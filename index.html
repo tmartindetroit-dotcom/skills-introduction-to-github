@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RenovateIQ — Home Renovation Platform</title>
+<title>RenovateIQ — Labor Estimator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
 <!-- Sidebar -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
@@ -52,7 +53,7 @@
   </div>
 </aside>
 
-<!-- Main Content -->
+<!-- Main -->
 <main class="main-content" id="mainContent">
   <header class="topbar">
     <div class="topbar-left">
@@ -73,43 +74,43 @@
     </div>
   </header>
 
-  <!-- VIEWS -->
+  <!-- ===== DASHBOARD ===== -->
   <div id="view-dashboard" class="view active">
     <div class="view-header">
       <h1>Welcome back, <span class="accent">T. Martin</span></h1>
-      <p class="subtitle">Here's what's happening with your projects today.</p>
+      <p class="subtitle">Labor estimates, active projects, and your pipeline at a glance.</p>
     </div>
     <div class="kpi-grid">
       <div class="kpi-card">
         <div class="kpi-icon teal"><svg viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
         <div class="kpi-data">
-          <div class="kpi-value">$284,500</div>
-          <div class="kpi-label">Active Pipeline</div>
-          <div class="kpi-change positive">+12.4% this month</div>
+          <div class="kpi-value">$187,400</div>
+          <div class="kpi-label">Labor Pipeline</div>
+          <div class="kpi-change positive">+9.2% this month</div>
         </div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-icon blue"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/></svg></div>
+        <div class="kpi-icon blue"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
         <div class="kpi-data">
-          <div class="kpi-value">7</div>
-          <div class="kpi-label">Active Projects</div>
-          <div class="kpi-change positive">2 closing this week</div>
+          <div class="kpi-value">1,248 hrs</div>
+          <div class="kpi-label">Estimated Hours</div>
+          <div class="kpi-change neutral">Across 7 projects</div>
         </div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-icon purple"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg></div>
+        <div class="kpi-icon purple"><svg viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+        <div class="kpi-data">
+          <div class="kpi-value">$112/hr</div>
+          <div class="kpi-label">Avg. Blended Rate</div>
+          <div class="kpi-change positive">+$4 vs last quarter</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon orange"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg></div>
         <div class="kpi-data">
           <div class="kpi-value">94%</div>
           <div class="kpi-label">Acceptance Rate</div>
           <div class="kpi-change positive">Industry avg: 71%</div>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon orange"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-        <div class="kpi-data">
-          <div class="kpi-value">18 days</div>
-          <div class="kpi-label">Avg. Project Duration</div>
-          <div class="kpi-change neutral">On track</div>
         </div>
       </div>
     </div>
@@ -124,52 +125,57 @@
           </div>
         </div>
         <table class="projects-table">
-          <thead><tr><th>Project</th><th>Client</th><th>Type</th><th>Value</th><th>Progress</th><th>Status</th><th></th></tr></thead>
+          <thead><tr><th>Project</th><th>Client</th><th>Type</th><th>Labor Value</th><th>Hours</th><th>Progress</th><th>Status</th><th></th></tr></thead>
           <tbody>
             <tr>
-              <td><strong>Lakewood Kitchen Reno</strong><br><small>Started May 12</small></td>
+              <td><strong>Lakewood Kitchen</strong><br><small>Started May 12</small></td>
               <td>Sarah Johnson</td>
               <td><span class="type-badge kitchen">Kitchen</span></td>
-              <td>$48,200</td>
+              <td>$14,880</td>
+              <td>132 hrs</td>
               <td><div class="prog-bar"><div class="prog-fill" style="width:68%"></div></div><small>68%</small></td>
               <td><span class="status-badge in-progress">In Progress</span></td>
-              <td><button class="btn-icon" onclick="openProposal('Lakewood Kitchen Reno')">→</button></td>
+              <td><button class="btn-icon" onclick="openProposal()">→</button></td>
             </tr>
             <tr>
               <td><strong>Riverside Master Bath</strong><br><small>Started Apr 28</small></td>
               <td>Mike Chen</td>
               <td><span class="type-badge bath">Bathroom</span></td>
-              <td>$32,750</td>
+              <td>$9,240</td>
+              <td>84 hrs</td>
               <td><div class="prog-bar"><div class="prog-fill" style="width:85%"></div></div><small>85%</small></td>
               <td><span class="status-badge review">In Review</span></td>
-              <td><button class="btn-icon" onclick="openProposal('Riverside Master Bath')">→</button></td>
+              <td><button class="btn-icon" onclick="openProposal()">→</button></td>
             </tr>
             <tr>
               <td><strong>Oakdale Full Home</strong><br><small>Started May 1</small></td>
               <td>The Williams Family</td>
               <td><span class="type-badge full">Full Home</span></td>
-              <td>$124,800</td>
+              <td>$48,600</td>
+              <td>440 hrs</td>
               <td><div class="prog-bar"><div class="prog-fill" style="width:32%"></div></div><small>32%</small></td>
               <td><span class="status-badge in-progress">In Progress</span></td>
-              <td><button class="btn-icon" onclick="openProposal('Oakdale Full Home')">→</button></td>
+              <td><button class="btn-icon" onclick="openProposal()">→</button></td>
             </tr>
             <tr>
-              <td><strong>Hilltop Basement Finish</strong><br><small>Pending start</small></td>
+              <td><strong>Hilltop Basement</strong><br><small>Pending start</small></td>
               <td>Dana Torres</td>
               <td><span class="type-badge basement">Basement</span></td>
-              <td>$38,400</td>
+              <td>$18,200</td>
+              <td>168 hrs</td>
               <td><div class="prog-bar"><div class="prog-fill" style="width:5%"></div></div><small>5%</small></td>
               <td><span class="status-badge pending">Pending</span></td>
-              <td><button class="btn-icon" onclick="openProposal('Hilltop Basement Finish')">→</button></td>
+              <td><button class="btn-icon" onclick="openProposal()">→</button></td>
             </tr>
             <tr>
-              <td><strong>Maplewood Outdoor Living</strong><br><small>Started May 20</small></td>
+              <td><strong>Maplewood Outdoor</strong><br><small>Started May 20</small></td>
               <td>Robert Kim</td>
               <td><span class="type-badge outdoor">Outdoor</span></td>
-              <td>$28,600</td>
+              <td>$11,040</td>
+              <td>96 hrs</td>
               <td><div class="prog-bar"><div class="prog-fill" style="width:45%"></div></div><small>45%</small></td>
               <td><span class="status-badge in-progress">In Progress</span></td>
-              <td><button class="btn-icon" onclick="openProposal('Maplewood Outdoor Living')">→</button></td>
+              <td><button class="btn-icon" onclick="openProposal()">→</button></td>
             </tr>
           </tbody>
         </table>
@@ -198,37 +204,28 @@
           </div>
         </div>
 
-        <div class="card budget-tracker-card">
-          <div class="card-header"><h2>Budget vs. Estimate</h2></div>
+        <div class="card">
+          <div class="card-header"><h2>Budget vs. Labor Est.</h2></div>
           <div class="budget-items">
             <div class="budget-item">
-              <div class="budget-label">
-                <span>Lakewood Kitchen</span>
-                <span class="budget-status over">+$2,100 over</span>
-              </div>
+              <div class="budget-label"><span>Lakewood Kitchen</span><span class="budget-status over">+$880 over</span></div>
               <div class="budget-bars">
-                <div class="b-bar budget-bar" style="width:100%"><span>Budget $46K</span></div>
-                <div class="b-bar estimate-bar" style="width:104.5%"><span>Est $48.1K</span></div>
+                <div class="b-bar budget-bar" style="width:100%"><span>Budget $14K</span></div>
+                <div class="b-bar estimate-bar" style="width:106.3%"><span>Est $14.88K</span></div>
               </div>
             </div>
             <div class="budget-item">
-              <div class="budget-label">
-                <span>Riverside Bath</span>
-                <span class="budget-status under">-$1,250 under</span>
-              </div>
+              <div class="budget-label"><span>Riverside Bath</span><span class="budget-status under">-$760 under</span></div>
               <div class="budget-bars">
-                <div class="b-bar budget-bar" style="width:100%"><span>Budget $34K</span></div>
-                <div class="b-bar estimate-bar" style="width:96.3%"><span>Est $32.75K</span></div>
+                <div class="b-bar budget-bar" style="width:100%"><span>Budget $10K</span></div>
+                <div class="b-bar estimate-bar" style="width:92.4%"><span>Est $9.24K</span></div>
               </div>
             </div>
             <div class="budget-item">
-              <div class="budget-label">
-                <span>Oakdale Full Home</span>
-                <span class="budget-status on-track">On track</span>
-              </div>
+              <div class="budget-label"><span>Oakdale Full Home</span><span class="budget-status on-track">On track</span></div>
               <div class="budget-bars">
-                <div class="b-bar budget-bar" style="width:100%"><span>Budget $125K</span></div>
-                <div class="b-bar estimate-bar" style="width:99.8%"><span>Est $124.8K</span></div>
+                <div class="b-bar budget-bar" style="width:100%"><span>Budget $49K</span></div>
+                <div class="b-bar estimate-bar" style="width:99.2%"><span>Est $48.6K</span></div>
               </div>
             </div>
           </div>
@@ -237,354 +234,173 @@
     </div>
   </div>
 
-  <!-- ESTIMATE BUILDER VIEW -->
+  <!-- ===== ESTIMATE BUILDER ===== -->
   <div id="view-estimates" class="view">
     <div class="view-header">
-      <h1>Estimate <span class="accent">Builder</span></h1>
-      <p class="subtitle">Create professional estimates your clients can interact with.</p>
+      <h1>Labor <span class="accent">Estimate Builder</span></h1>
+      <p class="subtitle">Build itemized labor estimates by trade, hours, and rate.</p>
     </div>
+
     <!-- Step Progress -->
     <div class="step-progress">
-      <div class="step-track">
-        <div class="step-fill" id="stepFill" style="width:25%"></div>
-      </div>
+      <div class="step-track"><div class="step-fill" id="stepFill" style="width:33%"></div></div>
       <div class="steps">
-        <div class="step active" data-step="1"><div class="step-num">1</div><div class="step-label">Project Type</div></div>
-        <div class="step" data-step="2"><div class="step-num">2</div><div class="step-label">Details</div></div>
-        <div class="step" data-step="3"><div class="step-num">3</div><div class="step-label">Selections</div></div>
-        <div class="step" data-step="4"><div class="step-num">4</div><div class="step-label">Review</div></div>
+        <div class="step active" data-step="1"><div class="step-num">1</div><div class="step-label">Project Info</div></div>
+        <div class="step" data-step="2"><div class="step-num">2</div><div class="step-label">Labor Lines</div></div>
+        <div class="step" data-step="3"><div class="step-num">3</div><div class="step-label">Review & Send</div></div>
       </div>
     </div>
 
-    <!-- Step 1: Project Type -->
+    <!-- Step 1: Project Info -->
     <div class="step-content" id="step1">
-      <h2 class="step-title">What type of project is this?</h2>
-      <div class="project-type-grid">
-        <div class="project-type-card" data-type="kitchen" onclick="selectProjectType(this)">
-          <div class="pt-icon">🍳</div>
-          <h3>Kitchen</h3>
-          <p>Full kitchen renovation including cabinets, countertops, appliances & more</p>
-          <div class="pt-range">$25,000 – $120,000</div>
-        </div>
-        <div class="project-type-card" data-type="bathroom" onclick="selectProjectType(this)">
-          <div class="pt-icon">🛁</div>
-          <h3>Bathroom</h3>
-          <p>Master bath, guest bath, or powder room renovation</p>
-          <div class="pt-range">$8,000 – $45,000</div>
-        </div>
-        <div class="project-type-card" data-type="fullhome" onclick="selectProjectType(this)">
-          <div class="pt-icon">🏠</div>
-          <h3>Full Home</h3>
-          <p>Whole home renovation across multiple rooms and systems</p>
-          <div class="pt-range">$80,000 – $400,000</div>
-        </div>
-        <div class="project-type-card" data-type="basement" onclick="selectProjectType(this)">
-          <div class="pt-icon">🏗️</div>
-          <h3>Basement</h3>
-          <p>Basement finishing, home theater, or rec room</p>
-          <div class="pt-range">$20,000 – $80,000</div>
-        </div>
-        <div class="project-type-card" data-type="outdoor" onclick="selectProjectType(this)">
-          <div class="pt-icon">🌿</div>
-          <h3>Outdoor Living</h3>
-          <p>Deck, patio, outdoor kitchen, or landscaping</p>
-          <div class="pt-range">$15,000 – $60,000</div>
-        </div>
-        <div class="project-type-card" data-type="addition" onclick="selectProjectType(this)">
-          <div class="pt-icon">🏡</div>
-          <h3>Addition</h3>
-          <p>Room addition, garage conversion, or ADU</p>
-          <div class="pt-range">$50,000 – $250,000</div>
+      <h2 class="step-title">Project Information</h2>
+      <div class="project-type-row">
+        <div class="ptypes">
+          <div class="project-type-card" data-type="kitchen" onclick="selectProjectType(this)"><div class="pt-icon">🍳</div><h3>Kitchen</h3></div>
+          <div class="project-type-card" data-type="bathroom" onclick="selectProjectType(this)"><div class="pt-icon">🛁</div><h3>Bathroom</h3></div>
+          <div class="project-type-card" data-type="fullhome" onclick="selectProjectType(this)"><div class="pt-icon">🏠</div><h3>Full Home</h3></div>
+          <div class="project-type-card" data-type="basement" onclick="selectProjectType(this)"><div class="pt-icon">🏗️</div><h3>Basement</h3></div>
+          <div class="project-type-card" data-type="outdoor" onclick="selectProjectType(this)"><div class="pt-icon">🌿</div><h3>Outdoor</h3></div>
+          <div class="project-type-card" data-type="addition" onclick="selectProjectType(this)"><div class="pt-icon">🏡</div><h3>Addition</h3></div>
         </div>
       </div>
-      <div class="step-nav">
-        <div></div>
-        <button class="btn-primary" onclick="goToStep(2)" id="nextStep1" disabled>Next: Project Details →</button>
-      </div>
-    </div>
-
-    <!-- Step 2: Details -->
-    <div class="step-content hidden" id="step2">
-      <h2 class="step-title">Tell us about the project</h2>
-      <div class="form-grid">
+      <div class="form-grid" style="margin-top:24px">
         <div class="form-group">
           <label>Client Name *</label>
           <input type="text" id="clientName" placeholder="Full name" class="form-input">
         </div>
         <div class="form-group">
-          <label>Client Email *</label>
+          <label>Client Email</label>
           <input type="email" id="clientEmail" placeholder="client@email.com" class="form-input">
         </div>
         <div class="form-group">
-          <label>Project Address *</label>
+          <label>Project Address</label>
           <input type="text" id="projectAddress" placeholder="123 Main St, City, State" class="form-input">
         </div>
         <div class="form-group">
-          <label>Square Footage</label>
-          <input type="number" id="sqFootage" placeholder="e.g. 250" class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Client Budget</label>
-          <input type="number" id="clientBudget" placeholder="e.g. 50000" class="form-input">
+          <label>Client Labor Budget</label>
+          <input type="number" id="clientBudget" placeholder="e.g. 20000" class="form-input" oninput="state.clientBudget=parseFloat(this.value)||0; updateLivePanel()">
         </div>
         <div class="form-group">
           <label>Projected Start Date</label>
           <input type="date" id="startDate" class="form-input">
         </div>
+        <div class="form-group">
+          <label>Default Hourly Rate ($/hr)</label>
+          <input type="number" id="defaultRate" placeholder="e.g. 95" value="95" class="form-input" oninput="state.defaultRate=parseFloat(this.value)||95">
+        </div>
         <div class="form-group full-width">
-          <label>Project Scope Notes</label>
-          <textarea id="scopeNotes" rows="4" placeholder="Describe the work to be done..." class="form-input"></textarea>
+          <label>Project Notes</label>
+          <textarea id="scopeNotes" rows="3" placeholder="Describe scope, access conditions, special requirements..." class="form-input"></textarea>
         </div>
       </div>
       <div class="step-nav">
-        <button class="btn-secondary" onclick="goToStep(1)">← Back</button>
-        <button class="btn-primary" onclick="goToStep(3)">Next: Make Selections →</button>
+        <div></div>
+        <button class="btn-primary" id="nextStep1" onclick="goToStep(2)" disabled>Next: Add Labor Lines →</button>
       </div>
     </div>
 
-    <!-- Step 3: Finish Selections -->
-    <div class="step-content hidden" id="step3">
-      <div class="selections-layout">
-        <div class="selections-main">
-          <h2 class="step-title">Choose Your Finishes</h2>
-          <p class="step-desc">Select options for each category. Prices update live.</p>
-
-          <!-- Cabinets -->
-          <div class="category-section">
-            <div class="category-header">
-              <h3>Cabinets</h3>
-              <div class="tier-tabs">
-                <button class="tier-tab active" onclick="filterTier(this,'cabinets','all')">All</button>
-                <button class="tier-tab" onclick="filterTier(this,'cabinets','basic')">Basic</button>
-                <button class="tier-tab" onclick="filterTier(this,'cabinets','standard')">Standard</button>
-                <button class="tier-tab" onclick="filterTier(this,'cabinets','premium')">Premium</button>
-              </div>
-            </div>
-            <div class="options-grid" id="cabinets-grid">
-              <div class="option-card" data-category="cabinets" data-tier="basic" data-price="4800" data-name="Thermofoil White" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#e8e8e8,#f5f5f5)"><span>🗄️</span></div>
-                <div class="option-info">
-                  <div class="tier-badge basic">Basic</div>
-                  <h4>Thermofoil White</h4>
-                  <p>Clean, modern matte finish. Low-maintenance vinyl wrap.</p>
-                  <div class="option-price">$4,800</div>
-                </div>
-              </div>
-              <div class="option-card" data-category="cabinets" data-tier="standard" data-price="9200" data-name="Shaker Maple" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#d4a96a,#c49a5a)"><span>🗄️</span></div>
-                <div class="option-info">
-                  <div class="tier-badge standard">Standard</div>
-                  <h4>Shaker Maple</h4>
-                  <p>Classic shaker style in natural maple. Soft-close hardware included.</p>
-                  <div class="option-price">$9,200</div>
-                </div>
-              </div>
-              <div class="option-card selected" data-category="cabinets" data-tier="standard" data-price="11400" data-name="Shaker Gray" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#8e9099,#6b7280)"><span>🗄️</span></div>
-                <div class="option-info">
-                  <div class="tier-badge standard">Standard</div>
-                  <h4>Shaker Gray</h4>
-                  <p>Trending two-tone gray. Full overlay doors, dovetail drawers.</p>
-                  <div class="option-price">$11,400</div>
-                </div>
-              </div>
-              <div class="option-card" data-category="cabinets" data-tier="premium" data-price="18600" data-name="Custom Inset Cherry" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#8B3A3A,#6b2d2d)"><span>🗄️</span></div>
-                <div class="option-info">
-                  <div class="tier-badge premium">Premium</div>
-                  <h4>Custom Inset Cherry</h4>
-                  <p>Handcrafted inset doors in rich cherry. Furniture-grade quality.</p>
-                  <div class="option-price">$18,600</div>
-                </div>
-              </div>
-              <div class="option-card" data-category="cabinets" data-tier="premium" data-price="24000" data-name="Custom Painted Euro" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#1a3a5c,#0d2138)"><span>🗄️</span></div>
-                <div class="option-info">
-                  <div class="tier-badge premium">Premium</div>
-                  <h4>Custom Painted Euro</h4>
-                  <p>Full-access European frameless. Factory painted, 10-year warranty.</p>
-                  <div class="option-price">$24,000</div>
-                </div>
-              </div>
+    <!-- Step 2: Labor Lines -->
+    <div class="step-content hidden" id="step2">
+      <div class="labor-layout">
+        <div class="labor-main">
+          <div class="labor-header-row">
+            <h2 class="step-title">Labor Line Items</h2>
+            <div class="labor-header-actions">
+              <select class="form-input trade-quick-add" id="quickAddTrade">
+                <option value="">+ Quick add trade...</option>
+                <option value="demo">Demo &amp; Hauling</option>
+                <option value="framing">Framing &amp; Carpentry</option>
+                <option value="electrical">Electrical</option>
+                <option value="plumbing">Plumbing</option>
+                <option value="hvac">HVAC</option>
+                <option value="tile">Tile Work</option>
+                <option value="flooring">Flooring Install</option>
+                <option value="cabinets">Cabinet Install</option>
+                <option value="drywall">Drywall &amp; Taping</option>
+                <option value="painting">Painting</option>
+                <option value="trim">Trim &amp; Millwork</option>
+                <option value="cleanup">Final Cleanup</option>
+              </select>
+              <button class="btn-primary" onclick="addCustomLine()">+ Custom Line</button>
             </div>
           </div>
 
-          <!-- Countertops -->
-          <div class="category-section">
-            <div class="category-header">
-              <h3>Countertops</h3>
-              <div class="tier-tabs">
-                <button class="tier-tab active" onclick="filterTier(this,'countertops','all')">All</button>
-                <button class="tier-tab" onclick="filterTier(this,'countertops','basic')">Basic</button>
-                <button class="tier-tab" onclick="filterTier(this,'countertops','standard')">Standard</button>
-                <button class="tier-tab" onclick="filterTier(this,'countertops','premium')">Premium</button>
-              </div>
+          <!-- Line items table -->
+          <div class="labor-table-wrap">
+            <div class="labor-table-head">
+              <span class="lt-trade">Trade / Task</span>
+              <span class="lt-crew">Crew Size</span>
+              <span class="lt-hours">Hours</span>
+              <span class="lt-rate">Rate ($/hr)</span>
+              <span class="lt-total">Total</span>
+              <span class="lt-actions"></span>
             </div>
-            <div class="options-grid" id="countertops-grid">
-              <div class="option-card" data-category="countertops" data-tier="basic" data-price="1200" data-name="Laminate Classic" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#c8b89a,#b8a88a)"><span>🪨</span></div>
-                <div class="option-info">
-                  <div class="tier-badge basic">Basic</div>
-                  <h4>Laminate Classic</h4>
-                  <p>Durable and affordable. Wide range of patterns available.</p>
-                  <div class="option-price">$1,200</div>
-                </div>
-              </div>
-              <div class="option-card selected" data-category="countertops" data-tier="standard" data-price="4200" data-name="Quartz White" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#f0ede8,#e8e2d9)"><span>🪨</span></div>
-                <div class="option-info">
-                  <div class="tier-badge standard">Standard</div>
-                  <h4>Quartz White</h4>
-                  <p>Engineered quartz. Non-porous, scratch & stain resistant.</p>
-                  <div class="option-price">$4,200</div>
-                </div>
-              </div>
-              <div class="option-card" data-category="countertops" data-tier="standard" data-price="5100" data-name="Quartz Calacatta" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#e8e4dc,#d4cfc4)"><span>🪨</span></div>
-                <div class="option-info">
-                  <div class="tier-badge standard">Standard</div>
-                  <h4>Quartz Calacatta</h4>
-                  <p>Marble-look quartz with bold veining. Premium engineered stone.</p>
-                  <div class="option-price">$5,100</div>
-                </div>
-              </div>
-              <div class="option-card" data-category="countertops" data-tier="premium" data-price="7800" data-name="Carrara Marble" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#f5f2ee,#ebe5da)"><span>🪨</span></div>
-                <div class="option-info">
-                  <div class="tier-badge premium">Premium</div>
-                  <h4>Carrara Marble</h4>
-                  <p>Authentic Italian marble. Timeless elegance. Requires sealing.</p>
-                  <div class="option-price">$7,800</div>
-                </div>
-              </div>
-              <div class="option-card" data-category="countertops" data-tier="premium" data-price="9400" data-name="Quartzite Taj Mahal" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#e8d5a3,#d4bc80)"><span>🪨</span></div>
-                <div class="option-info">
-                  <div class="tier-badge premium">Premium</div>
-                  <h4>Quartzite Taj Mahal</h4>
-                  <p>Exotic quartzite slab. More durable than marble, equally stunning.</p>
-                  <div class="option-price">$9,400</div>
-                </div>
-              </div>
+            <div id="laborLines">
+              <!-- Lines injected here -->
+            </div>
+            <div class="labor-empty" id="laborEmpty">
+              <div class="empty-icon">🔨</div>
+              <div>No labor lines yet — quick add a trade above or click <strong>+ Custom Line</strong></div>
             </div>
           </div>
 
-          <!-- Flooring -->
-          <div class="category-section">
-            <div class="category-header">
-              <h3>Flooring</h3>
-              <div class="tier-tabs">
-                <button class="tier-tab active" onclick="filterTier(this,'flooring','all')">All</button>
-                <button class="tier-tab" onclick="filterTier(this,'flooring','basic')">Basic</button>
-                <button class="tier-tab" onclick="filterTier(this,'flooring','standard')">Standard</button>
-                <button class="tier-tab" onclick="filterTier(this,'flooring','premium')">Premium</button>
-              </div>
-            </div>
-            <div class="options-grid" id="flooring-grid">
-              <div class="option-card" data-category="flooring" data-tier="basic" data-price="2100" data-name="LVP Wood-Look" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#a0805c,#8a6a48)"><span>🪵</span></div>
-                <div class="option-info">
-                  <div class="tier-badge basic">Basic</div>
-                  <h4>LVP Wood-Look</h4>
-                  <p>100% waterproof luxury vinyl plank. Great for kitchens and baths.</p>
-                  <div class="option-price">$2,100</div>
-                </div>
-              </div>
-              <div class="option-card selected" data-category="flooring" data-tier="standard" data-price="4600" data-name="Porcelain Tile" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#c8c4be,#b8b4ae)"><span>🪵</span></div>
-                <div class="option-info">
-                  <div class="tier-badge standard">Standard</div>
-                  <h4>Porcelain Tile 12x24"</h4>
-                  <p>Large format porcelain with grout lines. Timeless and durable.</p>
-                  <div class="option-price">$4,600</div>
-                </div>
-              </div>
-              <div class="option-card" data-category="flooring" data-tier="standard" data-price="5800" data-name="Engineered Hardwood" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#b08060,#9a6a4a)"><span>🪵</span></div>
-                <div class="option-info">
-                  <div class="tier-badge standard">Standard</div>
-                  <h4>Engineered Hardwood</h4>
-                  <p>Real wood veneer over plywood core. Stable, refinishable.</p>
-                  <div class="option-price">$5,800</div>
-                </div>
-              </div>
-              <div class="option-card" data-category="flooring" data-tier="premium" data-price="9200" data-name="Solid Hardwood" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#8a5c2c,#744c22)"><span>🪵</span></div>
-                <div class="option-info">
-                  <div class="tier-badge premium">Premium</div>
-                  <h4>Solid White Oak</h4>
-                  <p>¾" solid white oak, site-finished. Can be refinished multiple times.</p>
-                  <div class="option-price">$9,200</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Appliances -->
-          <div class="category-section">
-            <div class="category-header">
-              <h3>Appliances</h3>
-              <div class="tier-tabs">
-                <button class="tier-tab active" onclick="filterTier(this,'appliances','all')">All</button>
-                <button class="tier-tab" onclick="filterTier(this,'appliances','basic')">Basic</button>
-                <button class="tier-tab" onclick="filterTier(this,'appliances','standard')">Standard</button>
-                <button class="tier-tab" onclick="filterTier(this,'appliances','premium')">Premium</button>
-              </div>
-            </div>
-            <div class="options-grid" id="appliances-grid">
-              <div class="option-card" data-category="appliances" data-tier="basic" data-price="3200" data-name="Samsung Entry Suite" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#3a4555,#2a3545)"><span>🍽️</span></div>
-                <div class="option-info">
-                  <div class="tier-badge basic">Basic</div>
-                  <h4>Samsung Entry Suite</h4>
-                  <p>Range, dishwasher, refrigerator. Stainless finish.</p>
-                  <div class="option-price">$3,200</div>
-                </div>
-              </div>
-              <div class="option-card selected" data-category="appliances" data-tier="standard" data-price="6800" data-name="KitchenAid Suite" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#2d4a6b,#1d3a5b)"><span>🍽️</span></div>
-                <div class="option-info">
-                  <div class="tier-badge standard">Standard</div>
-                  <h4>KitchenAid Suite</h4>
-                  <p>Professional-style range, french door fridge, dishwasher. Stainless.</p>
-                  <div class="option-price">$6,800</div>
-                </div>
-              </div>
-              <div class="option-card" data-category="appliances" data-tier="premium" data-price="14500" data-name="Wolf / Sub-Zero" onclick="selectOption(this)">
-                <div class="option-img" style="background:linear-gradient(135deg,#1a1a2e,#0d0d1e)"><span>🍽️</span></div>
-                <div class="option-info">
-                  <div class="tier-badge premium">Premium</div>
-                  <h4>Wolf / Sub-Zero</h4>
-                  <p>Professional Wolf range, Sub-Zero column refrigeration. Best in class.</p>
-                  <div class="option-price">$14,500</div>
-                </div>
-              </div>
+          <!-- Crew rate presets -->
+          <div class="rate-presets card" style="margin-top:16px">
+            <h3>Crew Rate Presets</h3>
+            <div class="preset-grid">
+              <button class="preset-btn" onclick="applyRatePreset('General Laborer', 65)">
+                <span class="preset-label">General Laborer</span><span class="preset-rate">$65/hr</span>
+              </button>
+              <button class="preset-btn" onclick="applyRatePreset('Carpenter', 85)">
+                <span class="preset-label">Carpenter</span><span class="preset-rate">$85/hr</span>
+              </button>
+              <button class="preset-btn" onclick="applyRatePreset('Electrician', 110)">
+                <span class="preset-label">Electrician</span><span class="preset-rate">$110/hr</span>
+              </button>
+              <button class="preset-btn" onclick="applyRatePreset('Plumber', 115)">
+                <span class="preset-label">Plumber</span><span class="preset-rate">$115/hr</span>
+              </button>
+              <button class="preset-btn" onclick="applyRatePreset('HVAC Tech', 105)">
+                <span class="preset-label">HVAC Tech</span><span class="preset-rate">$105/hr</span>
+              </button>
+              <button class="preset-btn" onclick="applyRatePreset('Tile Setter', 90)">
+                <span class="preset-label">Tile Setter</span><span class="preset-rate">$90/hr</span>
+              </button>
+              <button class="preset-btn" onclick="applyRatePreset('Painter', 75)">
+                <span class="preset-label">Painter</span><span class="preset-rate">$75/hr</span>
+              </button>
+              <button class="preset-btn" onclick="applyRatePreset('GC Superintendent', 135)">
+                <span class="preset-label">GC Super</span><span class="preset-rate">$135/hr</span>
+              </button>
             </div>
           </div>
 
           <div class="step-nav">
-            <button class="btn-secondary" onclick="goToStep(2)">← Back</button>
-            <button class="btn-primary" onclick="goToStep(4)">Review Estimate →</button>
+            <button class="btn-secondary" onclick="goToStep(1)">← Back</button>
+            <button class="btn-primary" onclick="goToStep(3)">Review Estimate →</button>
           </div>
         </div>
 
         <!-- Live Cost Panel -->
         <div class="live-cost-panel" id="liveCostPanel">
           <div class="lcp-header">
-            <h3>Live Estimate</h3>
+            <h3>Live Labor Cost</h3>
             <div class="lcp-pulse"></div>
           </div>
-          <div class="lcp-total" id="lcpTotal">$27,200</div>
-          <div class="lcp-label">Estimated Total</div>
-          <div class="lcp-breakdown" id="lcpBreakdown">
-            <div class="lcp-item"><span>Cabinets</span><span id="lcp-cabinets">$11,400</span></div>
-            <div class="lcp-item"><span>Countertops</span><span id="lcp-countertops">$4,200</span></div>
-            <div class="lcp-item"><span>Flooring</span><span id="lcp-flooring">$4,600</span></div>
-            <div class="lcp-item"><span>Appliances</span><span id="lcp-appliances">$6,800</span></div>
-            <div class="lcp-item"><span>Labor (est.)</span><span id="lcp-labor">$4,080</span></div>
+          <div class="lcp-total" id="lcpTotal">$0</div>
+          <div class="lcp-label">Total Labor Estimate</div>
+          <div class="lcp-meta">
+            <div class="lcp-meta-item"><span>Total Hours</span><strong id="lcpHours">0</strong></div>
+            <div class="lcp-meta-item"><span>Line Items</span><strong id="lcpLines">0</strong></div>
+            <div class="lcp-meta-item"><span>Blended Rate</span><strong id="lcpBlended">—</strong></div>
           </div>
           <div class="lcp-divider"></div>
-          <div class="lcp-budget-check" id="lcpBudgetCheck">
+          <div id="lcpBreakdown" class="lcp-breakdown">
+            <div class="lcp-empty-msg">Add labor lines to see breakdown</div>
+          </div>
+          <div class="lcp-divider"></div>
+          <div class="lcp-budget-check">
             <div class="bc-label">vs. Client Budget</div>
             <div class="bc-value" id="bcValue">—</div>
           </div>
@@ -596,36 +412,34 @@
       </div>
     </div>
 
-    <!-- Step 4: Review -->
-    <div class="step-content hidden" id="step4">
-      <h2 class="step-title">Review Your Estimate</h2>
+    <!-- Step 3: Review -->
+    <div class="step-content hidden" id="step3">
+      <h2 class="step-title">Review Your Labor Estimate</h2>
       <div class="review-layout">
         <div class="review-main">
           <div class="card review-card">
             <div class="review-section">
               <h3>Project Overview</h3>
               <div class="review-grid">
-                <div class="review-item"><label>Project Type</label><span id="rv-type">Kitchen</span></div>
+                <div class="review-item"><label>Project Type</label><span id="rv-type">—</span></div>
                 <div class="review-item"><label>Client</label><span id="rv-client">—</span></div>
                 <div class="review-item"><label>Address</label><span id="rv-address">—</span></div>
                 <div class="review-item"><label>Start Date</label><span id="rv-start">—</span></div>
+                <div class="review-item"><label>Total Hours</label><span id="rv-hours">—</span></div>
+                <div class="review-item"><label>Blended Rate</label><span id="rv-rate">—</span></div>
               </div>
             </div>
             <div class="review-section">
-              <h3>Selected Finishes</h3>
-              <div id="rv-selections"></div>
-            </div>
-            <div class="review-section">
-              <h3>Cost Summary</h3>
-              <div class="cost-summary-table" id="rv-costs"></div>
+              <h3>Labor Line Items</h3>
+              <div id="rv-lines"></div>
             </div>
           </div>
 
-          <div class="card contractor-markup-card">
-            <h3>Contractor Margin & Markup</h3>
+          <div class="card" style="margin-top:16px">
+            <h3>Markup &amp; Margin</h3>
             <div class="markup-controls">
               <div class="markup-item">
-                <label>Overhead & Profit</label>
+                <label>Overhead &amp; Profit</label>
                 <div class="slider-wrap">
                   <input type="range" min="10" max="40" value="20" class="slider" id="markupSlider" oninput="updateMarkup(this.value)">
                   <span class="slider-val" id="markupVal">20%</span>
@@ -644,31 +458,30 @@
 
         <div class="review-sidebar">
           <div class="card final-total-card">
-            <h3>Final Estimate</h3>
-            <div class="ft-row"><span>Selections Total</span><span id="ft-selections">$27,200</span></div>
-            <div class="ft-row"><span>Labor (est.)</span><span id="ft-labor">$4,080</span></div>
-            <div class="ft-row"><span>Markup (20%)</span><span id="ft-markup">$6,256</span></div>
-            <div class="ft-row"><span>Contingency (5%)</span><span id="ft-contingency">$1,877</span></div>
+            <h3>Final Labor Estimate</h3>
+            <div class="ft-row"><span>Raw Labor Total</span><span id="ft-raw">$0</span></div>
+            <div class="ft-row"><span>Markup (<span id="ft-markup-pct">20</span>%)</span><span id="ft-markup">$0</span></div>
+            <div class="ft-row"><span>Contingency (<span id="ft-cont-pct">5</span>%)</span><span id="ft-contingency">$0</span></div>
             <div class="ft-divider"></div>
-            <div class="ft-row total"><span>Grand Total</span><span id="ft-total">$39,413</span></div>
+            <div class="ft-row total"><span>Grand Total</span><span id="ft-total">$0</span></div>
             <div class="ft-budget-status" id="ftBudgetStatus"></div>
-            <button class="btn-primary full-width" onclick="generateProposal()">Generate Proposal →</button>
-            <button class="btn-secondary full-width mt-8" onclick="goToStep(3)">← Revise Selections</button>
+            <button class="btn-primary full-width" style="margin-top:16px" onclick="generateProposal()">Generate Proposal →</button>
+            <button class="btn-secondary full-width mt-8" onclick="goToStep(2)">← Revise Lines</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- PROPOSALS VIEW -->
+  <!-- ===== PROPOSALS ===== -->
   <div id="view-proposals" class="view">
     <div class="view-header">
-      <h1>Project <span class="accent">Proposals</span></h1>
+      <h1>Labor <span class="accent">Proposals</span></h1>
       <div class="proposal-selector">
-        <select class="form-input" id="proposalSelect" onchange="loadProposal(this.value)">
-          <option value="lakewood">Lakewood Kitchen Reno — Sarah Johnson</option>
-          <option value="riverside">Riverside Master Bath — Mike Chen</option>
-          <option value="oakdale">Oakdale Full Home — Williams Family</option>
+        <select class="form-input" style="width:380px" onchange="showToast('Proposal loaded','success')">
+          <option>Lakewood Kitchen — Sarah Johnson</option>
+          <option>Riverside Master Bath — Mike Chen</option>
+          <option>Oakdale Full Home — Williams Family</option>
         </select>
       </div>
     </div>
@@ -683,41 +496,37 @@
       <div class="proposal-estimate-layout">
         <div class="card proposal-breakdown">
           <div class="pb-header">
-            <div>
-              <h2>Lakewood Kitchen Renovation</h2>
-              <p class="pb-client">Sarah Johnson · 4821 Lakewood Dr, Detroit, MI</p>
-            </div>
+            <div><h2>Lakewood Kitchen Renovation</h2><p class="pb-client">Sarah Johnson · 4821 Lakewood Dr, Detroit, MI</p></div>
             <div class="pb-status-badge accepted">Accepted</div>
           </div>
           <div class="line-items">
-            <div class="li-header"><span>Description</span><span>Qty</span><span>Unit</span><span>Total</span></div>
-            <div class="li-cat">Cabinets & Hardware</div>
-            <div class="li-row"><span>Shaker Gray Base Cabinets</span><span>1</span><span>Lot</span><span>$8,400</span></div>
-            <div class="li-row"><span>Shaker Gray Upper Cabinets</span><span>1</span><span>Lot</span><span>$3,000</span></div>
-            <div class="li-row"><span>Soft-Close Hardware</span><span>24</span><span>EA</span><span>$480</span></div>
-            <div class="li-cat">Countertops</div>
-            <div class="li-row"><span>Quartz White — 42 SF</span><span>42</span><span>SF</span><span>$4,200</span></div>
-            <div class="li-cat">Flooring</div>
-            <div class="li-row"><span>Porcelain Tile 12x24 — 180 SF</span><span>180</span><span>SF</span><span>$4,600</span></div>
-            <div class="li-cat">Appliances</div>
-            <div class="li-row"><span>KitchenAid Appliance Suite</span><span>1</span><span>Set</span><span>$6,800</span></div>
-            <div class="li-cat">Labor</div>
-            <div class="li-row"><span>Demolition & Prep</span><span>16</span><span>HR</span><span>$1,920</span></div>
-            <div class="li-row"><span>Cabinet Installation</span><span>24</span><span>HR</span><span>$2,880</span></div>
-            <div class="li-row"><span>Countertop Install & Plumbing</span><span>8</span><span>HR</span><span>$960</span></div>
-            <div class="li-row"><span>Tile Installation</span><span>20</span><span>HR</span><span>$2,400</span></div>
-            <div class="li-row"><span>Electrical & Appliance Hook-up</span><span>6</span><span>HR</span><span>$720</span></div>
+            <div class="li-header"><span>Trade / Task</span><span>Crew</span><span>Hours</span><span>Rate</span><span>Total</span></div>
+            <div class="li-cat">Demo &amp; Prep</div>
+            <div class="li-row"><span>Demolition &amp; Haul-Away</span><span>2</span><span>16</span><span>$65/hr</span><span>$2,080</span></div>
+            <div class="li-row"><span>Site Protection &amp; Prep</span><span>1</span><span>4</span><span>$65/hr</span><span>$260</span></div>
+            <div class="li-cat">Rough-In</div>
+            <div class="li-row"><span>Electrical Rough-In</span><span>1</span><span>16</span><span>$110/hr</span><span>$1,760</span></div>
+            <div class="li-row"><span>Plumbing Rough-In</span><span>1</span><span>12</span><span>$115/hr</span><span>$1,380</span></div>
+            <div class="li-cat">Cabinet &amp; Trim</div>
+            <div class="li-row"><span>Cabinet Installation</span><span>2</span><span>24</span><span>$85/hr</span><span>$4,080</span></div>
+            <div class="li-row"><span>Trim &amp; Millwork</span><span>1</span><span>8</span><span>$85/hr</span><span>$680</span></div>
+            <div class="li-cat">Finish Work</div>
+            <div class="li-row"><span>Tile Installation (Backsplash)</span><span>1</span><span>10</span><span>$90/hr</span><span>$900</span></div>
+            <div class="li-row"><span>Flooring Install</span><span>2</span><span>12</span><span>$85/hr</span><span>$2,040</span></div>
+            <div class="li-row"><span>Painting &amp; Touch-Up</span><span>1</span><span>10</span><span>$75/hr</span><span>$750</span></div>
+            <div class="li-row"><span>Final Electrical Trim</span><span>1</span><span>6</span><span>$110/hr</span><span>$660</span></div>
+            <div class="li-row"><span>Final Plumbing &amp; Hook-Up</span><span>1</span><span>4</span><span>$115/hr</span><span>$460</span></div>
+            <div class="li-row"><span>Punch List &amp; Cleanup</span><span>2</span><span>6</span><span>$65/hr</span><span>$780</span></div>
             <div class="li-divider"></div>
-            <div class="li-row subtotal"><span>Subtotal</span><span></span><span></span><span>$36,360</span></div>
-            <div class="li-row"><span>Overhead & Profit (20%)</span><span></span><span></span><span>$7,272</span></div>
-            <div class="li-row"><span>Contingency (5%)</span><span></span><span></span><span>$2,182</span></div>
-            <div class="li-row grand-total"><span>Grand Total</span><span></span><span></span><span>$48,200 — Wait</span></div>
-            <div class="li-row grand-total"><span>Grand Total</span><span></span><span></span><span>$45,814</span></div>
+            <div class="li-row subtotal"><span>Raw Labor Subtotal</span><span></span><span>128 hrs</span><span></span><span>$15,830</span></div>
+            <div class="li-row"><span>Overhead &amp; Profit (20%)</span><span></span><span></span><span></span><span>$3,166</span></div>
+            <div class="li-row"><span>Contingency (5%)</span><span></span><span></span><span></span><span>$950</span></div>
+            <div class="li-row grand-total"><span>Grand Total Labor</span><span></span><span></span><span></span><span>$19,946</span></div>
           </div>
         </div>
         <div class="proposal-side">
           <div class="card">
-            <h3>Estimate Actions</h3>
+            <h3>Actions</h3>
             <div class="proposal-actions">
               <button class="btn-primary full-width" onclick="switchView('client-portal')">Send to Client</button>
               <button class="btn-secondary full-width mt-8" onclick="window.print()">Print / PDF</button>
@@ -727,16 +536,8 @@
           <div class="card mt-16">
             <h3>Change Orders</h3>
             <div class="co-list" id="coList">
-              <div class="co-item">
-                <div class="co-desc">Add under-cabinet lighting</div>
-                <div class="co-amount positive">+$840</div>
-                <div class="co-date">May 18</div>
-              </div>
-              <div class="co-item">
-                <div class="co-desc">Upgrade to pull-out trash bins</div>
-                <div class="co-amount positive">+$320</div>
-                <div class="co-date">May 22</div>
-              </div>
+              <div class="co-item"><div class="co-desc">Add under-cabinet lighting install</div><div class="co-amount positive">+4 hrs / +$440</div><div class="co-date">May 18</div></div>
+              <div class="co-item"><div class="co-desc">Pull-out bins carpentry</div><div class="co-amount positive">+2 hrs / +$170</div><div class="co-date">May 22</div></div>
             </div>
           </div>
         </div>
@@ -749,47 +550,15 @@
         <div class="gantt-wrap">
           <div class="gantt-header">
             <div class="gantt-task-col">Phase</div>
-            <div class="gantt-weeks">
-              <span>Wk 1</span><span>Wk 2</span><span>Wk 3</span><span>Wk 4</span>
-              <span>Wk 5</span><span>Wk 6</span><span>Wk 7</span><span>Wk 8</span>
-            </div>
+            <div class="gantt-weeks"><span>Wk 1</span><span>Wk 2</span><span>Wk 3</span><span>Wk 4</span><span>Wk 5</span><span>Wk 6</span><span>Wk 7</span><span>Wk 8</span></div>
           </div>
-          <div class="gantt-row">
-            <div class="gantt-task">Demolition & Prep</div>
-            <div class="gantt-bar-track"><div class="gantt-bar" style="left:0%;width:12.5%;background:#00D4AA"></div></div>
-          </div>
-          <div class="gantt-row">
-            <div class="gantt-task">Rough-in (Electrical/Plumbing)</div>
-            <div class="gantt-bar-track"><div class="gantt-bar" style="left:12.5%;width:12.5%;background:#3b82f6"></div></div>
-          </div>
-          <div class="gantt-row">
-            <div class="gantt-task">Cabinet Delivery & Install</div>
-            <div class="gantt-bar-track"><div class="gantt-bar" style="left:25%;width:25%;background:#8b5cf6"></div></div>
-          </div>
-          <div class="gantt-row">
-            <div class="gantt-task">Countertop Template & Install</div>
-            <div class="gantt-bar-track"><div class="gantt-bar" style="left:37.5%;width:25%;background:#f59e0b"></div></div>
-          </div>
-          <div class="gantt-row">
-            <div class="gantt-task">Flooring Installation</div>
-            <div class="gantt-bar-track"><div class="gantt-bar" style="left:50%;width:25%;background:#ef4444"></div></div>
-          </div>
-          <div class="gantt-row">
-            <div class="gantt-task">Appliance Install & Hook-up</div>
-            <div class="gantt-bar-track"><div class="gantt-bar" style="left:62.5%;width:12.5%;background:#06b6d4"></div></div>
-          </div>
-          <div class="gantt-row">
-            <div class="gantt-task">Punch List & Final Walk</div>
-            <div class="gantt-bar-track"><div class="gantt-bar" style="left:75%;width:25%;background:#00D4AA"></div></div>
-          </div>
-        </div>
-        <div class="gantt-legend">
-          <span><i style="background:#00D4AA"></i>Demolition</span>
-          <span><i style="background:#3b82f6"></i>Rough-in</span>
-          <span><i style="background:#8b5cf6"></i>Cabinets</span>
-          <span><i style="background:#f59e0b"></i>Countertops</span>
-          <span><i style="background:#ef4444"></i>Flooring</span>
-          <span><i style="background:#06b6d4"></i>Appliances</span>
+          <div class="gantt-row"><div class="gantt-task">Demo &amp; Prep</div><div class="gantt-bar-track"><div class="gantt-bar" style="left:0%;width:12.5%;background:#00D4AA"></div></div></div>
+          <div class="gantt-row"><div class="gantt-task">Electrical Rough-In</div><div class="gantt-bar-track"><div class="gantt-bar" style="left:12.5%;width:12.5%;background:#3b82f6"></div></div></div>
+          <div class="gantt-row"><div class="gantt-task">Plumbing Rough-In</div><div class="gantt-bar-track"><div class="gantt-bar" style="left:12.5%;width:12.5%;background:#8b5cf6"></div></div></div>
+          <div class="gantt-row"><div class="gantt-task">Cabinet Install</div><div class="gantt-bar-track"><div class="gantt-bar" style="left:25%;width:25%;background:#f59e0b"></div></div></div>
+          <div class="gantt-row"><div class="gantt-task">Tile &amp; Flooring</div><div class="gantt-bar-track"><div class="gantt-bar" style="left:50%;width:25%;background:#ef4444"></div></div></div>
+          <div class="gantt-row"><div class="gantt-task">Painting &amp; Trim</div><div class="gantt-bar-track"><div class="gantt-bar" style="left:62.5%;width:25%;background:#06b6d4"></div></div></div>
+          <div class="gantt-row"><div class="gantt-task">Punch List &amp; Final</div><div class="gantt-bar-track"><div class="gantt-bar" style="left:87.5%;width:12.5%;background:#00D4AA"></div></div></div>
         </div>
       </div>
     </div>
@@ -804,47 +573,15 @@
           </div>
         </div>
         <div class="payment-milestones">
-          <div class="pm-item paid">
-            <div class="pm-check">✓</div>
-            <div class="pm-details">
-              <div class="pm-title">Deposit — Project Start</div>
-              <div class="pm-desc">Contract signed, materials ordered</div>
-              <div class="pm-date">Paid May 12</div>
-            </div>
-            <div class="pm-amount">$14,400<small>30%</small></div>
-          </div>
-          <div class="pm-item paid">
-            <div class="pm-check">✓</div>
-            <div class="pm-details">
-              <div class="pm-title">Milestone 2 — Cabinets Installed</div>
-              <div class="pm-desc">All cabinetry installed and inspected</div>
-              <div class="pm-date">Paid May 26</div>
-            </div>
-            <div class="pm-amount">$9,600<small>20%</small></div>
-          </div>
-          <div class="pm-item current">
-            <div class="pm-check pending">⏳</div>
-            <div class="pm-details">
-              <div class="pm-title">Milestone 3 — Countertops & Flooring</div>
-              <div class="pm-desc">Surfaces installed, rough-ins complete</div>
-              <div class="pm-date">Due ~Jun 5</div>
-            </div>
-            <div class="pm-amount">$12,000<small>25%</small></div>
-          </div>
-          <div class="pm-item">
-            <div class="pm-check future">○</div>
-            <div class="pm-details">
-              <div class="pm-title">Final Payment — Punch List Complete</div>
-              <div class="pm-desc">Walk-through approved, project closed</div>
-              <div class="pm-date">Est. Jun 18</div>
-            </div>
-            <div class="pm-amount">$12,014<small>25%</small></div>
-          </div>
+          <div class="pm-item paid"><div class="pm-check">✓</div><div class="pm-details"><div class="pm-title">Deposit — Contract Signed</div><div class="pm-desc">30% to reserve crew and schedule start date</div><div class="pm-date">Paid May 12</div></div><div class="pm-amount">$5,984<small>30%</small></div></div>
+          <div class="pm-item paid"><div class="pm-check">✓</div><div class="pm-details"><div class="pm-title">Milestone 2 — Rough-In Complete</div><div class="pm-desc">Electrical &amp; plumbing inspected and passed</div><div class="pm-date">Paid May 22</div></div><div class="pm-amount">$3,989<small>20%</small></div></div>
+          <div class="pm-item current"><div class="pm-check pending">⏳</div><div class="pm-details"><div class="pm-title">Milestone 3 — Cabinets &amp; Rough Finish</div><div class="pm-desc">All cabinets installed, tile and flooring in</div><div class="pm-date">Due ~Jun 5</div></div><div class="pm-amount">$4,987<small>25%</small></div></div>
+          <div class="pm-item"><div class="pm-check future">○</div><div class="pm-details"><div class="pm-title">Final Payment — Punch List Clear</div><div class="pm-desc">Walk-through approved, client sign-off</div><div class="pm-date">Est. Jun 18</div></div><div class="pm-amount">$4,986<small>25%</small></div></div>
         </div>
         <div class="payment-summary">
-          <div class="ps-row"><span>Total Contract</span><span>$48,014</span></div>
-          <div class="ps-row paid-row"><span>Received</span><span class="accent">$24,000</span></div>
-          <div class="ps-row"><span>Remaining</span><span>$24,014</span></div>
+          <div class="ps-row"><span>Total Labor Contract</span><span>$19,946</span></div>
+          <div class="ps-row paid-row"><span>Received</span><span class="accent">$9,973</span></div>
+          <div class="ps-row"><span>Remaining</span><span>$9,973</span></div>
         </div>
       </div>
     </div>
@@ -853,46 +590,10 @@
       <div class="card">
         <h2>Project Documents</h2>
         <div class="docs-grid">
-          <div class="doc-item signed">
-            <div class="doc-icon">📄</div>
-            <div class="doc-info">
-              <div class="doc-name">Renovation Contract</div>
-              <div class="doc-meta">Signed May 12 · PDF</div>
-            </div>
-            <div class="doc-status signed">Signed</div>
-          </div>
-          <div class="doc-item signed">
-            <div class="doc-icon">📄</div>
-            <div class="doc-info">
-              <div class="doc-name">Scope of Work</div>
-              <div class="doc-meta">Uploaded May 10 · PDF</div>
-            </div>
-            <div class="doc-status signed">Uploaded</div>
-          </div>
-          <div class="doc-item signed">
-            <div class="doc-icon">📸</div>
-            <div class="doc-info">
-              <div class="doc-name">Pre-Work Photos</div>
-              <div class="doc-meta">12 photos · May 13</div>
-            </div>
-            <div class="doc-status signed">Complete</div>
-          </div>
-          <div class="doc-item pending">
-            <div class="doc-icon">📋</div>
-            <div class="doc-info">
-              <div class="doc-name">Change Order #1</div>
-              <div class="doc-meta">Under-cabinet lighting · May 18</div>
-            </div>
-            <div class="doc-status pending">Pending Signature</div>
-          </div>
-          <div class="doc-item pending">
-            <div class="doc-icon">🔍</div>
-            <div class="doc-info">
-              <div class="doc-name">Final Inspection Report</div>
-              <div class="doc-meta">Not yet generated</div>
-            </div>
-            <div class="doc-status future">Upcoming</div>
-          </div>
+          <div class="doc-item signed"><div class="doc-icon">📄</div><div class="doc-info"><div class="doc-name">Labor Contract</div><div class="doc-meta">Signed May 12 · PDF</div></div><div class="doc-status signed">Signed</div></div>
+          <div class="doc-item signed"><div class="doc-icon">📄</div><div class="doc-info"><div class="doc-name">Scope of Work</div><div class="doc-meta">Uploaded May 10 · PDF</div></div><div class="doc-status signed">Uploaded</div></div>
+          <div class="doc-item signed"><div class="doc-icon">📸</div><div class="doc-info"><div class="doc-name">Pre-Work Photos</div><div class="doc-meta">12 photos · May 13</div></div><div class="doc-status signed">Complete</div></div>
+          <div class="doc-item pending"><div class="doc-icon">📋</div><div class="doc-info"><div class="doc-name">Change Order #1</div><div class="doc-meta">Lighting install · May 18</div></div><div class="doc-status pending">Pending Signature</div></div>
         </div>
         <div class="doc-upload-area">
           <div class="upload-icon">📎</div>
@@ -903,174 +604,96 @@
     </div>
   </div>
 
-  <!-- CHANGE ORDERS VIEW -->
+  <!-- ===== CHANGE ORDERS ===== -->
   <div id="view-changeorders" class="view">
     <div class="view-header">
       <h1>Change <span class="accent">Orders</span></h1>
       <button class="btn-primary" onclick="openChangeOrderModal()">+ New Change Order</button>
     </div>
-    <div class="co-table-wrap card">
+    <div class="co-table-wrap card" style="padding:0">
       <table class="projects-table">
-        <thead><tr><th>CO #</th><th>Project</th><th>Description</th><th>Cost Impact</th><th>Status</th><th>Date</th><th></th></tr></thead>
+        <thead><tr><th>CO #</th><th>Project</th><th>Description</th><th>Added Hours</th><th>Labor Impact</th><th>Status</th><th>Date</th></tr></thead>
         <tbody id="coTableBody">
-          <tr>
-            <td>#CO-001</td>
-            <td>Lakewood Kitchen</td>
-            <td>Add under-cabinet LED lighting</td>
-            <td class="positive">+$840</td>
-            <td><span class="status-badge pending">Pending Signature</span></td>
-            <td>May 18</td>
-            <td><button class="btn-icon">→</button></td>
-          </tr>
-          <tr>
-            <td>#CO-002</td>
-            <td>Lakewood Kitchen</td>
-            <td>Upgrade to pull-out trash bins</td>
-            <td class="positive">+$320</td>
-            <td><span class="status-badge in-progress">Approved</span></td>
-            <td>May 22</td>
-            <td><button class="btn-icon">→</button></td>
-          </tr>
-          <tr>
-            <td>#CO-003</td>
-            <td>Riverside Bath</td>
-            <td>Heated floor system addition</td>
-            <td class="positive">+$1,200</td>
-            <td><span class="status-badge review">In Review</span></td>
-            <td>May 24</td>
-            <td><button class="btn-icon">→</button></td>
-          </tr>
+          <tr><td>#CO-001</td><td>Lakewood Kitchen</td><td>Under-cabinet LED lighting install</td><td>+4 hrs</td><td class="positive">+$440</td><td><span class="status-badge pending">Pending Signature</span></td><td>May 18</td></tr>
+          <tr><td>#CO-002</td><td>Lakewood Kitchen</td><td>Pull-out trash bin carpentry</td><td>+2 hrs</td><td class="positive">+$170</td><td><span class="status-badge in-progress">Approved</span></td><td>May 22</td></tr>
+          <tr><td>#CO-003</td><td>Riverside Bath</td><td>Heated floor system installation</td><td>+6 hrs</td><td class="positive">+$660</td><td><span class="status-badge review">In Review</span></td><td>May 24</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <!-- CLIENT PORTAL VIEW -->
+  <!-- ===== CLIENT PORTAL ===== -->
   <div id="view-client-portal" class="view">
     <div class="view-header">
-      <h1>Client <span class="accent">Interactive Proposal</span></h1>
-      <p class="subtitle">Share this link with your client — they can configure options and accept digitally.</p>
+      <h1>Client <span class="accent">Labor Proposal</span></h1>
+      <p class="subtitle">Share this link — clients can review their labor estimate and sign digitally.</p>
     </div>
     <div class="client-portal-banner">
       <div class="portal-link-box">
         <span class="portal-link-label">Shareable Link</span>
         <div class="portal-link-input">
-          <input type="text" value="renovateiq.app/proposal/lakewood-2024-xyz" readonly class="form-input">
+          <input type="text" value="renovateiq.app/labor/lakewood-2024-xyz" readonly class="form-input">
           <button class="btn-primary" onclick="copyPortalLink()">Copy Link</button>
         </div>
       </div>
     </div>
-
     <div class="client-portal-preview">
       <div class="portal-header">
         <div class="portal-logo">RenovateIQ</div>
-        <div class="portal-greeting">Hello, <strong>Sarah!</strong> Your renovation proposal is ready to review.</div>
+        <div class="portal-greeting">Hello, <strong>Sarah!</strong> Your labor estimate is ready to review.</div>
       </div>
-
       <div class="portal-hero">
         <div class="portal-project-info">
-          <h2>Lakewood Kitchen Renovation</h2>
+          <h2>Lakewood Kitchen — Labor Estimate</h2>
           <p>4821 Lakewood Dr, Detroit, MI · Prepared by T. Martin</p>
           <div class="portal-highlights">
+            <div class="ph-item"><div class="ph-val">128 hrs</div><div class="ph-lbl">Total Labor Hours</div></div>
+            <div class="ph-item"><div class="ph-val">$19,946</div><div class="ph-lbl">Labor Total</div></div>
             <div class="ph-item"><div class="ph-val">8 weeks</div><div class="ph-lbl">Est. Duration</div></div>
-            <div class="ph-item"><div class="ph-val">$48,200</div><div class="ph-lbl">Project Value</div></div>
-            <div class="ph-item"><div class="ph-val">4</div><div class="ph-lbl">Finish Options</div></div>
-            <div class="ph-item"><div class="ph-val">100%</div><div class="ph-lbl">Insured & Licensed</div></div>
+            <div class="ph-item"><div class="ph-val">$110/hr</div><div class="ph-lbl">Blended Rate</div></div>
           </div>
         </div>
       </div>
-
-      <div class="portal-selections-section">
-        <h3>Configure Your Finishes</h3>
-        <p>Swap options to see how pricing changes. When you're happy, digitally accept below.</p>
-        <div class="portal-options-grid">
-          <div class="portal-option-group">
-            <h4>Countertops</h4>
-            <div class="portal-opts">
-              <label class="portal-opt-item checked">
-                <input type="radio" name="portal-ct" checked>
-                <div class="poi-content">
-                  <div class="poi-name">Quartz White</div>
-                  <div class="poi-price">$4,200</div>
-                  <div class="tier-badge standard">Standard</div>
-                </div>
-              </label>
-              <label class="portal-opt-item">
-                <input type="radio" name="portal-ct">
-                <div class="poi-content">
-                  <div class="poi-name">Carrara Marble</div>
-                  <div class="poi-price">$7,800</div>
-                  <div class="tier-badge premium">Premium</div>
-                </div>
-              </label>
-              <label class="portal-opt-item">
-                <input type="radio" name="portal-ct">
-                <div class="poi-content">
-                  <div class="poi-name">Quartzite Taj Mahal</div>
-                  <div class="poi-price">$9,400</div>
-                  <div class="tier-badge premium">Premium</div>
-                </div>
-              </label>
-            </div>
-          </div>
-          <div class="portal-option-group">
-            <h4>Flooring</h4>
-            <div class="portal-opts">
-              <label class="portal-opt-item checked">
-                <input type="radio" name="portal-fl" checked>
-                <div class="poi-content">
-                  <div class="poi-name">Porcelain Tile</div>
-                  <div class="poi-price">$4,600</div>
-                  <div class="tier-badge standard">Standard</div>
-                </div>
-              </label>
-              <label class="portal-opt-item">
-                <input type="radio" name="portal-fl">
-                <div class="poi-content">
-                  <div class="poi-name">Engineered Hardwood</div>
-                  <div class="poi-price">$5,800</div>
-                  <div class="tier-badge standard">Standard</div>
-                </div>
-              </label>
-              <label class="portal-opt-item">
-                <input type="radio" name="portal-fl">
-                <div class="poi-content">
-                  <div class="poi-name">Solid White Oak</div>
-                  <div class="poi-price">$9,200</div>
-                  <div class="tier-badge premium">Premium</div>
-                </div>
-              </label>
-            </div>
-          </div>
+      <div class="portal-breakdown-section">
+        <h3>Labor Breakdown</h3>
+        <div class="portal-labor-list">
+          <div class="pll-item"><span>Demo &amp; Prep</span><span>20 hrs</span><span>$2,340</span></div>
+          <div class="pll-item"><span>Electrical</span><span>22 hrs</span><span>$2,420</span></div>
+          <div class="pll-item"><span>Plumbing</span><span>16 hrs</span><span>$1,840</span></div>
+          <div class="pll-item"><span>Cabinet Install</span><span>24 hrs</span><span>$4,080</span></div>
+          <div class="pll-item"><span>Tile &amp; Flooring</span><span>22 hrs</span><span>$2,940</span></div>
+          <div class="pll-item"><span>Painting &amp; Trim</span><span>18 hrs</span><span>$1,430</span></div>
+          <div class="pll-item"><span>Punch List</span><span>6 hrs</span><span>$390</span></div>
+          <div class="pll-divider"></div>
+          <div class="pll-item subtotal"><span>Raw Labor</span><span>128 hrs</span><span>$15,440</span></div>
+          <div class="pll-item"><span>Overhead &amp; Profit (20%)</span><span></span><span>$3,088</span></div>
+          <div class="pll-item"><span>Contingency (5%)</span><span></span><span>$1,026</span></div>
+          <div class="pll-item total"><span>Total</span><span></span><span>$19,554</span></div>
         </div>
       </div>
-
       <div class="portal-acceptance">
         <div class="acceptance-summary">
-          <div class="acceptance-total">Your Selected Total: <strong id="portalTotal">$48,200</strong></div>
-          <div class="acceptance-note">Pricing includes all labor, materials, overhead, and contingency</div>
+          <div class="acceptance-total">Your Labor Total: <strong id="portalTotal">$19,554</strong></div>
+          <div class="acceptance-note">All labor, crew, overhead, and contingency included. Materials quoted separately.</div>
         </div>
         <div class="digital-signature-area">
           <h4>Digital Acceptance</h4>
           <div class="sig-fields">
             <input type="text" placeholder="Type your full legal name" class="form-input" id="sigName">
-            <div class="sig-date">Date: <strong>May 27, 2026</strong></div>
+            <div class="sig-date">Date: <strong>Jun 21, 2026</strong></div>
           </div>
-          <label class="sig-checkbox">
-            <input type="checkbox" id="sigAgree">
-            I agree to the project scope, pricing, and payment schedule outlined in this proposal.
-          </label>
-          <button class="btn-accept" onclick="acceptProposal()">Accept & Sign Proposal</button>
+          <label class="sig-checkbox"><input type="checkbox" id="sigAgree"> I agree to the labor scope, pricing, and payment schedule outlined in this proposal.</label>
+          <button class="btn-accept" onclick="acceptProposal()">Accept &amp; Sign Proposal</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- AI ADVISOR VIEW -->
+  <!-- ===== AI ADVISOR ===== -->
   <div id="view-ai-advisor" class="view">
     <div class="view-header">
-      <h1>AI Cost <span class="accent">Advisor</span></h1>
-      <p class="subtitle">Powered by Claude — get real-time renovation insights, cost analysis, and project guidance.</p>
+      <h1>AI Labor <span class="accent">Advisor</span></h1>
+      <p class="subtitle">Powered by Claude — get real-time labor cost insights, crew rates, and project guidance.</p>
     </div>
     <div class="ai-layout">
       <div class="ai-chat-section card">
@@ -1078,13 +701,13 @@
           <div class="ai-message ai">
             <div class="ai-avatar">AI</div>
             <div class="ai-bubble">
-              <p>Hi! I'm your AI renovation advisor. I can help you with:</p>
+              <p>Hi! I'm your AI labor advisor. I can help with:</p>
               <ul>
-                <li>Cost estimates for specific materials or scopes</li>
-                <li>Budget optimization strategies</li>
-                <li>Material comparisons (durability, cost, aesthetics)</li>
-                <li>Local market pricing insights</li>
-                <li>Project timeline planning</li>
+                <li>Local labor rate benchmarks by trade</li>
+                <li>Estimating hours for specific tasks</li>
+                <li>Crew size recommendations</li>
+                <li>Labor cost optimization strategies</li>
+                <li>Scheduling and sequencing advice</li>
               </ul>
               <p>What would you like to know?</p>
             </div>
@@ -1094,10 +717,7 @@
           <div class="ai-api-key-section" id="aiApiKeySection">
             <div class="api-key-banner">
               <svg viewBox="0 0 24 24"><path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
-              <div>
-                <strong>Enter your Anthropic API Key</strong>
-                <p>Your key is stored locally and never sent to our servers.</p>
-              </div>
+              <div><strong>Enter your Anthropic API Key</strong><p>Stored locally, never sent to our servers.</p></div>
             </div>
             <div class="api-key-input-wrap">
               <input type="password" id="apiKeyInput" placeholder="sk-ant-..." class="form-input">
@@ -1105,65 +725,39 @@
             </div>
           </div>
           <div class="ai-quick-prompts">
-            <button class="qp-btn" onclick="sendQuickPrompt(this)">💡 Compare quartz vs marble countertops</button>
-            <button class="qp-btn" onclick="sendQuickPrompt(this)">💰 How to reduce kitchen reno costs?</button>
-            <button class="qp-btn" onclick="sendQuickPrompt(this)">📅 Typical kitchen reno timeline?</button>
-            <button class="qp-btn" onclick="sendQuickPrompt(this)">🔨 What's included in cabinet installation?</button>
+            <button class="qp-btn" onclick="sendQuickPrompt(this)">💰 What's a fair electrician rate in Detroit?</button>
+            <button class="qp-btn" onclick="sendQuickPrompt(this)">⏱️ How many hours to install kitchen cabinets?</button>
+            <button class="qp-btn" onclick="sendQuickPrompt(this)">👷 What crew size for a kitchen reno?</button>
+            <button class="qp-btn" onclick="sendQuickPrompt(this)">📉 How to reduce labor costs on a bathroom?</button>
           </div>
           <div class="ai-chat-input">
-            <textarea id="aiPromptInput" placeholder="Ask anything about your renovation project..." rows="2" onkeydown="handleAiKeydown(event)"></textarea>
-            <button class="ai-send-btn" id="aiSendBtn" onclick="sendAiMessage()">
+            <textarea id="aiPromptInput" placeholder="Ask anything about labor costs, crew rates, or scheduling..." rows="2" onkeydown="handleAiKeydown(event)"></textarea>
+            <button class="ai-send-btn" onclick="sendAiMessage()">
               <svg viewBox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
             </button>
           </div>
         </div>
       </div>
-
       <div class="ai-insights-panel">
         <div class="card">
-          <h3>Market Insights</h3>
+          <h3>Detroit Metro Labor Rates</h3>
           <div class="insight-items">
-            <div class="insight-item">
-              <div class="insight-label">Detroit Metro Kitchen Avg.</div>
-              <div class="insight-value">$42,800</div>
-              <div class="insight-range">Range: $28K – $98K</div>
-            </div>
-            <div class="insight-item">
-              <div class="insight-label">Cabinet Cost per LF</div>
-              <div class="insight-value">$180 – $680</div>
-              <div class="insight-range">Basic to Custom</div>
-            </div>
-            <div class="insight-item">
-              <div class="insight-label">Countertop per SF</div>
-              <div class="insight-value">$40 – $220</div>
-              <div class="insight-range">Laminate to Quartzite</div>
-            </div>
-            <div class="insight-item">
-              <div class="insight-label">Labor Rate (Detroit)</div>
-              <div class="insight-value">$85 – $140/hr</div>
-              <div class="insight-range">GC markup 20-35%</div>
-            </div>
+            <div class="insight-item"><div class="insight-label">General Laborer</div><div class="insight-value">$55 – $75/hr</div></div>
+            <div class="insight-item"><div class="insight-label">Carpenter</div><div class="insight-value">$75 – $100/hr</div></div>
+            <div class="insight-item"><div class="insight-label">Electrician</div><div class="insight-value">$95 – $130/hr</div></div>
+            <div class="insight-item"><div class="insight-label">Plumber</div><div class="insight-value">$100 – $135/hr</div></div>
+            <div class="insight-item"><div class="insight-label">HVAC Tech</div><div class="insight-value">$90 – $120/hr</div></div>
+            <div class="insight-item"><div class="insight-label">Tile Setter</div><div class="insight-value">$80 – $105/hr</div></div>
+            <div class="insight-item"><div class="insight-label">Painter</div><div class="insight-value">$65 – $90/hr</div></div>
           </div>
         </div>
         <div class="card mt-16">
-          <h3>Cost Saving Tips</h3>
+          <h3>Labor Tips</h3>
           <div class="tips-list">
-            <div class="tip-item">
-              <div class="tip-icon">💡</div>
-              <div>Keep appliances in existing locations to avoid plumbing/electrical relocation costs ($800-2,000 savings)</div>
-            </div>
-            <div class="tip-item">
-              <div class="tip-icon">💡</div>
-              <div>Reface existing cabinet boxes instead of full replacement (saves 40-60%)</div>
-            </div>
-            <div class="tip-item">
-              <div class="tip-icon">💡</div>
-              <div>Order materials 6-8 weeks ahead to avoid rush shipping premiums</div>
-            </div>
-            <div class="tip-item">
-              <div class="tip-icon">💡</div>
-              <div>Bundle multiple trades (electric + plumbing) to reduce mobilization costs</div>
-            </div>
+            <div class="tip-item"><div class="tip-icon">💡</div><div>Sequence trades correctly — rough-in before drywall saves costly re-opens</div></div>
+            <div class="tip-item"><div class="tip-icon">💡</div><div>Bundle electrical and plumbing in the same phase to reduce mobilization trips</div></div>
+            <div class="tip-item"><div class="tip-icon">💡</div><div>Add 10–15% buffer on tile and flooring — layout complexity is often underestimated</div></div>
+            <div class="tip-item"><div class="tip-icon">💡</div><div>2-man crews are most efficient for cabinet install; 1 person adds 40% more time</div></div>
           </div>
         </div>
       </div>
@@ -1174,43 +768,31 @@
 <!-- CHANGE ORDER MODAL -->
 <div class="modal-overlay" id="coModal" onclick="closeModal(event)">
   <div class="modal">
-    <div class="modal-header">
-      <h2>New Change Order</h2>
-      <button class="modal-close" onclick="closeChangeOrderModal()">✕</button>
-    </div>
+    <div class="modal-header"><h2>New Change Order</h2><button class="modal-close" onclick="closeChangeOrderModal()">✕</button></div>
     <div class="modal-body">
       <div class="form-group">
         <label>Project</label>
-        <select class="form-input">
-          <option>Lakewood Kitchen Reno — Sarah Johnson</option>
-          <option>Riverside Master Bath — Mike Chen</option>
-          <option>Oakdale Full Home — Williams Family</option>
+        <select class="form-input"><option>Lakewood Kitchen — Sarah Johnson</option><option>Riverside Master Bath — Mike Chen</option></select>
+      </div>
+      <div class="form-group"><label>Change Description</label><input type="text" class="form-input" id="coTitle" placeholder="Brief description of added/removed work"></div>
+      <div class="form-group"><label>Trade</label>
+        <select class="form-input" id="coTrade">
+          <option>Carpentry</option><option>Electrical</option><option>Plumbing</option><option>HVAC</option><option>Tile Work</option><option>Painting</option><option>General Labor</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>Change Order Title</label>
-        <input type="text" class="form-input" placeholder="Brief description of change" id="coTitle">
-      </div>
-      <div class="form-group">
-        <label>Detailed Description</label>
-        <textarea class="form-input" rows="4" placeholder="Describe the change in detail..." id="coDescription"></textarea>
-      </div>
       <div class="form-grid">
-        <div class="form-group">
-          <label>Cost Impact Type</label>
-          <select class="form-input" id="coType">
-            <option value="addition">Addition (increase)</option>
-            <option value="credit">Credit (decrease)</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Amount ($)</label>
-          <input type="number" class="form-input" placeholder="0.00" id="coAmount">
-        </div>
+        <div class="form-group"><label>Hours Added / Removed</label><input type="number" class="form-input" id="coHours" placeholder="e.g. 4" oninput="updateCoPreview()"></div>
+        <div class="form-group"><label>Hourly Rate ($/hr)</label><input type="number" class="form-input" id="coRate" placeholder="e.g. 95" oninput="updateCoPreview()"></div>
       </div>
-      <div class="co-impact-preview" id="coImpactPreview">
+      <div class="form-group"><label>Type</label>
+        <select class="form-input" id="coType" onchange="updateCoPreview()"><option value="addition">Addition (more work)</option><option value="credit">Credit (removed work)</option></select>
+      </div>
+      <div class="co-impact-preview">
         <div class="cip-label">Cost Impact Preview</div>
-        <div class="cip-value" id="cipValue">+$0</div>
+        <div style="display:flex;gap:24px;align-items:center;margin-top:4px">
+          <div><span style="font-size:0.75rem;color:var(--text-muted)">Hours</span><div class="cip-value" id="cipHours">0 hrs</div></div>
+          <div><span style="font-size:0.75rem;color:var(--text-muted)">Labor Impact</span><div class="cip-value" id="cipValue">+$0</div></div>
+        </div>
       </div>
     </div>
     <div class="modal-footer">
@@ -1220,9 +802,7 @@
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
-
 <script src="app.js"></script>
 </body>
 </html>
