@@ -1094,14 +1094,41 @@
     <!-- ===== REQUESTS VIEW ===== -->
     <div id="view-requests" class="view">
       <div class="view-header">
-        <div><h1>Customer Requests</h1><p class="view-sub">Renovation intake submissions from your customers</p></div>
-        <button class="btn-primary" onclick="copyIntakeLink()">Copy Customer Link</button>
+        <div><h1>Customer Requests</h1><p class="view-sub">Leads from your intake form — click a request to verify on-site</p></div>
       </div>
+
+      <!-- Intake Link Card -->
+      <div class="ilc-card card">
+        <div class="ilc-body">
+          <div class="ilc-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          </div>
+          <div class="ilc-text">
+            <div class="ilc-title">Your Customer Intake Link</div>
+            <div class="ilc-sub">Send this to customers — they fill out the form and their lead appears here automatically</div>
+            <div class="ilc-url-row">
+              <input type="text" class="ilc-url-input" id="intakeLinkInput" readonly onclick="this.select()">
+              <button class="btn-primary btn-sm" onclick="copyIntakeLink()">Copy</button>
+              <button class="btn-outline btn-sm" onclick="shareIntakeLink()">Share ↗</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Import success banner -->
+      <div id="importBanner" class="import-banner" style="display:none">
+        <div class="import-banner-icon">✓</div>
+        <div>
+          <strong id="importBannerTitle">New lead imported!</strong>
+          <div id="importBannerSub" style="font-size:.8rem;margin-top:2px"></div>
+        </div>
+        <button class="import-banner-close" onclick="document.getElementById('importBanner').style.display='none'">✕</button>
+      </div>
+
       <div id="requestsEmpty" class="empty-state">
-        <div class="es-icon">📋</div>
-        <div class="es-title">No requests yet</div>
-        <div class="es-sub">Share your customer intake link and submissions will appear here.</div>
-        <button class="btn-primary" style="margin-top:16px" onclick="copyIntakeLink()">Copy Customer Link</button>
+        <div class="es-icon">📬</div>
+        <div class="es-title">No leads yet</div>
+        <div class="es-sub">Copy your intake link above and send it to your first customer.</div>
       </div>
       <div id="requestsList" style="display:none"></div>
     </div>
@@ -1616,14 +1643,31 @@
         <div class="ci-step-card ci-confirm-card">
           <div class="ci-confirm-icon">✓</div>
           <h2 class="ci-step-title">Request Submitted!</h2>
-          <p class="ci-step-sub">Your contractor has been notified and will confirm your appointment within 24 hours.</p>
+          <p class="ci-step-sub">Here's a summary of your submission.</p>
           <div class="ci-confirm-details">
             <div class="ci-confirm-row"><span>Estimate Code</span><strong id="ciConfirmCode">—</strong></div>
             <div class="ci-confirm-row"><span>Visit Scheduled</span><strong id="ciConfirmDate">—</strong></div>
             <div class="ci-confirm-row" id="ciConfirmWorkRow"><span>Preferred Work Start</span><strong id="ciConfirmWorkDate">—</strong></div>
             <div class="ci-confirm-row"><span>Estimate Range</span><strong id="ciConfirmRange">—</strong></div>
           </div>
-          <p style="font-size:.82rem;color:var(--text-muted);margin-top:16px">Save your estimate code — you'll need it to check status. We'll email you a confirmation at <span id="ciConfirmEmail"></span>.</p>
+
+          <!-- Share with contractor -->
+          <div class="ci-share-box">
+            <div class="ci-share-header">
+              <div class="ci-share-badge">Step 2</div>
+              <div>
+                <div style="font-weight:700;font-size:.9rem">Send this link to your contractor</div>
+                <div style="font-size:.77rem;color:var(--text-muted);margin-top:2px">Opening this link imports your request directly into their dashboard — no manual entry needed</div>
+              </div>
+            </div>
+            <input type="text" class="ci-share-url-input" id="ciImportUrlInput" readonly onclick="this.select()">
+            <div class="ci-share-actions">
+              <button class="btn-primary full-width" onclick="copyImportLink()">Copy Link</button>
+              <button class="btn-outline full-width" onclick="shareImportLink()">Share ↗</button>
+            </div>
+          </div>
+
+          <p style="font-size:.78rem;color:var(--text-muted);margin-top:14px">Your estimate code is <strong id="ciConfirmCode2"></strong>. Save it to follow up.</p>
         </div>
       </div>
     </div>
