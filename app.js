@@ -1,3 +1,17 @@
+/* ===== MARKETPLACE — DEMO AREA CONTRACTORS ===== */
+var DEMO_AREA_CONTRACTORS = [
+  { id:'c001', company:'T. Martin Renovations',  owner:'James Rivera',    city:'Detroit, MI', rating:4.9, reviews:47, responseAvg:35,
+    rates:{ kitchen:{min:80,max:140}, bathroom:{min:90,max:150}, fullhome:{min:65,max:110}, basement:{min:55,max:95},  outdoor:{min:45,max:80},  addition:{min:85,max:135} } },
+  { id:'c002', company:'Metro Detroit Builders',  owner:'Carlos Mendez',   city:'Detroit, MI', rating:4.7, reviews:31, responseAvg:78,
+    rates:{ kitchen:{min:75,max:130}, bathroom:{min:85,max:145}, fullhome:{min:60,max:105}, basement:{min:50,max:90},  outdoor:{min:40,max:72},  addition:{min:78,max:128} } },
+  { id:'c003', company:'Great Lakes Renovation',  owner:'Sarah Mitchell',  city:'Detroit, MI', rating:4.8, reviews:62, responseAvg:52,
+    rates:{ kitchen:{min:85,max:150}, bathroom:{min:95,max:160}, fullhome:{min:70,max:115}, basement:{min:60,max:100}, outdoor:{min:50,max:85},  addition:{min:90,max:140} } },
+  { id:'c004', company:'Motor City Craftsmen',    owner:'David Park',      city:'Detroit, MI', rating:4.6, reviews:28, responseAvg:95,
+    rates:{ kitchen:{min:72,max:125}, bathroom:{min:80,max:140}, fullhome:{min:58,max:100}, basement:{min:48,max:88},  outdoor:{min:38,max:70},  addition:{min:76,max:126} } },
+  { id:'c005', company:'Sterling Home Pros',      owner:'Jennifer Walsh',  city:'Detroit, MI', rating:4.9, reviews:84, responseAvg:42,
+    rates:{ kitchen:{min:90,max:155}, bathroom:{min:100,max:165},fullhome:{min:75,max:120}, basement:{min:65,max:105}, outdoor:{min:55,max:90},  addition:{min:95,max:145} } },
+];
+
 /* ===== SCHEDULE DEFAULTS ===== */
 var DEFAULT_SCHEDULE = {
   visitDays: [1,2,3,4,5],
@@ -127,7 +141,9 @@ function importLeadFromUrl() {
 
   document.getElementById('sigDateDisplay').value = new Date().toLocaleDateString();
 
-  if (window.location.search.includes('intake=1')) {
+  if (window.location.search.includes('marketplace=1')) {
+    showMarketplace();
+  } else if (window.location.search.includes('intake=1')) {
     document.getElementById('loginScreen').style.display = 'none';
     var intake = document.getElementById('customerIntake');
     if (intake) { intake.style.display = 'flex'; }
@@ -219,6 +235,7 @@ function showIntakeFlow() {
 function signOut() {
   document.getElementById('appShell').style.display = 'none';
   document.getElementById('customerIntake').style.display = 'none';
+  document.getElementById('marketplaceFlow').style.display = 'none';
   document.getElementById('signupFlow').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('contractorLoginForm').style.display = 'none';
@@ -1140,6 +1157,227 @@ function appendAiMsg(role, text) {
   msgs.scrollTop = msgs.scrollHeight;
 }
 
+/* ===== MARKETPLACE FLOW ===== */
+var mpState = { projectType: null, views: 0 };
+
+function showMarketplace() {
+  document.getElementById('loginScreen').style.display = 'none';
+  var mf = document.getElementById('marketplaceFlow');
+  if (mf) mf.style.display = 'flex';
+  mpStep(1);
+  mpState = { projectType: null, views: 0 };
+}
+
+function mpStep(n) {
+  for (var i = 1; i <= 4; i++) {
+    var el = document.getElementById('mpst-' + i);
+    if (el) el.style.display = i === n ? 'block' : 'none';
+    var pill = document.getElementById('mpsp-' + i);
+    if (pill) { pill.classList.remove('active','done'); if (i < n) pill.classList.add('done'); else if (i === n) pill.classList.add('active'); }
+  }
+  var conf = document.getElementById('mpst-confirm');
+  if (conf) conf.style.display = 'none';
+  if (n === 4) { calculateMarketEstimate(); renderContractorRanking(); }
+}
+
+function mpSelectType(el) {
+  document.querySelectorAll('#mpst-1 .ci-type-btn').forEach(function(b){ b.classList.remove('selected'); });
+  el.classList.add('selected');
+  mpState.projectType = el.dataset.type;
+}
+
+function rankContractors() {
+  return DEMO_AREA_CONTRACTORS.map(function(c) {
+    var score = c.rating * 20 - c.responseAvg * 0.15 + c.reviews * 0.08;
+    return Object.assign({}, c, { score: score });
+  }).sort(function(a, b) { return b.score - a.score; });
+}
+
+function calculateMarketEstimate() {
+  var type = mpState.projectType || 'kitchen';
+  var sqft = parseFloat(document.getElementById('mpSqft').value) || 200;
+  var mins = [], maxs = [];
+  DEMO_AREA_CONTRACTORS.forEach(function(c) {
+    var r = c.rates[type]; if (r) { mins.push(r.min); maxs.push(r.max); }
+  });
+  var avgMin = mins.reduce(function(s,v){return s+v;},0)/mins.length;
+  var avgMax = maxs.reduce(function(s,v){return s+v;},0)/maxs.length;
+  var estMin = sqft * avgMin, estMax = sqft * avgMax;
+  var typeLabels = { kitchen:'Kitchen', bathroom:'Bathroom', fullhome:'Full Home', basement:'Basement', outdoor:'Outdoor', addition:'Addition' };
+  setText('mpEstMin', fmt(estMin));
+  setText('mpEstMax', fmt(estMax));
+  setText('mpEstBasis', sqft + ' sqft · ' + (typeLabels[type]||type) + ' · avg of ' + DEMO_AREA_CONTRACTORS.length + ' contractors in your area');
+  setText('mpConfirmRange', fmt(estMin) + ' – ' + fmt(estMax));
+  mpState._estMin = estMin; mpState._estMax = estMax;
+}
+
+function renderContractorRanking() {
+  var list = document.getElementById('mpContractorList');
+  if (!list) return;
+  var ranked = rankContractors();
+  var type = mpState.projectType || 'kitchen';
+  var budget = document.getElementById('mpBudget').value;
+  var budgetLabels = { 'under10k':'Under $10k', '10k-25k':'$10k–$25k', '25k-50k':'$25k–$50k', '50k-100k':'$50k–$100k', 'over100k':'$100k+' };
+
+  list.innerHTML = ranked.map(function(c, i) {
+    var r = c.rates[type] || { min:75, max:140 };
+    var stars = '★'.repeat(Math.floor(c.rating)) + (c.rating % 1 >= 0.5 ? '½' : '');
+    var responseLabel = c.responseAvg < 60 ? 'Avg. ' + c.responseAvg + ' min response' : 'Avg. ' + Math.round(c.responseAvg/60*10)/10 + ' hr response';
+    var rank = i + 1;
+    var badge = rank === 1 ? '<span class="mkt-rank-badge mkt-rank-1">🏆 #1 Ranked</span>' :
+                rank === 2 ? '<span class="mkt-rank-badge mkt-rank-2">🥈 #' + rank + '</span>' :
+                             '<span class="mkt-rank-badge mkt-rank-other">#' + rank + '</span>';
+    return '<div class="mkt-contractor-card">' +
+      '<div class="mkt-cc-head">' + badge +
+        '<div class="mkt-cc-name">' + escHtml(c.company) + '</div>' +
+        '<div class="mkt-cc-owner">' + escHtml(c.owner) + ' · ' + escHtml(c.city) + '</div>' +
+      '</div>' +
+      '<div class="mkt-cc-stats">' +
+        '<div class="mkt-cc-stat"><span class="mkt-stars">' + stars + '</span><span class="mkt-rating">' + c.rating + ' (' + c.reviews + ' reviews)</span></div>' +
+        '<div class="mkt-cc-stat mkt-response-time">⚡ ' + responseLabel + '</div>' +
+        '<div class="mkt-cc-stat">Labor rate: ' + fmt(r.min * 150) + ' – ' + fmt(r.max * 150) + ' est.</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function submitMarketplaceRequest() {
+  var city = (document.getElementById('mpCity')||{}).value || '';
+  var zip = (document.getElementById('mpZip')||{}).value || '';
+  var first = (document.getElementById('mpFirstName')||{}).value || '';
+  var last = (document.getElementById('mpLastName')||{}).value || '';
+  if (!city || !mpState.projectType || !first || !last) { showToast('Please complete all required fields'); return; }
+
+  var lastName = last.toUpperCase();
+  var year = new Date().getFullYear();
+  var hotLeads = JSON.parse(localStorage.getItem('renovateiq_hot_leads') || '[]');
+  var num = String(hotLeads.length + 1).padStart(3, '0');
+  var code = 'MKT-' + lastName.slice(0,4) + '-' + year + '-' + num;
+  var scopes = [];
+  document.querySelectorAll('#mpst-2 input[type=checkbox]:checked').forEach(function(cb){ scopes.push(cb.value); });
+
+  var lead = {
+    code: code, source: 'marketplace', status: 'hot',
+    name: first + ' ' + last,
+    phone: (document.getElementById('mpPhone')||{}).value || '',
+    email: (document.getElementById('mpEmail')||{}).value || '',
+    address: (document.getElementById('mpAddress')||{}).value || '',
+    city: city, zip: zip,
+    projectType: mpState.projectType,
+    sqft: parseFloat((document.getElementById('mpSqft')||{}).value) || 0,
+    budget: (document.getElementById('mpBudget')||{}).value || '',
+    scope: scopes,
+    description: (document.getElementById('mpDescription')||{}).value || '',
+    estMin: mpState._estMin || 0, estMax: mpState._estMax || 0,
+    submittedAt: new Date().toISOString(),
+    contractorCount: DEMO_AREA_CONTRACTORS.length,
+    claimedBy: null,
+    views: [],
+  };
+  hotLeads.push(lead);
+  localStorage.setItem('renovateiq_hot_leads', JSON.stringify(hotLeads));
+
+  setText('mpConfirmCode', code);
+  setText('mpConfirmCount', DEMO_AREA_CONTRACTORS.length + ' contractors in ' + city);
+  var sub = document.getElementById('mpConfirmSub');
+  if (sub) sub.textContent = 'Your request has been sent to ' + DEMO_AREA_CONTRACTORS.length + ' contractors in ' + city + (zip ? ' (' + zip + ')' : '') + '.';
+
+  for (var i = 1; i <= 4; i++) { var el = document.getElementById('mpst-' + i); if (el) el.style.display = 'none'; }
+  for (var j = 1; j <= 4; j++) { var pill = document.getElementById('mpsp-' + j); if (pill) { pill.classList.remove('active'); pill.classList.add('done'); } }
+  var conf = document.getElementById('mpst-confirm'); if (conf) conf.style.display = 'block';
+  updateRequestsBadge();
+}
+
+/* ===== HOT LEADS (contractor side) ===== */
+function renderHotLeads() {
+  var hotLeads = JSON.parse(localStorage.getItem('renovateiq_hot_leads') || '[]');
+  var section = document.getElementById('hotLeadsSection');
+  var list = document.getElementById('hotLeadsList');
+  var count = document.getElementById('hotLeadsCount');
+  if (!section || !list) return;
+
+  var unclaimed = hotLeads.filter(function(l){ return !l.claimedBy; });
+  if (unclaimed.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  if (count) count.textContent = unclaimed.length + ' new';
+
+  var typeLabels = { kitchen:'Kitchen', bathroom:'Bathroom', fullhome:'Full Home', basement:'Basement', outdoor:'Outdoor', addition:'Addition' };
+  var budgetLabels = { 'under10k':'Under $10k','10k-25k':'$10k–$25k','25k-50k':'$25k–$50k','50k-100k':'$50k–$100k','over100k':'$100k+' };
+
+  list.innerHTML = unclaimed.map(function(lead) {
+    var minsAgo = Math.round((Date.now() - new Date(lead.submittedAt).getTime()) / 60000);
+    var timeStr = minsAgo < 1 ? 'Just now' : minsAgo < 60 ? minsAgo + ' min ago' : Math.round(minsAgo/60) + ' hr ago';
+    var viewCount = (lead.views || []).length;
+    var initials = (lead.name||'??').split(' ').map(function(w){return w[0];}).slice(0,2).join('').toUpperCase();
+    return '<div class="hot-lead-card">' +
+      '<div class="hot-lead-top">' +
+        '<div class="hot-lead-avatar">' + initials + '</div>' +
+        '<div class="hot-lead-info">' +
+          '<div class="hot-lead-name">' + escHtml(lead.name.replace(/(\w)\w+$/, '$1.')) + '</div>' +
+          '<div class="hot-lead-location">📍 ' + escHtml(lead.city || lead.address || '—') + '</div>' +
+        '</div>' +
+        '<div class="hot-lead-right">' +
+          '<span class="hot-badge">🔥 HOT LEAD</span>' +
+          '<div class="hot-time">' + timeStr + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="hot-lead-details">' +
+        '<span>🔧 ' + (typeLabels[lead.projectType]||'—') + '</span>' +
+        (lead.sqft ? '<span>📐 ' + lead.sqft + ' sqft</span>' : '') +
+        (lead.budget ? '<span>💰 ' + (budgetLabels[lead.budget]||lead.budget) + '</span>' : '') +
+        '<span>📊 Est. ' + fmt(lead.estMin) + ' – ' + fmt(lead.estMax) + '</span>' +
+      '</div>' +
+      (lead.description ? '<div class="hot-lead-desc">"' + escHtml(lead.description.slice(0,100)) + (lead.description.length>100?'…':'') + '"</div>' : '') +
+      (viewCount > 0 ? '<div class="hot-urgency-note">👀 ' + viewCount + ' contractor' + (viewCount>1?'s':'') + ' in your area ' + (viewCount>1?'have':'has') + ' already viewed this lead</div>' : '') +
+      '<div class="hot-lead-actions">' +
+        '<button class="btn-primary btn-sm" onclick="claimHotLead(\'' + lead.code + '\')">Claim This Lead →</button>' +
+        '<button class="btn-ghost btn-sm" onclick="viewHotLead(\'' + lead.code + '\')" style="font-size:.75rem">View Details</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function claimHotLead(code) {
+  var hotLeads = JSON.parse(localStorage.getItem('renovateiq_hot_leads') || '[]');
+  var lead = hotLeads.find(function(l){ return l.code === code; });
+  if (!lead) { showToast('Lead not found'); return; }
+  if (lead.claimedBy) { showToast('This lead has already been claimed'); return; }
+
+  lead.claimedBy = contractor.companyName || 'You';
+  lead.claimedAt = new Date().toISOString();
+  localStorage.setItem('renovateiq_hot_leads', JSON.stringify(hotLeads));
+
+  var requests = JSON.parse(localStorage.getItem('renovateiq_requests') || '[]');
+  var exists = requests.find(function(r){ return r.code === code; });
+  if (!exists) {
+    requests.push({
+      code: lead.code, name: lead.name, phone: lead.phone, email: lead.email,
+      address: lead.address || lead.city, projectType: lead.projectType, sqft: lead.sqft,
+      budget: lead.budget, scope: lead.scope, description: lead.description,
+      photos: [], estMin: lead.estMin, estMax: lead.estMax,
+      submittedAt: lead.submittedAt, status: 'pending',
+      source: 'marketplace', _hotLead: true,
+    });
+    localStorage.setItem('renovateiq_requests', JSON.stringify(requests));
+  }
+  showToast('🔥 Lead claimed! ' + lead.name + ' added to your requests.');
+  renderRequestsList();
+  updateRequestsBadge();
+}
+
+function viewHotLead(code) {
+  var hotLeads = JSON.parse(localStorage.getItem('renovateiq_hot_leads') || '[]');
+  var lead = hotLeads.find(function(l){ return l.code === code; });
+  if (!lead) return;
+  if (!lead.views) lead.views = [];
+  var alreadyViewed = lead.views.indexOf(contractor.companyName || 'You') !== -1;
+  if (!alreadyViewed) {
+    lead.views.push(contractor.companyName || 'You');
+    localStorage.setItem('renovateiq_hot_leads', JSON.stringify(hotLeads));
+  }
+  renderHotLeads();
+}
+
 /* ===== SCHEDULE MANAGEMENT ===== */
 function renderScheduleView() {
   populateScheduleForm();
@@ -1641,6 +1879,8 @@ function renderRequestsList() {
   var linkInput = document.getElementById('intakeLinkInput');
   if (linkInput) linkInput.value = url;
 
+  renderHotLeads();
+
   var requests = JSON.parse(localStorage.getItem('renovateiq_requests') || '[]');
   var emptyEl = document.getElementById('requestsEmpty');
   var listEl = document.getElementById('requestsList');
@@ -1731,10 +1971,13 @@ function deleteRequest(code) {
 
 function updateRequestsBadge() {
   var requests = JSON.parse(localStorage.getItem('renovateiq_requests') || '[]');
+  var hotLeads = JSON.parse(localStorage.getItem('renovateiq_hot_leads') || '[]');
   var pending = requests.filter(function(r){ return r.status === 'pending'; }).length;
+  var unclaimed = hotLeads.filter(function(l){ return !l.claimedBy; }).length;
+  var total = pending + unclaimed;
   var badge = document.getElementById('requestsBadge');
   if (badge) {
-    if (pending > 0) { badge.style.display = 'inline-flex'; badge.textContent = pending; }
+    if (total > 0) { badge.style.display = 'inline-flex'; badge.textContent = total; }
     else badge.style.display = 'none';
   }
 }
