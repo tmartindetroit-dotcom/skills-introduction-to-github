@@ -84,6 +84,17 @@ var jobRates = JSON.parse(JSON.stringify(DEFAULT_JOB_RATES));
 
   document.getElementById('sigDateDisplay').value = new Date().toLocaleDateString();
 
+  if (window.location.search.includes('intake=1')) {
+    document.getElementById('loginScreen').style.display = 'none';
+    var intake = document.getElementById('customerIntake');
+    if (intake) { intake.style.display = 'flex'; }
+    customerStep(1);
+    setText('ciContractorName', contractor.companyName || 'RenovateIQ');
+    renderDatePicker();
+  }
+
+  updateRequestsBadge();
+
   document.getElementById('quickAddTrade').addEventListener('change', function() {
     if (this.value) { addLaborLineByKey(this.value); this.value = ''; }
   });
@@ -132,16 +143,21 @@ function contractorLogin() {
 }
 
 function clientLogin() {
-  var code = document.getElementById('clientCode').value.trim();
-  if (!code) { showToast('Please enter your estimate code'); return; }
+  showIntakeFlow();
+}
+
+function showIntakeFlow() {
   document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('clientShell').style.display = 'flex';
-  document.getElementById('clientShell').style.flexDirection = 'column';
+  var intake = document.getElementById('customerIntake');
+  intake.style.display = 'flex';
+  customerStep(1);
+  setText('ciContractorName', contractor.companyName || 'RenovateIQ');
+  renderDatePicker();
 }
 
 function signOut() {
   document.getElementById('appShell').style.display = 'none';
-  document.getElementById('clientShell').style.display = 'none';
+  document.getElementById('customerIntake').style.display = 'none';
   document.getElementById('signupFlow').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('contractorLoginForm').style.display = 'none';
@@ -288,7 +304,8 @@ function switchView(viewName) {
   var labels = {
     'dashboard': 'Dashboard', 'estimates': 'New Estimate', 'rates': 'My Rates',
     'proposals': 'Proposals', 'changeorders': 'Change Orders', 'onsite': 'On-Site',
-    'client-portal': 'Client Portal', 'invoices': 'Invoices', 'ai-advisor': 'AI Advisor', 'setup': 'Settings'
+    'client-portal': 'Client Portal', 'invoices': 'Invoices', 'ai-advisor': 'AI Advisor',
+    'setup': 'Settings', 'requests': 'Requests'
   };
   var bc = document.getElementById('breadcrumb');
   if (bc) bc.textContent = labels[viewName] || viewName;
@@ -298,6 +315,8 @@ function switchView(viewName) {
   if (viewName === 'client-portal') updateLetterhead();
   if (viewName === 'estimates') { goToStep(1); }
   if (viewName === 'proposals') updateProposalHero();
+  if (viewName === 'requests') renderRequestsList();
+  if (viewName === 'onsite') populateOnsiteSelect();
 }
 
 /* ===== ESTIMATE STEPS ===== */
@@ -1057,6 +1076,527 @@ function appendAiMsg(role, text) {
     '<div class="ai-bubble">' + escHtml(text).replace(/\n/g, '<br>') + '</div>';
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
+}
+
+/* ===== CUSTOMER INTAKE ===== */
+var ciState = {
+  projectType: null,
+  photos: [],
+  aiConcept: null,
+  selectedDate: null,
+  selectedTime: null,
+};
+
+function customerStep(n) {
+  for (var i = 1; i <= 4; i++) {
+    var el = document.getElementById('cist-' + i);
+    if (el) el.style.display = i === n ? 'block' : 'none';
+    var pill = document.getElementById('csp-' + i);
+    if (pill) {
+      pill.classList.remove('active', 'done');
+      if (i < n) pill.classList.add('done');
+      else if (i === n) pill.classList.add('active');
+    }
+  }
+  var confirm = document.getElementById('cist-confirm');
+  if (confirm) confirm.style.display = 'none';
+  if (n === 4) calculateInstantEstimate();
+}
+
+function ciSelectType(el) {
+  document.querySelectorAll('.ci-type-btn').forEach(function(b) { b.classList.remove('selected'); });
+  el.classList.add('selected');
+  ciState.projectType = el.dataset.type;
+}
+
+function addCustomerPhotos(input) {
+  if (!input.files) return;
+  var grid = document.getElementById('ciPhotoPreviewGrid');
+  var aiSection = document.getElementById('ciAiSection');
+  Array.from(input.files).slice(0, 6 - ciState.photos.length).forEach(function(file) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      ciState.photos.push(e.target.result);
+      var img = document.createElement('div');
+      img.className = 'ci-photo-thumb';
+      img.innerHTML = '<img src="' + e.target.result + '" alt="Before photo">';
+      grid.appendChild(img);
+      if (ciState.photos.length > 0 && aiSection) aiSection.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  });
+  document.getElementById('ciPhotoPlaceholder').style.display = ciState.photos.length >= 6 ? 'none' : 'flex';
+}
+
+function generateCustomerConcept() {
+  if (!state.apiKey) {
+    showToast('AI concept requires an API key — contact your contractor to enable this feature');
+    return;
+  }
+  var photoData = ciState.photos[0];
+  if (!photoData) { showToast('Upload at least one photo first'); return; }
+  var desc = document.getElementById('ciDescription').value.trim();
+  var type = ciState.projectType || 'renovation';
+  var btn = document.querySelector('#ciAiSection .btn-outline');
+  if (btn) btn.textContent = 'Generating...';
+
+  var base64 = photoData.split(',')[1];
+  var mediaType = photoData.split(';')[0].split(':')[1] || 'image/jpeg';
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': state.apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 500,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+          { type: 'text', text: 'This is a BEFORE photo of a ' + type + ' that will be renovated. ' + (desc ? 'Customer says: "' + desc + '". ' : '') + 'Write a vivid 3-4 sentence "After Renovation" concept description. Describe the transformed space using specific materials, finishes, colors, and the atmosphere it will create. Be inspiring and specific.' }
+        ]
+      }]
+    })
+  }).then(function(r) { return r.json(); })
+    .then(function(data) {
+      var text = data.content && data.content[0] ? data.content[0].text : 'Could not generate concept.';
+      ciState.aiConcept = text;
+      var result = document.getElementById('ciAiResult');
+      var textEl = document.getElementById('ciAiText');
+      if (result) result.style.display = 'block';
+      if (textEl) textEl.textContent = text;
+      if (btn) btn.textContent = 'Regenerate Concept';
+    })
+    .catch(function() {
+      if (btn) btn.textContent = 'Generate AI Concept →';
+      showToast('AI error — try again');
+    });
+}
+
+function calculateInstantEstimate() {
+  var type = ciState.projectType;
+  var sqft = parseFloat(document.getElementById('ciSqft').value) || 0;
+  var jr = jobRates[type] || jobRates.kitchen;
+  var scopes = document.querySelectorAll('#ciScopeGrid input:checked');
+  var scopeFactor = scopes.length > 0 ? 0.5 + (scopes.length / 12) * 0.5 : 0.8;
+  var minEst = sqft > 0 ? sqft * jr.min * scopeFactor : jr.min * 150 * scopeFactor;
+  var maxEst = sqft > 0 ? sqft * jr.max * scopeFactor : jr.max * 150 * scopeFactor;
+
+  var typeLabels = { kitchen:'Kitchen', bathroom:'Bathroom', fullhome:'Full Home', basement:'Basement', outdoor:'Outdoor', addition:'Addition' };
+  setText('ciEstMin', fmt(minEst));
+  setText('ciEstMax', fmt(maxEst));
+  setText('ciEstBasis', (sqft > 0 ? sqft + ' sqft · ' : '') + (type ? typeLabels[type] : 'Renovation') + ' · ' + scopes.length + ' trades selected');
+  setText('ciConfirmRange', fmt(minEst) + ' – ' + fmt(maxEst));
+  ciState._minEst = minEst;
+  ciState._maxEst = maxEst;
+}
+
+function renderDatePicker() {
+  var cal = document.getElementById('ciCalendar');
+  if (!cal) return;
+  var today = new Date();
+  var html = '<div class="ci-cal-grid">';
+  var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  html += days.map(function(d){ return '<div class="ci-cal-dow">' + d + '</div>'; }).join('');
+  var startDay = new Date(today);
+  startDay.setDate(today.getDate() + 1);
+  var startDow = startDay.getDay();
+  for (var pad = 0; pad < startDow; pad++) html += '<div></div>';
+  for (var i = 0; i < 14; i++) {
+    var d = new Date(startDay);
+    d.setDate(startDay.getDate() + i);
+    var isWeekend = d.getDay() === 0 || d.getDay() === 6;
+    var iso = d.toISOString().split('T')[0];
+    var label = (i === 0 ? 'Tomorrow' : d.toLocaleDateString('en-US', {month:'short',day:'numeric'}));
+    html += '<button class="ci-cal-day' + (isWeekend ? ' ci-cal-weekend' : '') + '" data-date="' + iso + '" onclick="selectDate(this,\'' + iso + '\')">' + d.getDate() + '</button>';
+  }
+  html += '</div>';
+  cal.innerHTML = html;
+}
+
+function selectDate(el, date) {
+  document.querySelectorAll('.ci-cal-day').forEach(function(b) { b.classList.remove('selected'); });
+  el.classList.add('selected');
+  ciState.selectedDate = date;
+  ciState.selectedTime = null;
+  document.querySelectorAll('.ci-slot').forEach(function(s) { s.classList.remove('selected'); });
+  var slots = document.getElementById('ciTimeSlots');
+  if (slots) slots.style.display = 'block';
+  updateSubmitBtn();
+}
+
+function selectTimeSlot(el, time) {
+  document.querySelectorAll('.ci-slot').forEach(function(s) { s.classList.remove('selected'); });
+  el.classList.add('selected');
+  ciState.selectedTime = time;
+  updateSubmitBtn();
+}
+
+function updateSubmitBtn() {
+  var btn = document.getElementById('ciSubmitBtn');
+  if (btn) btn.disabled = !(ciState.selectedDate && ciState.selectedTime);
+}
+
+function submitCustomerRequest() {
+  var first = document.getElementById('ciFirstName').value.trim();
+  var last = document.getElementById('ciLastName').value.trim();
+  if (!first || !last) { showToast('Enter your full name'); customerStep(1); return; }
+  if (!ciState.projectType) { showToast('Select a project type'); customerStep(1); return; }
+  if (!document.getElementById('ciSqft').value) { showToast('Enter approximate square footage'); customerStep(2); return; }
+  if (!ciState.selectedDate || !ciState.selectedTime) { showToast('Select a date and time'); return; }
+
+  var lastName = last.toUpperCase();
+  var year = new Date().getFullYear();
+  var requests = JSON.parse(localStorage.getItem('renovateiq_requests') || '[]');
+  var num = String(requests.length + 1).padStart(3, '0');
+  var code = lastName + '-' + year + '-' + num;
+
+  var scopes = [];
+  document.querySelectorAll('#ciScopeGrid input:checked').forEach(function(cb) { scopes.push(cb.value); });
+  var timeLabels = { morning: 'Morning (8–11am)', afternoon: 'Afternoon (12–3pm)', late: 'Late Afternoon (3–6pm)' };
+
+  var request = {
+    code: code,
+    name: first + ' ' + last,
+    phone: document.getElementById('ciPhone').value,
+    email: document.getElementById('ciEmail').value,
+    address: document.getElementById('ciAddress').value,
+    projectType: ciState.projectType,
+    sqft: parseFloat(document.getElementById('ciSqft').value) || 0,
+    budget: document.getElementById('ciBudget').value,
+    scope: scopes,
+    description: document.getElementById('ciDescription').value,
+    photos: ciState.photos,
+    aiConcept: ciState.aiConcept,
+    scheduledDate: ciState.selectedDate,
+    scheduledTime: ciState.selectedTime,
+    estMin: ciState._minEst || 0,
+    estMax: ciState._maxEst || 0,
+    submittedAt: new Date().toISOString(),
+    status: 'pending',
+  };
+
+  requests.push(request);
+  localStorage.setItem('renovateiq_requests', JSON.stringify(requests));
+
+  var d = new Date(ciState.selectedDate + 'T12:00:00');
+  var dateStr = d.toLocaleDateString('en-US', {weekday:'long',month:'long',day:'numeric'}) + ' · ' + timeLabels[ciState.selectedTime];
+
+  setText('ciConfirmCode', code);
+  setText('ciConfirmDate', dateStr);
+  setText('ciConfirmEmail', document.getElementById('ciEmail').value || 'your email');
+
+  for (var i = 1; i <= 4; i++) {
+    var el = document.getElementById('cist-' + i);
+    if (el) el.style.display = 'none';
+  }
+  var conf = document.getElementById('cist-confirm');
+  if (conf) conf.style.display = 'block';
+  for (var j = 1; j <= 4; j++) {
+    var pill = document.getElementById('csp-' + j);
+    if (pill) { pill.classList.remove('active'); pill.classList.add('done'); }
+  }
+
+  updateRequestsBadge();
+}
+
+/* ===== REQUESTS VIEW ===== */
+function renderRequestsList() {
+  var requests = JSON.parse(localStorage.getItem('renovateiq_requests') || '[]');
+  var emptyEl = document.getElementById('requestsEmpty');
+  var listEl = document.getElementById('requestsList');
+  if (!listEl) return;
+
+  if (requests.length === 0) {
+    if (emptyEl) emptyEl.style.display = 'block';
+    listEl.style.display = 'none';
+    return;
+  }
+  if (emptyEl) emptyEl.style.display = 'none';
+  listEl.style.display = 'grid';
+
+  var typeLabels = { kitchen:'Kitchen', bathroom:'Bathroom', fullhome:'Full Home', basement:'Basement', outdoor:'Outdoor', addition:'Addition' };
+  var timeLabels = { morning: 'Morning (8–11am)', afternoon: 'Afternoon (12–3pm)', late: 'Late Afternoon (3–6pm)' };
+
+  listEl.innerHTML = requests.slice().reverse().map(function(r) {
+    var d = new Date(r.submittedAt);
+    var submitted = d.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
+    var visit = r.scheduledDate ? new Date(r.scheduledDate + 'T12:00:00').toLocaleDateString('en-US', {month:'short',day:'numeric'}) + ' · ' + (timeLabels[r.scheduledTime] || '') : '—';
+    return '<div class="req-card card">' +
+      '<div class="req-card-head">' +
+        '<div>' +
+          '<div class="req-name">' + escHtml(r.name) + '</div>' +
+          '<div class="req-code">' + escHtml(r.code) + '</div>' +
+        '</div>' +
+        '<span class="status-pill status-pending">Pending</span>' +
+      '</div>' +
+      '<div class="req-meta">' +
+        '<span>📍 ' + escHtml(r.address || '—') + '</span>' +
+        '<span>🔧 ' + escHtml(typeLabels[r.projectType] || r.projectType || '—') + '</span>' +
+        '<span>📐 ' + (r.sqft || '—') + ' sqft</span>' +
+        '<span>📅 Visit: ' + visit + '</span>' +
+      '</div>' +
+      '<div class="req-range">' + fmt(r.estMin) + ' – ' + fmt(r.estMax) + ' estimate range</div>' +
+      (r.description ? '<div class="req-desc">"' + escHtml(r.description.slice(0, 120)) + (r.description.length > 120 ? '…' : '') + '"</div>' : '') +
+      '<div class="req-actions">' +
+        '<button class="btn-primary btn-sm" onclick="loadRequestToOnsite(\'' + r.code + '\')">Verify On-Site →</button>' +
+        '<button class="btn-outline btn-sm" onclick="copyIntakeLink()">Copy Link</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  updateRequestsBadge();
+}
+
+function updateRequestsBadge() {
+  var requests = JSON.parse(localStorage.getItem('renovateiq_requests') || '[]');
+  var pending = requests.filter(function(r){ return r.status === 'pending'; }).length;
+  var badge = document.getElementById('requestsBadge');
+  if (badge) {
+    if (pending > 0) { badge.style.display = 'inline-flex'; badge.textContent = pending; }
+    else badge.style.display = 'none';
+  }
+}
+
+function copyIntakeLink() {
+  var url = window.location.href.split('?')[0].split('#')[0] + '?intake=1';
+  navigator.clipboard.writeText(url)
+    .then(function() { showToast('Customer intake link copied!'); })
+    .catch(function() { showToast('Copy the URL from your address bar'); });
+}
+
+function loadRequestToOnsite(code) {
+  switchView('onsite');
+  setTimeout(function() {
+    var sel = document.getElementById('onsiteClientSelect');
+    if (sel) {
+      sel.value = code;
+      loadOnsiteRequest(code);
+    }
+  }, 100);
+}
+
+/* ===== ON-SITE VERIFICATION (NEW) ===== */
+var osvState = {
+  request: null,
+  lines: [],
+};
+
+function populateOnsiteSelect() {
+  var sel = document.getElementById('onsiteClientSelect');
+  if (!sel) return;
+  var requests = JSON.parse(localStorage.getItem('renovateiq_requests') || '[]');
+  sel.innerHTML = '<option value="">— Select a pending request —</option>';
+  requests.forEach(function(r) {
+    var opt = document.createElement('option');
+    opt.value = r.code;
+    opt.textContent = r.code + ' — ' + r.name;
+    sel.appendChild(opt);
+  });
+  if (requests.length === 0) {
+    var opt = document.createElement('option');
+    opt.value = '__demo__';
+    opt.textContent = 'JOHNSON-2025-001 — Sarah Johnson (Demo)';
+    sel.appendChild(opt);
+  }
+}
+
+function loadOnsiteRequest(code) {
+  var panel = document.getElementById('onsitePanel');
+  if (!code) { if (panel) panel.style.display = 'none'; return; }
+
+  var requests = JSON.parse(localStorage.getItem('renovateiq_requests') || '[]');
+  var request = requests.find(function(r) { return r.code === code; });
+
+  if (!request && code === '__demo__') {
+    request = {
+      code: 'JOHNSON-2025-001', name: 'Sarah Johnson', phone: '(313) 555-0100',
+      email: 'sarah@email.com', address: '1847 Lakewood Dr, Detroit, MI 48215',
+      projectType: 'kitchen', sqft: 280, budget: '$20,000–$30,000',
+      scope: ['demo','electrical','drywall','flooring','cabinets','painting','cleanup'],
+      description: 'Full kitchen gut renovation. Remove all existing cabinets and flooring. New island layout, open to dining area. Want quartz countertops and hardwood floors.',
+      photos: [], estMin: 18000, estMax: 31500,
+      scheduledDate: new Date(Date.now() + 3*86400000).toISOString().split('T')[0],
+      scheduledTime: 'morning', submittedAt: new Date().toISOString(), status: 'pending',
+    };
+  }
+
+  if (!request) { showToast('Request not found'); return; }
+  osvState.request = request;
+
+  if (panel) panel.style.display = 'block';
+
+  setText('osvName', request.name);
+  setText('osvPhone', request.phone || '—');
+  setText('osvEmail', request.email || '—');
+  setText('osvAddress', request.address || '—');
+  var typeLabels = { kitchen:'Kitchen', bathroom:'Bathroom', fullhome:'Full Home', basement:'Basement', outdoor:'Outdoor', addition:'Addition' };
+  setText('osvProjectType', typeLabels[request.projectType] || request.projectType || '—');
+  setText('osvBudget', request.budget || 'Not specified');
+  setText('osvDescription', request.description || 'No description provided.');
+  setText('onsiteClientSqft', request.sqft || '—');
+  setText('osvCustMin', fmt(request.estMin || 0));
+  setText('osvCustMax', fmt(request.estMax || 0));
+
+  var photoCard = document.getElementById('osvPhotoCard');
+  var photoGrid = document.getElementById('osvPhotoGrid');
+  if (request.photos && request.photos.length > 0) {
+    if (photoCard) photoCard.style.display = 'block';
+    setText('osvPhotoCount', '(' + request.photos.length + ')');
+    if (photoGrid) {
+      photoGrid.innerHTML = request.photos.map(function(p) {
+        return '<div class="osv-photo-thumb"><img src="' + p + '" alt="Before photo"></div>';
+      }).join('');
+    }
+  } else {
+    if (photoCard) photoCard.style.display = 'none';
+  }
+
+  osvState.lines = (request.scope || []).map(function(key) {
+    var r = rates[key] || DEFAULT_RATES[key] || { name: key, unit: 'hr', rate: 85 };
+    return { key: key, trade: r.name, unit: r.unit, qty: r.unit === 'hr' ? 8 : 100, rate: r.rate, included: true };
+  });
+
+  var lockBtn = document.getElementById('lockPriceBtn');
+  var lockedConf = document.getElementById('lockedConfirm');
+  var fp = document.getElementById('onsiteFinalPrice');
+  if (lockBtn) { lockBtn.disabled = true; lockBtn.style.display = 'block'; }
+  if (lockedConf) lockedConf.style.display = 'none';
+  if (fp) fp.value = '';
+  var sqftInput = document.getElementById('onsiteActualSqft');
+  if (sqftInput) sqftInput.value = '';
+
+  renderOnsiteScopeTable();
+  recalcOnsiteVerify();
+}
+
+function renderOnsiteScopeTable() {
+  var el = document.getElementById('osvScopeTable');
+  if (!el) return;
+  el.innerHTML = osvState.lines.map(function(line, i) {
+    return '<div class="osv-scope-row' + (line.included ? '' : ' osv-row-excluded') + '">' +
+      '<div style="display:flex;align-items:center;gap:8px">' +
+        '<input type="checkbox"' + (line.included ? ' checked' : '') + ' onchange="osvState.lines[' + i + '].included=this.checked;renderOnsiteScopeTable();recalcOnsiteVerify()">' +
+        '<span style="font-size:.82rem">' + escHtml(line.trade) + '</span>' +
+      '</div>' +
+      '<input type="number" value="' + line.qty + '" class="osv-num-in" onchange="osvState.lines[' + i + '].qty=parseFloat(this.value)||0;recalcOnsiteVerify()">' +
+      '<span class="osv-unit-lbl">' + (line.unit === 'hr' ? 'hrs' : line.unit) + '</span>' +
+      '<input type="number" value="' + line.rate + '" step="0.5" class="osv-num-in" onchange="osvState.lines[' + i + '].rate=parseFloat(this.value)||0;recalcOnsiteVerify()">' +
+      '<span class="osv-line-total">' + fmt(line.included ? line.qty * line.rate : 0) + '</span>' +
+      '<button class="labor-del" onclick="osvState.lines.splice(' + i + ',1);renderOnsiteScopeTable();recalcOnsiteVerify()">✕</button>' +
+    '</div>';
+  }).join('');
+}
+
+function addOnsiteLine() {
+  osvState.lines.push({ key: 'custom_' + Date.now(), trade: 'Custom Task', unit: 'hr', qty: 8, rate: 85, included: true });
+  renderOnsiteScopeTable();
+  recalcOnsiteVerify();
+}
+
+function recalcOnsiteVerify() {
+  var raw = osvState.lines.reduce(function(s, l) { return s + (l.included ? l.qty * l.rate : 0); }, 0);
+  var op = parseInt((document.getElementById('osvOpSlider') || {}).value || 20);
+  var cont = parseInt((document.getElementById('osvContSlider') || {}).value || 5);
+  var withOp = raw * (1 + op / 100);
+  var grand = withOp * (1 + cont / 100);
+
+  var opVal = document.getElementById('osvOpVal');
+  if (opVal) opVal.textContent = op + '%';
+  var contVal = document.getElementById('osvContVal');
+  if (contVal) contVal.textContent = cont + '%';
+
+  setText('osvLiveTotal', fmt(raw));
+  setText('osvGrandTotal', fmt(grand));
+
+  var req = osvState.request;
+  if (req) {
+    var actSqft = parseFloat((document.getElementById('onsiteActualSqft') || {}).value) || 0;
+    var custSqft = req.sqft || 0;
+    var basis = osvState.lines.filter(function(l){ return l.included; }).length + ' trades';
+    if (actSqft > 0) basis += ' · ' + actSqft + ' sqft (actual)';
+    else if (custSqft > 0) basis += ' · ' + custSqft + ' sqft (customer)';
+    setText('osvLiveBasis', basis);
+
+    if (actSqft > 0) {
+      var flag = document.getElementById('sqftAdjustFlag');
+      var diff = actSqft - custSqft;
+      if (flag && Math.abs(diff) > custSqft * 0.1) {
+        flag.style.display = 'block';
+        flag.textContent = diff > 0 ? 'Your measurement is ' + Math.abs(diff).toFixed(0) + ' sqft larger than customer stated' : 'Your measurement is ' + Math.abs(diff).toFixed(0) + ' sqft smaller than customer stated';
+      } else if (flag) flag.style.display = 'none';
+    }
+  }
+}
+
+function checkOsvLock() {
+  var btn = document.getElementById('lockPriceBtn');
+  var val = parseFloat((document.getElementById('onsiteFinalPrice') || {}).value) || 0;
+  if (btn) btn.disabled = val <= 0;
+}
+
+function lockOnsitePrice() {
+  var val = parseFloat(document.getElementById('onsiteFinalPrice').value) || 0;
+  if (val <= 0) return;
+  state.lockedPrice = val;
+  var btn = document.getElementById('lockPriceBtn');
+  var conf = document.getElementById('lockedConfirm');
+  if (btn) btn.style.display = 'none';
+  if (conf) conf.style.display = 'block';
+  setText('lockedAmount', fmt(val));
+
+  if (osvState.request) {
+    var requests = JSON.parse(localStorage.getItem('renovateiq_requests') || '[]');
+    requests = requests.map(function(r) {
+      if (r.code === osvState.request.code) { r.status = 'locked'; r.lockedPrice = val; }
+      return r;
+    });
+    localStorage.setItem('renovateiq_requests', JSON.stringify(requests));
+    updateRequestsBadge();
+  }
+  showToast('Price locked at ' + fmt(val));
+}
+
+function generateOnsiteContract() {
+  if (!state.lockedPrice) { showToast('Lock a price first'); return; }
+  var req = osvState.request || {};
+  openPrintModal(buildOnsiteContract(req.name || 'Client', state.lockedPrice, req));
+}
+
+function buildOnsiteContract(clientName, amount, req) {
+  var c = contractor;
+  var today = new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
+  var scopeList = osvState.lines.filter(function(l){return l.included;}).map(function(l){return l.trade;}).join(', ');
+  return '<div class="print-letterhead">' +
+    '<div style="font-size:1.2rem;font-weight:800">' + escHtml(c.companyName) + '</div>' +
+    '<div style="margin-left:auto;text-align:right;font-size:.78rem;color:var(--text-muted)">' + escHtml(c.phone) + '<br>' + escHtml(c.email) + '<br>Lic: ' + escHtml(c.license) + '</div>' +
+    '</div>' +
+    '<h2 style="font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px">Labor Services Agreement</h2>' +
+    '<p style="font-size:.75rem;color:var(--text-muted);margin-bottom:20px">Date: ' + today + '</p>' +
+    '<p style="font-size:.85rem;margin-bottom:8px"><strong>Contractor:</strong> ' + escHtml(c.companyName) + ' · ' + escHtml(c.address) + '</p>' +
+    '<p style="font-size:.85rem;margin-bottom:8px"><strong>Client:</strong> ' + escHtml(clientName) + (req.address ? ' · ' + escHtml(req.address) : '') + '</p>' +
+    '<p style="font-size:.85rem;margin-bottom:20px"><strong>Project Type:</strong> ' + escHtml(req.projectType || 'Renovation') + (req.sqft ? ' · ' + req.sqft + ' sqft' : '') + '</p>' +
+    '<h3 style="margin-bottom:8px">1. Scope of Work</h3>' +
+    '<p style="font-size:.82rem;margin-bottom:16px">Contractor agrees to furnish labor for the renovation project verified on-site. Scope: ' + escHtml(scopeList || 'See attached') + '.</p>' +
+    '<h3 style="margin-bottom:8px">2. Locked Contract Price</h3>' +
+    '<p style="font-size:.82rem;margin-bottom:16px">Total labor price confirmed after on-site measurement: <strong>' + fmt(amount) + '</strong>. This price is fixed unless a signed change order is executed.</p>' +
+    '<h3 style="margin-bottom:8px">3. Payment Terms</h3>' +
+    '<p style="font-size:.82rem;margin-bottom:16px">30% deposit upon signing. 40% at project midpoint. 30% upon completion and client approval.</p>' +
+    '<h3 style="margin-bottom:8px">4. Change Orders</h3>' +
+    '<p style="font-size:.82rem;margin-bottom:16px">Any changes to scope require a written change order signed by both parties.</p>' +
+    '<h3 style="margin-bottom:8px">5. Warranty</h3>' +
+    '<p style="font-size:.82rem;margin-bottom:24px">One (1) year workmanship warranty from project completion.</p>' +
+    '<div style="border:1px solid var(--border);border-radius:8px;padding:16px;background:var(--amber-light)">' +
+    '<p style="font-size:.72rem;color:#92400E"><strong>Disclaimer:</strong> This is a template. Consult a licensed attorney before use.</p></div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:40px">' +
+    '<div><div style="border-top:2px solid var(--text);padding-top:6px;font-size:.78rem;margin-top:60px">Contractor Signature &amp; Date</div></div>' +
+    '<div><div style="border-top:2px solid var(--text);padding-top:6px;font-size:.78rem;margin-top:60px">Client Signature &amp; Date</div></div>' +
+    '</div>';
 }
 
 /* ===== UTILITIES ===== */

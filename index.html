@@ -47,19 +47,19 @@
         </div>
 
         <!-- Homeowner Portal -->
-        <div class="portal-card portal-card-alt" id="homeownerCard" onclick="showClientLogin()">
+        <div class="portal-card portal-card-alt" id="homeownerCard" onclick="showIntakeFlow()">
           <div class="pc-icon pc-icon-alt">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           </div>
-          <h2 class="pc-title">Homeowner Portal</h2>
-          <p class="pc-desc">View your labor estimate, track project progress, and sign off on your renovation proposal.</p>
+          <h2 class="pc-title">Get an Estimate</h2>
+          <p class="pc-desc">Fill out a quick renovation intake form and receive an instant labor estimate from your contractor.</p>
           <div class="pc-features">
-            <span>✓ View estimates</span>
-            <span>✓ Track project</span>
-            <span>✓ Digital signing</span>
-            <span>✓ Payment schedule</span>
+            <span>✓ Quick intake form</span>
+            <span>✓ Instant estimate</span>
+            <span>✓ Upload photos</span>
+            <span>✓ Schedule a visit</span>
           </div>
-          <div class="pc-cta pc-cta-alt">View as Homeowner →</div>
+          <div class="pc-cta pc-cta-alt">Start Your Estimate →</div>
         </div>
       </div>
 
@@ -332,6 +332,11 @@
         On-Site
       </a>
       <div class="nav-section-label">Client</div>
+      <a href="#" class="nav-item" data-view="requests">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Requests
+        <span class="nav-badge" id="requestsBadge" style="display:none">0</span>
+      </a>
       <a href="#" class="nav-item" data-view="client-portal">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Client Portal
@@ -970,65 +975,131 @@
       </div>
     </div>
 
-    <!-- ===== ON-SITE ===== -->
+    <!-- ===== ON-SITE VERIFICATION ===== -->
     <div id="view-onsite" class="view">
       <div class="view-header">
-        <div><h1>On-Site Verification</h1><p class="view-sub">Verify sqft, confirm scope, and lock the final price</p></div>
+        <div><h1>On-Site Verification</h1><p class="view-sub">Review customer submission, adjust scope, and lock final price</p></div>
       </div>
-      <div class="card" style="margin-bottom:16px;max-width:400px">
-        <label class="form-label">Select Client</label>
-        <select class="form-input" id="onsiteClientSelect" onchange="loadOnsiteClient(this.value)">
-          <option value="">— Choose a pending estimate —</option>
-          <option value="lakewood">Lakewood Kitchen — Sarah Johnson</option>
-          <option value="riverside">Riverside Bath — Mike Chen</option>
-          <option value="sample">Sample (demo)</option>
+      <div class="card" style="margin-bottom:16px;max-width:460px">
+        <label class="form-label">Load Customer Request</label>
+        <select class="form-input" id="onsiteClientSelect" onchange="loadOnsiteRequest(this.value)">
+          <option value="">— Select a pending request —</option>
         </select>
       </div>
       <div id="onsitePanel" style="display:none">
-        <div class="onsite-layout">
-          <div>
-            <div class="card" style="margin-bottom:14px">
-              <h3 style="margin-bottom:14px">Sqft Verification</h3>
+        <div class="osv-layout">
+          <!-- LEFT: Customer Info -->
+          <div class="osv-left">
+            <!-- Customer Info -->
+            <div class="card osv-card" style="margin-bottom:14px">
+              <div class="osv-card-head">Customer Info</div>
+              <div class="osv-info-grid">
+                <div><span class="osv-lbl">Name</span><span class="osv-val" id="osvName">—</span></div>
+                <div><span class="osv-lbl">Phone</span><span class="osv-val" id="osvPhone">—</span></div>
+                <div><span class="osv-lbl">Email</span><span class="osv-val" id="osvEmail">—</span></div>
+                <div><span class="osv-lbl">Address</span><span class="osv-val" id="osvAddress">—</span></div>
+                <div><span class="osv-lbl">Project</span><span class="osv-val" id="osvProjectType">—</span></div>
+                <div><span class="osv-lbl">Budget</span><span class="osv-val" id="osvBudget">—</span></div>
+              </div>
+              <div style="margin-top:10px">
+                <div class="osv-lbl">Customer Description</div>
+                <div class="osv-description" id="osvDescription">—</div>
+              </div>
+            </div>
+
+            <!-- Photos -->
+            <div class="card osv-card" id="osvPhotoCard" style="margin-bottom:14px;display:none">
+              <div class="osv-card-head">Before Photos <span id="osvPhotoCount" style="font-size:.75rem;color:var(--text-muted);font-weight:500"></span></div>
+              <div class="osv-photo-grid" id="osvPhotoGrid"></div>
+            </div>
+
+            <!-- Sqft Verification -->
+            <div class="card osv-card" style="margin-bottom:14px">
+              <div class="osv-card-head">Sqft Verification</div>
               <div class="sqft-row">
-                <div class="sqft-box"><div class="sqft-label">Client Submitted</div><div class="sqft-val" id="onsiteClientSqft">—</div><div class="sqft-unit">sq ft</div></div>
+                <div class="sqft-box"><div class="sqft-label">Customer Said</div><div class="sqft-val" id="onsiteClientSqft">—</div><div class="sqft-unit">sq ft</div></div>
                 <div class="sqft-arrow">→</div>
-                <div class="sqft-box sqft-actual"><div class="sqft-label">Your Measurement</div><input type="number" class="sqft-input" id="onsiteActualSqft" placeholder="0" oninput="recalcOnSite()"><div class="sqft-unit">sq ft</div></div>
+                <div class="sqft-box sqft-actual"><div class="sqft-label">Your Measurement</div><input type="number" class="sqft-input" id="onsiteActualSqft" placeholder="0" oninput="recalcOnsiteVerify()"><div class="sqft-unit">sq ft</div></div>
               </div>
               <div id="sqftAdjustFlag" class="adjust-flag" style="display:none"></div>
             </div>
-            <div class="card" style="margin-bottom:14px">
-              <h3 style="margin-bottom:10px">Scope Confirmation</h3>
-              <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px">Tap to toggle included trades</p>
-              <div id="onsiteScopeChips" class="scope-chips"></div>
-              <div id="onsiteAdjustments" style="margin-top:10px"></div>
+
+            <!-- Scope Table -->
+            <div class="card osv-card" style="margin-bottom:14px">
+              <div class="osv-card-head" style="display:flex;justify-content:space-between;align-items:center">
+                <span>Scope &amp; Labor Lines</span>
+                <button class="btn-outline btn-sm" onclick="addOnsiteLine()">+ Add Line</button>
+              </div>
+              <div class="osv-scope-head">
+                <span>Trade</span><span>Qty</span><span>Unit</span><span>Rate</span><span>Total</span><span></span>
+              </div>
+              <div id="osvScopeTable"></div>
             </div>
-            <div class="card">
-              <h3 style="margin-bottom:10px">Site Notes</h3>
-              <textarea class="form-input" id="onsiteNotes" rows="3" placeholder="Access conditions, scope clarifications..."></textarea>
+
+            <!-- Site Notes -->
+            <div class="card osv-card">
+              <div class="osv-card-head">Site Notes</div>
+              <textarea class="form-input" id="onsiteNotes" rows="3" placeholder="Access conditions, scope clarifications, surprises found on-site..."></textarea>
             </div>
           </div>
-          <div>
-            <div class="card onsite-price-card">
-              <h3>Estimated Range</h3>
-              <div class="onsite-range"><span id="onsiteRangeMin">—</span><span class="range-dash">–</span><span id="onsiteRangeMax">—</span></div>
-              <div class="range-basis" id="onsiteRangeBasis"></div>
-              <div class="divider"></div>
-              <h3>Lock Final Price</h3>
-              <div class="final-price-row">
-                <span class="dollar">$</span>
-                <input type="number" class="final-price-in" id="onsiteFinalPrice" placeholder="0" oninput="checkFinalPrice()">
+
+          <!-- RIGHT: Quote Panel -->
+          <div class="osv-right">
+            <div class="card osv-quote-card">
+              <div class="osv-quote-label">Customer's Estimate Range</div>
+              <div class="osv-customer-range"><span id="osvCustMin">—</span><span class="range-dash"> – </span><span id="osvCustMax">—</span></div>
+              <div class="divider" style="margin:14px 0"></div>
+              <div class="osv-quote-label">Your Live Quote</div>
+              <div class="osv-live-total" id="osvLiveTotal">$0</div>
+              <div class="osv-live-basis" id="osvLiveBasis"></div>
+              <div style="margin-top:12px">
+                <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:4px">
+                  <span>O&amp;P</span><span id="osvOpVal">20%</span>
+                </div>
+                <input type="range" class="range-slider" min="0" max="40" value="20" id="osvOpSlider" oninput="recalcOnsiteVerify()">
               </div>
-              <div id="finalPriceFlag" style="display:none;font-size:0.78rem;color:var(--amber);margin-top:6px"></div>
-              <button class="btn-primary full-width" style="margin-top:12px" id="lockPriceBtn" onclick="lockFinalPrice()" disabled>Lock Price</button>
+              <div style="margin-top:8px">
+                <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:4px">
+                  <span>Contingency</span><span id="osvContVal">5%</span>
+                </div>
+                <input type="range" class="range-slider" min="0" max="20" value="5" id="osvContSlider" oninput="recalcOnsiteVerify()">
+              </div>
+              <div class="divider" style="margin:14px 0"></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                <span style="font-size:.85rem;font-weight:600">Grand Total</span>
+                <span class="osv-grand-total" id="osvGrandTotal">$0</span>
+              </div>
+              <div class="divider" style="margin:14px 0"></div>
+              <div class="osv-quote-label">Lock Final Price</div>
+              <div class="final-price-row" style="margin-top:8px">
+                <span class="dollar">$</span>
+                <input type="number" class="final-price-in" id="onsiteFinalPrice" placeholder="0" oninput="checkOsvLock()">
+              </div>
+              <button class="btn-primary full-width" style="margin-top:10px" id="lockPriceBtn" onclick="lockOnsitePrice()" disabled>Lock Price</button>
               <div id="lockedConfirm" style="display:none;margin-top:12px">
-                <div class="locked-badge">✓ Price Locked</div>
-                <div class="locked-amount" id="lockedAmount"></div>
-                <button class="btn-outline full-width" style="margin-top:10px" onclick="draftContract()">Draft Contract →</button>
+                <div class="locked-badge">✓ Price Locked at <span id="lockedAmount"></span></div>
+                <button class="btn-outline full-width" style="margin-top:10px" onclick="generateOnsiteContract()">Generate Contract →</button>
+                <button class="btn-primary full-width" style="margin-top:8px" onclick="showToast('Confirmation sent to customer!')">Send to Customer</button>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- ===== REQUESTS VIEW ===== -->
+    <div id="view-requests" class="view">
+      <div class="view-header">
+        <div><h1>Customer Requests</h1><p class="view-sub">Renovation intake submissions from your customers</p></div>
+        <button class="btn-primary" onclick="copyIntakeLink()">Copy Customer Link</button>
+      </div>
+      <div id="requestsEmpty" class="empty-state">
+        <div class="es-icon">📋</div>
+        <div class="es-title">No requests yet</div>
+        <div class="es-sub">Share your customer intake link and submissions will appear here.</div>
+        <button class="btn-primary" style="margin-top:16px" onclick="copyIntakeLink()">Copy Customer Link</button>
+      </div>
+      <div id="requestsList" style="display:none"></div>
     </div>
 
     <!-- ===== CLIENT PORTAL ===== -->
@@ -1261,39 +1332,184 @@
 </div>
 
 <!-- ===================================================
-     CLIENT / HOMEOWNER SHELL
+     CUSTOMER INTAKE FLOW
 ===================================================== -->
-<div id="clientShell" style="display:none">
-  <div class="client-nav">
-    <div class="cn-brand" id="clientNavBrand">
-      <svg width="22" height="22" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="7" fill="#4F46E5"/><path d="M8 22L12 10L16 18L20 13L24 22H8Z" fill="white"/></svg>
-      RenovateIQ
-    </div>
-    <button class="btn-outline btn-sm" onclick="signOut()">Exit Portal</button>
-  </div>
-  <div class="client-content">
-    <div class="client-estimate-card card">
-      <div class="letterhead" id="clientLetterhead">
-        <div id="clientLogoDisplay" class="lh-logo">
-          <svg width="36" height="36" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#4F46E5"/><path d="M8 22L12 10L16 18L20 13L24 22H8Z" fill="white"/></svg>
+<div id="customerIntake" style="display:none">
+  <div class="ci-shell">
+    <!-- Header with progress -->
+    <div class="ci-header">
+      <div class="ci-brand">
+        <svg width="22" height="22" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="7" fill="#4F46E5"/><path d="M8 22L12 10L16 18L20 13L24 22H8Z" fill="white"/></svg>
+        <span id="ciContractorName">RenovateIQ</span>
+      </div>
+      <div class="ci-progress-wrap">
+        <div class="ci-steps">
+          <div class="ci-step-pill active" id="csp-1">1</div>
+          <div class="ci-step-line"></div>
+          <div class="ci-step-pill" id="csp-2">2</div>
+          <div class="ci-step-line"></div>
+          <div class="ci-step-pill" id="csp-3">3</div>
+          <div class="ci-step-line"></div>
+          <div class="ci-step-pill" id="csp-4">4</div>
         </div>
-        <div>
-          <div class="lh-company" id="clientCompanyDisplay">Your Contractor</div>
-          <div class="lh-detail" id="clientContactDisplay"></div>
+        <div class="ci-step-labels">
+          <span>Contact</span><span>Project</span><span>Photos</span><span>Estimate</span>
         </div>
       </div>
-      <div class="portal-body">
-        <div class="portal-greeting">Hello, <strong>Sarah</strong> — your labor estimate is ready.</div>
-        <div class="portal-highlights">
-          <div class="ph-item"><div class="ph-val">$14,200–$24,920</div><div class="ph-label">Estimated Range</div></div>
-          <div class="ph-item"><div class="ph-val">Kitchen</div><div class="ph-label">Project Type</div></div>
-          <div class="ph-item"><div class="ph-val">280 sq ft</div><div class="ph-label">Submitted Size</div></div>
+    </div>
+
+    <div class="ci-body">
+      <!-- Step 1: Contact Info + Project Type -->
+      <div class="ci-step" id="cist-1">
+        <div class="ci-step-card">
+          <h2 class="ci-step-title">Tell us about yourself</h2>
+          <p class="ci-step-sub">We'll use this to send you your estimate and schedule a visit.</p>
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">First Name *</label><input type="text" class="form-input" id="ciFirstName" placeholder="Sarah"></div>
+            <div class="form-group"><label class="form-label">Last Name *</label><input type="text" class="form-input" id="ciLastName" placeholder="Johnson"></div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">Phone *</label><input type="tel" class="form-input" id="ciPhone" placeholder="(313) 555-1234"></div>
+            <div class="form-group"><label class="form-label">Email *</label><input type="email" class="form-input" id="ciEmail" placeholder="sarah@email.com"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Project Address *</label><input type="text" class="form-input" id="ciAddress" placeholder="123 Main St, Detroit, MI 48201"></div>
+          <h3 style="margin-top:20px;margin-bottom:12px">What type of renovation? *</h3>
+          <div class="ci-type-grid">
+            <button class="ci-type-btn" data-type="kitchen" onclick="ciSelectType(this)">🍳 Kitchen</button>
+            <button class="ci-type-btn" data-type="bathroom" onclick="ciSelectType(this)">🛁 Bathroom</button>
+            <button class="ci-type-btn" data-type="fullhome" onclick="ciSelectType(this)">🏠 Full Home</button>
+            <button class="ci-type-btn" data-type="basement" onclick="ciSelectType(this)">🏗️ Basement</button>
+            <button class="ci-type-btn" data-type="outdoor" onclick="ciSelectType(this)">🌿 Outdoor</button>
+            <button class="ci-type-btn" data-type="addition" onclick="ciSelectType(this)">🏡 Addition</button>
+          </div>
+          <div class="ci-nav">
+            <div></div>
+            <button class="btn-primary" onclick="customerStep(2)">Next: Project Details →</button>
+          </div>
         </div>
-        <div class="portal-disclaimer">
-          <strong>About this estimate</strong>
-          <p>This is a preliminary labor cost range based on your project description. Your contractor will confirm the exact price during an on-site visit. There's no obligation to proceed.</p>
+      </div>
+
+      <!-- Step 2: Project Details -->
+      <div class="ci-step" id="cist-2" style="display:none">
+        <div class="ci-step-card">
+          <h2 class="ci-step-title">Project Details</h2>
+          <p class="ci-step-sub">Help us understand the scope of your renovation.</p>
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">Approximate Square Footage *</label><input type="number" class="form-input" id="ciSqft" placeholder="e.g. 250"></div>
+            <div class="form-group"><label class="form-label">Your Budget (optional)</label><input type="text" class="form-input" id="ciBudget" placeholder="e.g. $15,000–$25,000"></div>
+          </div>
+          <h3 style="margin-top:16px;margin-bottom:10px">Which trades will be needed? (check all that apply)</h3>
+          <div class="ci-scope-grid" id="ciScopeGrid">
+            <label class="ci-scope-cb"><input type="checkbox" value="demo"> Demo &amp; Hauling</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="electrical"> Electrical</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="plumbing"> Plumbing</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="hvac"> HVAC</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="framing"> Framing</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="drywall"> Drywall</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="tile"> Tile Work</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="flooring"> Flooring</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="cabinets"> Cabinets</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="painting"> Painting</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="trim"> Trim &amp; Millwork</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="cleanup"> Final Cleanup</label>
+          </div>
+          <div class="form-group" style="margin-top:16px">
+            <label class="form-label">Describe your project *</label>
+            <textarea class="form-input" id="ciDescription" rows="4" placeholder="Tell us about your renovation vision, current condition of the space, any specific concerns or requests..."></textarea>
+          </div>
+          <div class="ci-nav">
+            <button class="btn-outline" onclick="customerStep(1)">← Back</button>
+            <button class="btn-primary" onclick="customerStep(3)">Next: Upload Photos →</button>
+          </div>
         </div>
-        <button class="btn-primary full-width" style="margin-top:16px" onclick="showToast('Scheduling request sent! Your contractor will contact you within 24 hours.')">Schedule On-Site Visit →</button>
+      </div>
+
+      <!-- Step 3: Photos + AI Concept -->
+      <div class="ci-step" id="cist-3" style="display:none">
+        <div class="ci-step-card">
+          <h2 class="ci-step-title">Upload Before Photos</h2>
+          <p class="ci-step-sub">Photos of the current space help your contractor prepare an accurate estimate. (Optional but recommended)</p>
+          <div class="ci-photo-zone" onclick="document.getElementById('ciPhotoInput').click()">
+            <input type="file" id="ciPhotoInput" accept="image/*" multiple style="display:none" onchange="addCustomerPhotos(this)">
+            <div id="ciPhotoPlaceholder">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:8px;color:var(--text-muted)"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+              <div style="font-weight:600;margin-bottom:4px">Tap to upload photos</div>
+              <div style="font-size:.8rem;color:var(--text-muted)">JPG, PNG · Up to 6 photos</div>
+            </div>
+          </div>
+          <div class="ci-photo-grid" id="ciPhotoPreviewGrid"></div>
+
+          <!-- AI Concept Section -->
+          <div class="ci-ai-section" id="ciAiSection" style="display:none">
+            <div class="ci-ai-header">
+              <div class="ci-ai-badge">✨ AI</div>
+              <div>
+                <div style="font-weight:600;font-size:.9rem">Generate Before &amp; After Concept</div>
+                <div style="font-size:.78rem;color:var(--text-muted)">AI describes how your space could look after renovation</div>
+              </div>
+            </div>
+            <button class="btn-outline full-width" style="margin-top:10px" onclick="generateCustomerConcept()">Generate AI Concept →</button>
+            <div id="ciAiResult" style="display:none;margin-top:12px" class="ci-ai-result">
+              <div class="ci-ai-result-label">AI Vision for Your Space</div>
+              <div id="ciAiText" style="font-size:.88rem;line-height:1.6;color:var(--text)"></div>
+            </div>
+          </div>
+
+          <div class="ci-nav">
+            <button class="btn-outline" onclick="customerStep(2)">← Back</button>
+            <button class="btn-primary" onclick="customerStep(4)">Next: See Estimate →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Instant Estimate + Schedule -->
+      <div class="ci-step" id="cist-4" style="display:none">
+        <div class="ci-step-card">
+          <h2 class="ci-step-title">Your Instant Estimate</h2>
+          <p class="ci-step-sub">Based on your project details. A contractor visit confirms the exact price.</p>
+
+          <div class="ci-estimate-range">
+            <div class="ci-range-label">Estimated Labor Range</div>
+            <div class="ci-range-nums"><span id="ciEstMin">—</span><span class="range-dash"> – </span><span id="ciEstMax">—</span></div>
+            <div class="ci-range-basis" id="ciEstBasis">based on your inputs</div>
+          </div>
+
+          <div class="ci-est-disclaimer">
+            <strong>About this estimate</strong> — This is a preliminary range based on your project type and square footage. Labor prices vary by scope, materials, and site conditions. Your contractor will confirm the final price in person. No obligation to proceed.
+          </div>
+
+          <h3 style="margin-top:20px;margin-bottom:12px">Schedule an On-Site Visit</h3>
+          <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:14px">Pick a day and time for your contractor to visit, measure, and provide a locked quote.</p>
+          <div class="ci-calendar" id="ciCalendar"></div>
+          <div class="ci-time-slots" id="ciTimeSlots" style="display:none">
+            <div style="font-size:.85rem;font-weight:600;margin-bottom:10px">Available Times</div>
+            <div class="ci-slots-row">
+              <button class="ci-slot" onclick="selectTimeSlot(this,'morning')">Morning (8–11am)</button>
+              <button class="ci-slot" onclick="selectTimeSlot(this,'afternoon')">Afternoon (12–3pm)</button>
+              <button class="ci-slot" onclick="selectTimeSlot(this,'late')">Late Afternoon (3–6pm)</button>
+            </div>
+          </div>
+
+          <div class="ci-nav">
+            <button class="btn-outline" onclick="customerStep(3)">← Back</button>
+            <button class="btn-primary" id="ciSubmitBtn" onclick="submitCustomerRequest()" disabled>Submit Request →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Confirmation Screen -->
+      <div class="ci-step" id="cist-confirm" style="display:none">
+        <div class="ci-step-card ci-confirm-card">
+          <div class="ci-confirm-icon">✓</div>
+          <h2 class="ci-step-title">Request Submitted!</h2>
+          <p class="ci-step-sub">Your contractor has been notified and will confirm your appointment within 24 hours.</p>
+          <div class="ci-confirm-details">
+            <div class="ci-confirm-row"><span>Estimate Code</span><strong id="ciConfirmCode">—</strong></div>
+            <div class="ci-confirm-row"><span>Scheduled</span><strong id="ciConfirmDate">—</strong></div>
+            <div class="ci-confirm-row"><span>Estimate Range</span><strong id="ciConfirmRange">—</strong></div>
+          </div>
+          <p style="font-size:.82rem;color:var(--text-muted);margin-top:16px">Save your estimate code — you'll need it to check status. We'll email you a confirmation at <span id="ciConfirmEmail"></span>.</p>
+        </div>
       </div>
     </div>
   </div>
