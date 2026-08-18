@@ -976,6 +976,7 @@ textarea.form-input { resize: vertical; }
 @media (max-width: 900px) {
   .osv-layout { grid-template-columns: 1fr; }
   .osv-right { position: static; }
+  .sched-layout { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
   .ci-type-grid { grid-template-columns: repeat(2, 1fr); }
@@ -983,3 +984,113 @@ textarea.form-input { resize: vertical; }
   .ci-step-labels span:not(:last-child) { margin-right: 28px; }
   .ci-step-line { width: 28px; }
 }
+
+/* ===== SCHEDULE VIEW ===== */
+.sched-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.sched-section { margin-bottom: 20px; }
+.sched-section-label {
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+.sched-dow-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.sched-dow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .82rem;
+  font-weight: 500;
+  padding: 7px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  background: #fff;
+  transition: all .1s;
+}
+.sched-dow:has(input:checked) { border-color: var(--green); background: var(--green-light); color: var(--green-dark); }
+.sched-dow input { accent-color: var(--green); }
+.sched-slot-row { display: flex; flex-direction: column; gap: 8px; }
+.sched-slot-cb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .85rem;
+  cursor: pointer;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  transition: all .1s;
+}
+.sched-slot-cb:has(input:checked) { border-color: var(--green); background: var(--green-light); color: var(--green-dark); }
+.sched-slot-cb input { accent-color: var(--green); }
+.sched-lead-sel { max-width: 220px; }
+.sched-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  margin-bottom: 12px;
+}
+.sched-cal-dow {
+  text-align: center;
+  font-size: .65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 4px 0;
+}
+.sched-cal-day {
+  aspect-ratio: 1;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: #fff;
+  font-size: .75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .1s;
+  position: relative;
+}
+.sched-cal-day:hover:not(.sched-day-blocked):not(.sched-day-past) { border-color: var(--red); background: var(--red-light); }
+.sched-day-blocked {
+  background: var(--red-light);
+  border-color: var(--red);
+  color: var(--red);
+  font-weight: 700;
+}
+.sched-day-past { opacity: .3; cursor: default; }
+.sched-blocked-list { display: flex; flex-wrap: wrap; gap: 6px; min-height: 24px; }
+.sched-blocked-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--red-light);
+  color: var(--red);
+  border: 1px solid var(--red);
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+}
+
+/* ===== SCHEDULE TABS in Customer Intake ===== */
+.ci-sched-tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 2px solid var(--border); padding-bottom: 0; }
+.ci-sched-tab {
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all .1s;
+}
+.ci-sched-tab.active { color: var(--green-dark); border-bottom-color: var(--green); }
