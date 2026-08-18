@@ -3,1059 +3,1194 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RenovateIQ — Labor Estimator</title>
+<title>RenovateIQ — Labor Estimation Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<!-- ===== SIDEBAR ===== -->
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-logo">
-    <div class="monkey-logo">🐒</div>
-    <div>
-      <div class="logo-text">RenovateIQ</div>
-      <div class="logo-sub">Labor Estimator</div>
-    </div>
-  </div>
-
-  <div class="xp-bar-wrap">
-    <div class="xp-label"><span>🔥 12 day streak</span><span class="xp-val">2,480 XP</span></div>
-    <div class="xp-track"><div class="xp-fill" style="width:62%"></div></div>
-  </div>
-
-  <nav class="sidebar-nav">
-    <a href="#" class="nav-item active" data-view="dashboard">
-      <span class="nav-icon">🏠</span><span>Dashboard</span>
-    </a>
-    <a href="#" class="nav-item" data-view="estimates">
-      <span class="nav-icon">📋</span><span>Estimates</span>
-    </a>
-    <a href="#" class="nav-item" data-view="rates">
-      <span class="nav-icon">💲</span><span>My Rates</span>
-    </a>
-    <a href="#" class="nav-item" data-view="proposals">
-      <span class="nav-icon">📄</span><span>Proposals</span>
-    </a>
-    <a href="#" class="nav-item" data-view="changeorders">
-      <span class="nav-icon">✏️</span><span>Change Orders</span>
-    </a>
-    <a href="#" class="nav-item" data-view="client-portal">
-      <span class="nav-icon">👤</span><span>Client Portal</span>
-    </a>
-    <a href="#" class="nav-item" data-view="ai-advisor">
-      <span class="nav-icon">🤖</span><span>AI Advisor</span>
-    </a>
-    <a href="#" class="nav-item" data-view="onsite">
-      <span class="nav-icon">📍</span><span>On-Site</span>
-    </a>
-    <a href="#" class="nav-item" data-view="setup">
-      <span class="nav-icon">🔧</span><span>Setup</span>
-    </a>
-  </nav>
-
-  <div class="sidebar-footer">
-    <div class="user-badge" onclick="switchView('setup')" style="cursor:pointer" title="Edit Profile">
-      <div class="user-avatar" id="sidebarAvatarWrap"><span id="sidebarAvatarText">TM</span></div>
-      <div>
-        <div class="user-name" id="sidebarCompanyName">T. Martin</div>
-        <div class="user-level">⭐ Pro Contractor · <span style="color:var(--green)">Edit Profile</span></div>
-      </div>
-    </div>
-  </div>
-</aside>
-
-<!-- ===== MAIN ===== -->
-<main class="main-content" id="mainContent">
-  <header class="topbar">
-    <div class="topbar-left">
-      <button class="menu-toggle" id="menuToggle">☰</button>
-      <div class="breadcrumb" id="breadcrumb">Dashboard</div>
-    </div>
-    <div class="topbar-right">
-      <div class="streak-chip">🔥 12</div>
-      <div class="xp-chip">⚡ 2,480 XP</div>
-      <button class="btn-primary topbar-btn" id="btnNewEstimate">+ New Estimate</button>
-    </div>
-  </header>
-
-  <!-- ===== DASHBOARD ===== -->
-  <div id="view-dashboard" class="view active">
-    <!-- Mascot greeting -->
-    <div class="mascot-banner">
-      <div class="mascot-char">🐒</div>
-      <div class="mascot-bubble">
-        <strong>Hey T. Martin! 🎉</strong>
-        <p>You're on a 12-day streak! Keep estimating to level up. You have 3 active projects this week.</p>
-      </div>
-    </div>
-
-    <div class="kpi-grid">
-      <div class="kpi-card green">
-        <div class="kpi-emoji">💰</div>
-        <div class="kpi-value">$187,400</div>
-        <div class="kpi-label">Labor Pipeline</div>
-        <div class="kpi-change">↑ 9.2% this month</div>
-      </div>
-      <div class="kpi-card yellow">
-        <div class="kpi-emoji">⏱️</div>
-        <div class="kpi-value">1,248 hrs</div>
-        <div class="kpi-label">Estimated Hours</div>
-        <div class="kpi-change">7 active projects</div>
-      </div>
-      <div class="kpi-card blue">
-        <div class="kpi-emoji">👷</div>
-        <div class="kpi-value">$112/hr</div>
-        <div class="kpi-label">Avg Blended Rate</div>
-        <div class="kpi-change">↑ $4 vs last quarter</div>
-      </div>
-      <div class="kpi-card orange">
-        <div class="kpi-emoji">🏆</div>
-        <div class="kpi-value">94%</div>
-        <div class="kpi-label">Acceptance Rate</div>
-        <div class="kpi-change">Industry avg: 71%</div>
-      </div>
-    </div>
-
-    <!-- Achievements row -->
-    <div class="achievements-row">
-      <div class="achievement unlocked">🥇<span>First Estimate</span></div>
-      <div class="achievement unlocked">🔥<span>7-Day Streak</span></div>
-      <div class="achievement unlocked">💼<span>5 Projects</span></div>
-      <div class="achievement unlocked">⭐<span>90%+ Rate</span></div>
-      <div class="achievement locked">🚀<span>25 Projects</span></div>
-      <div class="achievement locked">💎<span>$500K Pipeline</span></div>
-    </div>
-
-    <div class="dashboard-grid">
-      <div class="card projects-table-card">
-        <div class="card-header">
-          <h2>Active Projects</h2>
-          <input type="text" class="search-input" placeholder="🔍 Search...">
+<!-- ===================================================
+     LOGIN / PORTAL SELECTION SCREEN
+===================================================== -->
+<div id="loginScreen">
+  <div class="login-bg">
+    <div class="login-card-wrap">
+      <div class="login-brand">
+        <div class="login-logo">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#4F46E5"/><path d="M8 22L12 10L16 18L20 13L24 22H8Z" fill="white" fill-opacity="0.9"/></svg>
         </div>
-        <table class="projects-table">
-          <thead><tr><th>Project</th><th>Client</th><th>Type</th><th>Labor Value</th><th>Hours</th><th>Progress</th><th>Status</th><th></th></tr></thead>
-          <tbody>
-            <tr>
-              <td><strong>Lakewood Kitchen</strong><br><small>Started May 12</small></td>
-              <td>Sarah Johnson</td>
-              <td><span class="type-badge kitchen">🍳 Kitchen</span></td>
-              <td><strong>$14,880</strong></td>
-              <td>132 hrs</td>
-              <td><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill green" style="width:68%"></div></div><span>68%</span></div></td>
-              <td><span class="status-badge green">In Progress</span></td>
-              <td><button class="btn-go" onclick="switchView('proposals')">→</button></td>
-            </tr>
-            <tr>
-              <td><strong>Riverside Bath</strong><br><small>Started Apr 28</small></td>
-              <td>Mike Chen</td>
-              <td><span class="type-badge bath">🛁 Bathroom</span></td>
-              <td><strong>$9,240</strong></td>
-              <td>84 hrs</td>
-              <td><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill blue" style="width:85%"></div></div><span>85%</span></div></td>
-              <td><span class="status-badge blue">In Review</span></td>
-              <td><button class="btn-go" onclick="switchView('proposals')">→</button></td>
-            </tr>
-            <tr>
-              <td><strong>Oakdale Full Home</strong><br><small>Started May 1</small></td>
-              <td>Williams Family</td>
-              <td><span class="type-badge full">🏠 Full Home</span></td>
-              <td><strong>$48,600</strong></td>
-              <td>440 hrs</td>
-              <td><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill orange" style="width:32%"></div></div><span>32%</span></div></td>
-              <td><span class="status-badge orange">In Progress</span></td>
-              <td><button class="btn-go" onclick="switchView('proposals')">→</button></td>
-            </tr>
-            <tr>
-              <td><strong>Hilltop Basement</strong><br><small>Pending start</small></td>
-              <td>Dana Torres</td>
-              <td><span class="type-badge basement">🏗️ Basement</span></td>
-              <td><strong>$18,200</strong></td>
-              <td>168 hrs</td>
-              <td><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill yellow" style="width:5%"></div></div><span>5%</span></div></td>
-              <td><span class="status-badge yellow">Pending</span></td>
-              <td><button class="btn-go" onclick="switchView('proposals')">→</button></td>
-            </tr>
-          </tbody>
-        </table>
+        <div>
+          <div class="login-brand-name">RenovateIQ</div>
+          <div class="login-brand-tag">Professional Labor Estimation Platform</div>
+        </div>
       </div>
 
-      <div class="sidebar-cards">
-        <div class="card quick-actions-card">
-          <h2>Quick Actions</h2>
-          <div class="quick-actions">
-            <button class="qa-btn green" onclick="switchView('estimates')"><span>📋</span><span>New Estimate</span></button>
-            <button class="qa-btn blue" onclick="switchView('rates')"><span>💲</span><span>Edit My Rates</span></button>
-            <button class="qa-btn orange" onclick="openChangeOrderModal()"><span>✏️</span><span>Change Order</span></button>
-            <button class="qa-btn purple" onclick="switchView('ai-advisor')"><span>🤖</span><span>AI Advisor</span></button>
+      <h1 class="login-headline">Select your portal</h1>
+      <p class="login-sub">Choose how you're using RenovateIQ today</p>
+
+      <div class="portal-cards">
+        <!-- Contractor Portal -->
+        <div class="portal-card" id="contractorCard" onclick="showContractorLogin()">
+          <div class="pc-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
           </div>
+          <h2 class="pc-title">Contractor Portal</h2>
+          <p class="pc-desc">Create estimates, manage projects, generate invoices, and lock final pricing on-site.</p>
+          <div class="pc-features">
+            <span>✓ Estimate builder</span>
+            <span>✓ Invoice templates</span>
+            <span>✓ On-site verification</span>
+            <span>✓ Contract generation</span>
+          </div>
+          <div class="pc-cta">Sign in as Contractor →</div>
         </div>
 
-        <div class="card budget-card">
-          <h2>Budget vs Labor Est.</h2>
-          <div class="budget-items">
-            <div class="budget-item">
-              <div class="budget-label"><span>Lakewood Kitchen</span><span class="over">+$880 over</span></div>
-              <div class="b-bar-wrap"><div class="b-bar budget"><span>Budget $14K</span></div><div class="b-bar estimate over-bar" style="width:106%"><span>Est $14.88K</span></div></div>
-            </div>
-            <div class="budget-item">
-              <div class="budget-label"><span>Riverside Bath</span><span class="under">-$760 under</span></div>
-              <div class="b-bar-wrap"><div class="b-bar budget"><span>Budget $10K</span></div><div class="b-bar estimate under-bar" style="width:92%"><span>Est $9.24K</span></div></div>
-            </div>
-            <div class="budget-item">
-              <div class="budget-label"><span>Oakdale Full Home</span><span class="on-track">On track</span></div>
-              <div class="b-bar-wrap"><div class="b-bar budget"><span>Budget $49K</span></div><div class="b-bar estimate ontrack-bar" style="width:99%"><span>Est $48.6K</span></div></div>
-            </div>
+        <!-- Homeowner Portal -->
+        <div class="portal-card portal-card-alt" id="homeownerCard" onclick="showClientLogin()">
+          <div class="pc-icon pc-icon-alt">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           </div>
+          <h2 class="pc-title">Homeowner Portal</h2>
+          <p class="pc-desc">View your labor estimate, track project progress, and sign off on your renovation proposal.</p>
+          <div class="pc-features">
+            <span>✓ View estimates</span>
+            <span>✓ Track project</span>
+            <span>✓ Digital signing</span>
+            <span>✓ Payment schedule</span>
+          </div>
+          <div class="pc-cta pc-cta-alt">View as Homeowner →</div>
         </div>
+      </div>
+
+      <!-- Contractor Login Form -->
+      <div class="login-form-wrap" id="contractorLoginForm" style="display:none">
+        <div class="lf-header">
+          <button class="lf-back" onclick="backToPortals()">← Back</button>
+          <h2>Contractor Sign In</h2>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" id="loginEmail" placeholder="you@company.com" value="demo@renovateiq.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" value="demo123">
+        </div>
+        <button class="btn-primary full-width" onclick="contractorLogin()">Sign In</button>
+        <div class="lf-divider"><span>or</span></div>
+        <button class="btn-outline full-width" onclick="showSignup()">Create Contractor Account</button>
+      </div>
+
+      <!-- Homeowner Login Form -->
+      <div class="login-form-wrap" id="homeownerLoginForm" style="display:none">
+        <div class="lf-header">
+          <button class="lf-back" onclick="backToPortals()">← Back</button>
+          <h2>View Your Estimate</h2>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Estimate Code or Email</label>
+          <input type="text" class="form-input" id="clientCode" placeholder="Enter code from your contractor (e.g. LAK-2025-001)" value="LAK-2025-001">
+        </div>
+        <button class="btn-primary full-width" onclick="clientLogin()">View Estimate</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- ===== ESTIMATES ===== -->
-  <div id="view-estimates" class="view">
-    <div class="view-header">
-      <div class="mascot-inline"><span class="mascot-sm">🐒</span><div class="mascot-tip">Pick a project type to get started! I'll help you build your labor estimate step by step.</div></div>
-      <h1>Labor <span class="accent">Estimate Builder</span></h1>
-    </div>
-
-    <!-- Steps -->
-    <div class="step-progress">
-      <div class="step-track"><div class="step-fill" id="stepFill" style="width:33%"></div></div>
-      <div class="steps">
-        <div class="step active" data-step="1"><div class="step-num">1</div><div class="step-label">Project Info</div></div>
-        <div class="step" data-step="2"><div class="step-num">2</div><div class="step-label">Labor Lines</div></div>
-        <div class="step" data-step="3"><div class="step-num">3</div><div class="step-label">Review</div></div>
+<!-- ===================================================
+     CONTRACTOR SIGNUP FLOW
+===================================================== -->
+<div id="signupFlow" style="display:none">
+  <div class="signup-shell">
+    <div class="signup-sidebar">
+      <div class="ss-brand">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#4F46E5"/><path d="M8 22L12 10L16 18L20 13L24 22H8Z" fill="white"/></svg>
+        <span>RenovateIQ</span>
       </div>
-    </div>
-
-    <!-- Step 1 -->
-    <div class="step-content" id="step1">
-      <h2 class="step-title">What type of project? 🏗️</h2>
-      <div class="ptypes">
-        <div class="project-type-card" data-type="kitchen" onclick="selectProjectType(this)"><div class="pt-icon">🍳</div><h3>Kitchen</h3></div>
-        <div class="project-type-card" data-type="bathroom" onclick="selectProjectType(this)"><div class="pt-icon">🛁</div><h3>Bathroom</h3></div>
-        <div class="project-type-card" data-type="fullhome" onclick="selectProjectType(this)"><div class="pt-icon">🏠</div><h3>Full Home</h3></div>
-        <div class="project-type-card" data-type="basement" onclick="selectProjectType(this)"><div class="pt-icon">🏗️</div><h3>Basement</h3></div>
-        <div class="project-type-card" data-type="outdoor" onclick="selectProjectType(this)"><div class="pt-icon">🌿</div><h3>Outdoor</h3></div>
-        <div class="project-type-card" data-type="addition" onclick="selectProjectType(this)"><div class="pt-icon">🏡</div><h3>Addition</h3></div>
-      </div>
-      <div class="form-grid" style="margin-top:24px">
-        <div class="form-group"><label>Client Name *</label><input type="text" id="clientName" placeholder="Full name" class="form-input"></div>
-        <div class="form-group"><label>Client Email</label><input type="email" id="clientEmail" placeholder="client@email.com" class="form-input"></div>
-        <div class="form-group"><label>Project Address</label><input type="text" id="projectAddress" placeholder="123 Main St, City, State" class="form-input"></div>
-        <div class="form-group"><label>Client Labor Budget ($)</label><input type="number" id="clientBudget" placeholder="e.g. 20000" class="form-input" oninput="state.clientBudget=parseFloat(this.value)||0;updateLivePanel()"></div>
-        <div class="form-group"><label>Start Date</label><input type="date" id="startDate" class="form-input"></div>
-        <div class="form-group"><label>Default Rate ($/hr)</label><input type="number" id="defaultRate" value="95" class="form-input" oninput="state.defaultRate=parseFloat(this.value)||95"></div>
-        <div class="form-group full-width"><label>Project Notes</label><textarea id="scopeNotes" rows="3" placeholder="Describe scope, access, special requirements..." class="form-input"></textarea></div>
-      </div>
-      <div class="step-nav">
-        <div></div>
-        <button class="btn-primary btn-xl" id="nextStep1" onclick="goToStep(2)" disabled>Continue →</button>
-      </div>
-    </div>
-
-    <!-- Step 2: Labor Lines -->
-    <div class="step-content hidden" id="step2">
-      <div class="labor-layout">
-        <div class="labor-main">
-          <div class="mascot-inline"><span class="mascot-sm">🐒</span><div class="mascot-tip">Quick-add trades below, or click <strong>+ Custom Line</strong> to build your own. My rates are pre-loaded from <strong>My Rates</strong>!</div></div>
-          <div class="labor-header-row">
-            <h2 class="step-title">Add Labor Lines ⚒️</h2>
-            <div class="labor-header-actions">
-              <select class="form-input trade-quick-add" id="quickAddTrade">
-                <option value="">+ Quick add trade...</option>
-                <option value="demo">🗑️ Demo &amp; Hauling</option>
-                <option value="framing">🪚 Framing &amp; Carpentry</option>
-                <option value="electrical">⚡ Electrical</option>
-                <option value="plumbing">🔧 Plumbing</option>
-                <option value="hvac">❄️ HVAC</option>
-                <option value="tile">🪟 Tile Work</option>
-                <option value="flooring">🪵 Flooring Install</option>
-                <option value="cabinets">🗄️ Cabinet Install</option>
-                <option value="drywall">🧱 Drywall &amp; Taping</option>
-                <option value="painting">🎨 Painting</option>
-                <option value="trim">🪟 Trim &amp; Millwork</option>
-                <option value="cleanup">🧹 Final Cleanup</option>
-              </select>
-              <button class="btn-secondary" onclick="addCustomLine()">+ Custom</button>
-            </div>
-          </div>
-
-          <div class="labor-table-wrap card">
-            <div class="labor-table-head">
-              <span>Trade / Task</span><span>Unit</span><span>Qty</span><span>Rate</span><span>Total</span><span></span>
-            </div>
-            <div id="laborLines"></div>
-            <div class="labor-empty" id="laborEmpty">
-              <div style="font-size:3rem;margin-bottom:8px">🐒</div>
-              <strong>No labor lines yet!</strong>
-              <p>Quick-add a trade above or click + Custom to start building.</p>
-            </div>
-          </div>
-
-          <!-- Rate Presets -->
-          <div class="card rate-presets-mini">
-            <div class="rate-presets-header"><h3>💡 My Saved Rates <span class="preset-hint">Click to set rate on focused line</span></h3></div>
-            <div class="preset-grid" id="miniPresetGrid">
-              <!-- populated by JS from state.rates -->
-            </div>
-          </div>
-
-          <div class="step-nav">
-            <button class="btn-secondary" onclick="goToStep(1)">← Back</button>
-            <button class="btn-primary btn-xl" onclick="goToStep(3)">Review Estimate →</button>
-          </div>
+      <div class="ss-steps">
+        <div class="ss-step" id="sss-1">
+          <div class="ss-step-num">1</div>
+          <div><div class="ss-step-label">Account</div><div class="ss-step-sub">Company &amp; contact info</div></div>
         </div>
-
-        <!-- Live Panel -->
-        <div class="live-cost-panel" id="liveCostPanel">
-          <div class="lcp-mascot">🐒</div>
-          <div class="lcp-header"><h3>Live Labor Cost</h3><div class="lcp-pulse"></div></div>
-          <div class="lcp-total" id="lcpTotal">$0</div>
-          <div class="lcp-label">Total Estimate</div>
-          <div class="lcp-stats">
-            <div class="lcp-stat"><div id="lcpHours">0</div><span>Hours</span></div>
-            <div class="lcp-stat"><div id="lcpLines">0</div><span>Lines</span></div>
-            <div class="lcp-stat"><div id="lcpBlended">—</div><span>Blended Rate</span></div>
-          </div>
-          <div class="lcp-divider"></div>
-          <div id="lcpBreakdown" class="lcp-breakdown"><div class="lcp-empty-msg">Add lines to see breakdown</div></div>
-          <div class="lcp-divider"></div>
-          <div class="lcp-budget">
-            <div class="bc-label">vs. Client Budget</div>
-            <div class="bc-value" id="bcValue">—</div>
-          </div>
-          <div class="escrow-badge">🔒 Payment Protection Included</div>
+        <div class="ss-step" id="sss-2">
+          <div class="ss-step-num">2</div>
+          <div><div class="ss-step-label">Pricing</div><div class="ss-step-sub">Set your labor rates</div></div>
+        </div>
+        <div class="ss-step" id="sss-3">
+          <div class="ss-step-num">3</div>
+          <div><div class="ss-step-label">Invoice Design</div><div class="ss-step-sub">Choose your template</div></div>
         </div>
       </div>
     </div>
-
-    <!-- Step 3: Review -->
-    <div class="step-content hidden" id="step3">
-      <div class="mascot-inline"><span class="mascot-sm">🐒</span><div class="mascot-tip">Looking great! Adjust your markup and contingency below, then generate the proposal.</div></div>
-      <h2 class="step-title">Review Your Estimate ✅</h2>
-      <div class="review-layout">
-        <div class="review-main">
-          <div class="card review-card">
-            <div class="review-section">
-              <h3>Project Overview</h3>
-              <div class="review-grid">
-                <div class="review-item"><label>Project Type</label><span id="rv-type">—</span></div>
-                <div class="review-item"><label>Client</label><span id="rv-client">—</span></div>
-                <div class="review-item"><label>Address</label><span id="rv-address">—</span></div>
-                <div class="review-item"><label>Start Date</label><span id="rv-start">—</span></div>
-                <div class="review-item"><label>Total Hours</label><span id="rv-hours">—</span></div>
-                <div class="review-item"><label>Blended Rate</label><span id="rv-rate">—</span></div>
-              </div>
-            </div>
-            <div class="review-section">
-              <h3>Labor Lines</h3>
-              <div id="rv-lines"></div>
-            </div>
+    <div class="signup-main">
+      <!-- Step 1: Account -->
+      <div class="signup-step" id="signup-step1">
+        <div class="su-header">
+          <h1>Create your account</h1>
+          <p>You'll use this to sign in and brand all your estimates and invoices.</p>
+        </div>
+        <div class="su-form">
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input" id="suFirstName" placeholder="James"></div>
+            <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input" id="suLastName" placeholder="Rivera"></div>
           </div>
-          <div class="card" style="margin-top:16px">
-            <h3>Markup &amp; Margin 📊</h3>
-            <div class="markup-controls">
-              <div class="markup-item">
-                <label>Overhead &amp; Profit</label>
-                <div class="slider-wrap">
-                  <input type="range" min="10" max="40" value="20" class="slider" id="markupSlider" oninput="updateMarkup(this.value)">
-                  <span class="slider-val" id="markupVal">20%</span>
+          <div class="form-group"><label class="form-label">Company Name</label><input type="text" class="form-input" id="suCompany" placeholder="Rivera Renovations LLC"></div>
+          <div class="form-group"><label class="form-label">Business Email</label><input type="email" class="form-input" id="suEmail" placeholder="james@riverarenovations.com"></div>
+          <div class="form-group"><label class="form-label">Business Phone</label><input type="tel" class="form-input" id="suPhone" placeholder="(313) 555-0100"></div>
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">License # <span class="label-opt">(recommended)</span></label><input type="text" class="form-input" id="suLicense" placeholder="MI-RB-123456"></div>
+            <div class="form-group"><label class="form-label">Business Address</label><input type="text" class="form-input" id="suAddress" placeholder="Detroit, MI 48201"></div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">Password</label><input type="password" class="form-input" id="suPassword" placeholder="Min. 8 characters"></div>
+            <div class="form-group"><label class="form-label">Confirm Password</label><input type="password" class="form-input" id="suConfirm" placeholder="Repeat password"></div>
+          </div>
+          <div class="su-actions">
+            <button class="btn-ghost" onclick="backToPortals()">← Back to login</button>
+            <button class="btn-primary" onclick="signupStep(2)">Continue →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Pricing -->
+      <div class="signup-step" id="signup-step2" style="display:none">
+        <div class="su-header">
+          <h1>Set your labor rates</h1>
+          <p>Choose how you price each trade. You can mix hourly and per-sqft — change anytime.</p>
+        </div>
+        <div class="pricing-mode-toggle">
+          <button class="pmt-btn pmt-active" id="pmtHr" onclick="setPricingMode('hr')">Hourly ($/hr)</button>
+          <button class="pmt-btn" id="pmtSqft" onclick="setPricingMode('sqft')">Per Sq Ft ($/sqft)</button>
+          <button class="pmt-btn" id="pmtMixed" onclick="setPricingMode('mixed')">Mixed</button>
+        </div>
+        <div class="pricing-table-wrap">
+          <div class="pricing-table-head">
+            <span>Trade</span><span>Unit</span><span>Rate</span><span>Min Charge</span>
+          </div>
+          <div id="pricingTableBody"></div>
+        </div>
+        <div class="su-actions">
+          <button class="btn-ghost" onclick="signupStep(1)">← Back</button>
+          <button class="btn-primary" onclick="signupStep(3)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Invoice Template -->
+      <div class="signup-step" id="signup-step3" style="display:none">
+        <div class="su-header">
+          <h1>Choose your invoice style</h1>
+          <p>This becomes your default template. You can customize or switch it anytime.</p>
+        </div>
+
+        <!-- Logo upload -->
+        <div class="logo-upload-row">
+          <div class="logo-upload-box" id="suLogoBox" onclick="document.getElementById('suLogoInput').click()">
+            <div id="suLogoPreview">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+              <span>Upload logo</span>
+            </div>
+            <input type="file" id="suLogoInput" accept="image/*" style="display:none" onchange="previewSignupLogo(this)">
+          </div>
+          <div class="logo-upload-hint">
+            <strong>Company Logo</strong>
+            <p>PNG or JPG. Appears on every estimate and invoice you send.</p>
+          </div>
+        </div>
+
+        <!-- Template previews -->
+        <div class="template-grid">
+
+          <!-- Template: Classic -->
+          <div class="template-card" id="tpl-classic" onclick="selectTemplate('classic')">
+            <div class="tpl-preview classic-preview">
+              <div class="tp-header tp-classic-h">
+                <div class="tp-logo-box"></div>
+                <div class="tp-company-info">
+                  <div class="tp-co">ACME Contractors</div>
+                  <div class="tp-sub">Detroit, MI · (313) 555-0100</div>
                 </div>
               </div>
-              <div class="markup-item">
-                <label>Contingency</label>
-                <div class="slider-wrap">
-                  <input type="range" min="0" max="15" value="5" class="slider" id="contingencySlider" oninput="updateContingency(this.value)">
-                  <span class="slider-val" id="contingencyVal">5%</span>
-                </div>
+              <div class="tp-title-bar tp-classic-t">LABOR ESTIMATE</div>
+              <div class="tp-body">
+                <div class="tp-line"><span class="tp-trade">Demo &amp; Hauling</span><span class="tp-amt">$2,080</span></div>
+                <div class="tp-line"><span class="tp-trade">Electrical</span><span class="tp-amt">$3,520</span></div>
+                <div class="tp-line"><span class="tp-trade">Cabinet Install</span><span class="tp-amt">$4,080</span></div>
+                <div class="tp-total-line"><span>Total Labor</span><span>$18,535</span></div>
               </div>
             </div>
+            <div class="tpl-meta">
+              <div class="tpl-name">Classic</div>
+              <div class="tpl-desc">Clean letterhead, structured layout</div>
+            </div>
+            <div class="tpl-check" id="check-classic"></div>
           </div>
+
+          <!-- Template: Modern -->
+          <div class="template-card" id="tpl-modern" onclick="selectTemplate('modern')">
+            <div class="tpl-preview modern-preview">
+              <div class="tp-header tp-modern-h">
+                <div class="tp-logo-box-inv"></div>
+                <div>
+                  <div class="tp-co tp-co-inv">ACME Contractors</div>
+                  <div class="tp-sub tp-sub-inv">Detroit, MI</div>
+                </div>
+                <div class="tp-est-label">ESTIMATE</div>
+              </div>
+              <div class="tp-body tp-body-modern">
+                <div class="tp-client-row"><span class="tp-client-lbl">Prepared for</span><span class="tp-client-name">Sarah Johnson</span></div>
+                <div class="tp-line tp-line-modern"><span class="tp-trade">Demo &amp; Hauling</span><span class="tp-amt">$2,080</span></div>
+                <div class="tp-line tp-line-modern"><span class="tp-trade">Electrical</span><span class="tp-amt">$3,520</span></div>
+                <div class="tp-line tp-line-modern"><span class="tp-trade">Cabinet Install</span><span class="tp-amt">$4,080</span></div>
+                <div class="tp-total-line tp-total-modern"><span>Total Labor</span><span>$18,535</span></div>
+              </div>
+            </div>
+            <div class="tpl-meta">
+              <div class="tpl-name">Modern</div>
+              <div class="tpl-desc">Bold dark header, high impact</div>
+            </div>
+            <div class="tpl-check" id="check-modern"></div>
+          </div>
+
+          <!-- Template: Minimal -->
+          <div class="template-card" id="tpl-minimal" onclick="selectTemplate('minimal')">
+            <div class="tpl-preview minimal-preview">
+              <div class="tp-header tp-minimal-h">
+                <div class="tp-co tp-co-minimal">ACME Contractors</div>
+                <div class="tp-sub tp-sub-minimal">Detroit, MI · License MI-RB-123456</div>
+              </div>
+              <div class="tp-rule"></div>
+              <div class="tp-title-minimal">Labor Estimate — Kitchen Renovation</div>
+              <div class="tp-body tp-body-minimal">
+                <div class="tp-line tp-line-min"><span class="tp-trade">Demo &amp; Hauling</span><span class="tp-amt">$2,080</span></div>
+                <div class="tp-line tp-line-min"><span class="tp-trade">Electrical</span><span class="tp-amt">$3,520</span></div>
+                <div class="tp-line tp-line-min"><span class="tp-trade">Cabinet Install</span><span class="tp-amt">$4,080</span></div>
+                <div class="tp-rule" style="margin:6px 0"></div>
+                <div class="tp-total-line tp-total-min"><span>Total Labor</span><span>$18,535</span></div>
+              </div>
+            </div>
+            <div class="tpl-meta">
+              <div class="tpl-name">Minimal</div>
+              <div class="tpl-desc">Clean lines, maximum whitespace</div>
+            </div>
+            <div class="tpl-check" id="check-minimal"></div>
+          </div>
+
         </div>
-        <div class="review-sidebar">
-          <div class="card final-total-card">
-            <div class="ft-mascot">🐒 <span>Here's your total!</span></div>
-            <div class="ft-row"><span>Raw Labor</span><span id="ft-raw">$0</span></div>
-            <div class="ft-row"><span>Markup (<span id="ft-markup-pct">20</span>%)</span><span id="ft-markup">$0</span></div>
-            <div class="ft-row"><span>Contingency (<span id="ft-cont-pct">5</span>%)</span><span id="ft-contingency">$0</span></div>
-            <div class="ft-divider"></div>
-            <div class="ft-row total"><span>Grand Total</span><span id="ft-total">$0</span></div>
-            <div id="ftBudgetStatus"></div>
-            <button class="btn-primary btn-xl full-width" style="margin-top:16px" onclick="generateProposal()">🚀 Generate Proposal</button>
-            <button class="btn-secondary full-width mt-8" onclick="goToStep(2)">← Revise Lines</button>
-          </div>
+
+        <div class="su-actions">
+          <button class="btn-ghost" onclick="signupStep(2)">← Back</button>
+          <button class="btn-primary" onclick="completeSignup()">Finish Setup →</button>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- ===== MY RATES ===== -->
-  <div id="view-rates" class="view">
-    <div class="view-header">
-      <div class="mascot-inline"><span class="mascot-sm">🐒</span><div class="mascot-tip">Set your own rates here! These auto-load when you quick-add a trade in the estimate builder. Switch between hourly and per sq ft.</div></div>
-      <h1>My <span class="accent">Rates Manager</span></h1>
+<!-- ===================================================
+     CONTRACTOR APP SHELL
+===================================================== -->
+<div id="appShell" style="display:none">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <svg width="26" height="26" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="7" fill="#4F46E5"/><path d="M8 22L12 10L16 18L20 13L24 22H8Z" fill="white"/></svg>
+        <span class="sidebar-brand-name">RenovateIQ</span>
+      </div>
+      <button class="sidebar-menu-toggle" id="menuToggle">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
     </div>
 
-    <div class="rates-layout">
-      <div class="rates-main">
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Workspace</div>
+      <a href="#" class="nav-item active" data-view="dashboard">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="#" class="nav-item" data-view="estimates">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        New Estimate
+      </a>
+      <a href="#" class="nav-item" data-view="rates">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        My Rates
+      </a>
+      <div class="nav-section-label">Projects</div>
+      <a href="#" class="nav-item" data-view="proposals">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Proposals
+      </a>
+      <a href="#" class="nav-item" data-view="changeorders">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Change Orders
+      </a>
+      <a href="#" class="nav-item" data-view="onsite">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        On-Site
+      </a>
+      <div class="nav-section-label">Client</div>
+      <a href="#" class="nav-item" data-view="client-portal">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Client Portal
+      </a>
+      <a href="#" class="nav-item" data-view="invoices">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        Invoices
+      </a>
+      <div class="nav-section-label">Tools</div>
+      <a href="#" class="nav-item" data-view="ai-advisor">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2-1 4H6l3.5 3-1.5 5L12 11l4 3-1.5-5L18 6h-5z"/><path d="M12 22v-4"/></svg>
+        AI Advisor
+      </a>
+      <a href="#" class="nav-item" data-view="setup">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="sidebar-user" onclick="switchView('setup')" style="cursor:pointer">
+      <div class="su-avatar" id="sidebarAvatar">JR</div>
+      <div class="su-info">
+        <div class="su-name" id="sidebarName">James Rivera</div>
+        <div class="su-company" id="sidebarCompany">Rivera Renovations</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main" id="mainContent">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-menu-btn" id="menuToggleMobile" onclick="document.getElementById('sidebar').classList.toggle('open')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="topbar-breadcrumb" id="breadcrumb">Dashboard</div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-primary" onclick="switchView('estimates')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Estimate
+        </button>
+        <button class="topbar-icon-btn" onclick="switchView('setup')" title="Settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4"/></svg>
+        </button>
+        <button class="topbar-icon-btn" onclick="signOut()" title="Sign Out">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div id="view-dashboard" class="view active">
+      <div class="view-header">
+        <div>
+          <h1 id="dashGreeting">Good morning, James</h1>
+          <p class="view-sub">Here's your business at a glance</p>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-top"><span class="kpi-label">Labor Pipeline</span><span class="kpi-badge kpi-up">↑ 9.2%</span></div>
+          <div class="kpi-value" id="kpiRevenue">$284,500</div>
+          <div class="kpi-sub">Across 12 active estimates</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-top"><span class="kpi-label">Active Projects</span><span class="kpi-badge">This month</span></div>
+          <div class="kpi-value" id="kpiProjects">12</div>
+          <div class="kpi-sub">4 in progress · 3 pending</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-top"><span class="kpi-label">Acceptance Rate</span><span class="kpi-badge kpi-up">↑ from 68%</span></div>
+          <div class="kpi-value" id="kpiWinRate">74%</div>
+          <div class="kpi-sub">Industry avg: 61%</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-top"><span class="kpi-label">Avg Job Value</span><span class="kpi-badge">Labor only</span></div>
+          <div class="kpi-value" id="kpiAvgJob">$23,750</div>
+          <div class="kpi-sub">+$2,100 vs last quarter</div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
         <div class="card">
-          <div class="rates-toolbar">
-            <div class="rates-unit-toggle">
-              <button class="unit-btn active" id="unitHr" onclick="setRateUnit('hr', this)">$/hr</button>
-              <button class="unit-btn" id="unitSqft" onclick="setRateUnit('sqft', this)">$/sq ft</button>
-            </div>
-            <div class="rates-actions">
-              <button class="btn-secondary" onclick="resetRates()">Reset to Defaults</button>
-              <button class="btn-primary" onclick="saveRates()">💾 Save Rates</button>
-            </div>
+          <div class="card-header">
+            <h2>Active Projects</h2>
+            <button class="btn-sm btn-outline" onclick="switchView('estimates')">+ New</button>
           </div>
-
-          <div class="rates-table-head">
-            <span>Trade</span>
-            <span>Unit Type</span>
-            <span id="rateColHeader">Rate ($/hr)</span>
-            <span>Min Charge</span>
-            <span>Notes</span>
-          </div>
-          <div id="ratesTableBody">
-            <!-- populated by JS -->
-          </div>
+          <table class="data-table">
+            <thead><tr><th>Project</th><th>Client</th><th>Type</th><th>Value</th><th>Progress</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td><div class="td-project">Lakewood Kitchen<span>Started May 12</span></div></td>
+                <td>Sarah Johnson</td>
+                <td><span class="type-pill">Kitchen</span></td>
+                <td class="td-amount">$14,880</td>
+                <td><div class="progress-cell"><div class="progress-bar"><div class="progress-fill" style="width:68%"></div></div><span>68%</span></div></td>
+                <td><span class="status-pill status-active">In Progress</span></td>
+                <td><button class="row-btn" onclick="switchView('proposals')">→</button></td>
+              </tr>
+              <tr>
+                <td><div class="td-project">Riverside Bath<span>Started Apr 28</span></div></td>
+                <td>Mike Chen</td>
+                <td><span class="type-pill">Bathroom</span></td>
+                <td class="td-amount">$9,240</td>
+                <td><div class="progress-cell"><div class="progress-bar"><div class="progress-fill" style="width:85%;background:var(--blue)"></div></div><span>85%</span></div></td>
+                <td><span class="status-pill status-review">In Review</span></td>
+                <td><button class="row-btn" onclick="switchView('proposals')">→</button></td>
+              </tr>
+              <tr>
+                <td><div class="td-project">Oakdale Full Home<span>Started May 1</span></div></td>
+                <td>Williams Family</td>
+                <td><span class="type-pill">Full Home</span></td>
+                <td class="td-amount">$48,600</td>
+                <td><div class="progress-cell"><div class="progress-bar"><div class="progress-fill" style="width:32%;background:var(--orange)"></div></div><span>32%</span></div></td>
+                <td><span class="status-pill status-active">In Progress</span></td>
+                <td><button class="row-btn" onclick="switchView('proposals')">→</button></td>
+              </tr>
+              <tr>
+                <td><div class="td-project">Hilltop Basement<span>Pending start</span></div></td>
+                <td>Dana Torres</td>
+                <td><span class="type-pill">Basement</span></td>
+                <td class="td-amount">$18,200</td>
+                <td><div class="progress-cell"><div class="progress-bar"><div class="progress-fill" style="width:5%;background:var(--amber)"></div></div><span>5%</span></div></td>
+                <td><span class="status-pill status-pending">Pending</span></td>
+                <td><button class="row-btn" onclick="switchView('proposals')">→</button></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <div class="card" style="margin-top:16px">
-          <h3>➕ Add Custom Trade</h3>
-          <div class="add-trade-form">
-            <input type="text" id="newTradeName" placeholder="Trade name (e.g. Waterproofing)" class="form-input">
-            <select id="newTradeUnit" class="form-input">
-              <option value="hr">Per Hour ($/hr)</option>
-              <option value="sqft">Per Sq Ft ($/sqft)</option>
-              <option value="flat">Flat Rate</option>
-            </select>
-            <input type="number" id="newTradeRate" placeholder="Rate" class="form-input">
-            <button class="btn-primary" onclick="addCustomTrade()">Add Trade</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="rates-sidebar">
-        <div class="card rate-tip-card">
-          <div class="mascot-char" style="font-size:3rem;text-align:center;margin-bottom:8px">🐒</div>
-          <h3>Rate Tips from the Monkey 🍌</h3>
-          <div class="rate-tips">
-            <div class="rate-tip">💡 Set your rates <strong>10-15% above</strong> your actual cost to cover overhead before markup.</div>
-            <div class="rate-tip">💡 Use <strong>$/sq ft</strong> for flooring, tile, drywall, and painting — faster and more accurate.</div>
-            <div class="rate-tip">💡 Detroit metro electricians currently average <strong>$95–$130/hr</strong>. Are yours competitive?</div>
-            <div class="rate-tip">💡 Always set a <strong>minimum charge</strong> for small jobs so short trips are still profitable.</div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:16px">
-          <h3>Market Benchmarks</h3>
-          <div class="benchmark-list">
-            <div class="bm-item"><span>General Laborer</span><span>$55–75/hr</span></div>
-            <div class="bm-item"><span>Carpenter</span><span>$75–100/hr</span></div>
-            <div class="bm-item"><span>Electrician</span><span>$95–130/hr</span></div>
-            <div class="bm-item"><span>Plumber</span><span>$100–135/hr</span></div>
-            <div class="bm-item"><span>HVAC Tech</span><span>$90–120/hr</span></div>
-            <div class="bm-item"><span>Tile Setter</span><span>$80–105/hr</span></div>
-            <div class="bm-item"><span>Painter</span><span>$65–90/hr or $2–4/sqft</span></div>
-            <div class="bm-item"><span>Flooring Install</span><span>$3–8/sqft</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== PROPOSALS ===== -->
-  <div id="view-proposals" class="view">
-    <div class="view-header">
-      <h1>Labor <span class="accent">Proposals</span></h1>
-      <select class="form-input" style="width:340px" onchange="showToast('Proposal loaded! 🐒','success')">
-        <option>Lakewood Kitchen — Sarah Johnson</option>
-        <option>Riverside Master Bath — Mike Chen</option>
-        <option>Oakdale Full Home — Williams Family</option>
-      </select>
-    </div>
-    <div class="proposal-tabs">
-      <button class="ptab active" onclick="switchProposalTab(this,'ptab-estimate')">📋 Estimate</button>
-      <button class="ptab" onclick="switchProposalTab(this,'ptab-schedule')">📅 Schedule</button>
-      <button class="ptab" onclick="switchProposalTab(this,'ptab-payment')">💳 Payment</button>
-      <button class="ptab" onclick="switchProposalTab(this,'ptab-docs')">📁 Documents</button>
-    </div>
-
-    <div id="ptab-estimate" class="ptab-content active">
-      <div class="proposal-estimate-layout">
-        <div class="card proposal-breakdown">
-          <div class="pb-header">
-            <div><h2>Lakewood Kitchen Renovation</h2><p class="pb-client">Sarah Johnson · 4821 Lakewood Dr, Detroit, MI</p></div>
-            <div class="status-badge green big">✓ Accepted</div>
-          </div>
-          <div class="line-items">
-            <div class="li-header"><span>Trade / Task</span><span>Crew</span><span>Hrs</span><span>Rate</span><span>Total</span></div>
-            <div class="li-cat">🗑️ Demo &amp; Prep</div>
-            <div class="li-row"><span>Demolition &amp; Haul-Away</span><span>2</span><span>16</span><span>$65/hr</span><span>$2,080</span></div>
-            <div class="li-row"><span>Site Protection &amp; Prep</span><span>1</span><span>4</span><span>$65/hr</span><span>$260</span></div>
-            <div class="li-cat">⚡ Rough-In</div>
-            <div class="li-row"><span>Electrical Rough-In</span><span>1</span><span>16</span><span>$110/hr</span><span>$1,760</span></div>
-            <div class="li-row"><span>Plumbing Rough-In</span><span>1</span><span>12</span><span>$115/hr</span><span>$1,380</span></div>
-            <div class="li-cat">🗄️ Cabinets &amp; Trim</div>
-            <div class="li-row"><span>Cabinet Installation</span><span>2</span><span>24</span><span>$85/hr</span><span>$4,080</span></div>
-            <div class="li-row"><span>Trim &amp; Millwork</span><span>1</span><span>8</span><span>$85/hr</span><span>$680</span></div>
-            <div class="li-cat">✨ Finish Work</div>
-            <div class="li-row"><span>Tile Installation</span><span>1</span><span>10</span><span>$90/hr</span><span>$900</span></div>
-            <div class="li-row"><span>Flooring Install</span><span>2</span><span>12</span><span>$85/hr</span><span>$2,040</span></div>
-            <div class="li-row"><span>Painting</span><span>1</span><span>10</span><span>$75/hr</span><span>$750</span></div>
-            <div class="li-row"><span>Cleanup</span><span>2</span><span>6</span><span>$65/hr</span><span>$780</span></div>
-            <div class="li-divider"></div>
-            <div class="li-row subtotal"><span>Raw Labor Subtotal</span><span></span><span>128 hrs</span><span></span><span>$14,710</span></div>
-            <div class="li-row"><span>Overhead &amp; Profit (20%)</span><span></span><span></span><span></span><span>$2,942</span></div>
-            <div class="li-row"><span>Contingency (5%)</span><span></span><span></span><span></span><span>$883</span></div>
-            <div class="li-row grand-total"><span>🏆 Grand Total Labor</span><span></span><span></span><span></span><span>$18,535</span></div>
-          </div>
-        </div>
-        <div class="proposal-side">
+        <div class="dash-right">
           <div class="card">
-            <h3>Actions</h3>
-            <button class="btn-primary full-width" onclick="switchView('client-portal')">📤 Send to Client</button>
-            <button class="btn-secondary full-width mt-8" onclick="openChangeOrderModal()">✏️ Add Change Order</button>
-          </div>
-          <div class="card mt-16">
-            <h3>Change Orders</h3>
-            <div class="co-list" id="coList">
-              <div class="co-item"><div class="co-desc">Under-cabinet lighting install</div><div class="co-amt positive">+4hrs / +$440</div></div>
-              <div class="co-item"><div class="co-desc">Pull-out bins carpentry</div><div class="co-amt positive">+2hrs / +$170</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="ptab-schedule" class="ptab-content">
-      <div class="card">
-        <h2>📅 Project Schedule</h2>
-        <div class="gantt-wrap">
-          <div class="gantt-header"><div class="gantt-task-col">Phase</div><div class="gantt-weeks"><span>Wk1</span><span>Wk2</span><span>Wk3</span><span>Wk4</span><span>Wk5</span><span>Wk6</span><span>Wk7</span><span>Wk8</span></div></div>
-          <div class="gantt-row"><div class="gantt-task">🗑️ Demo &amp; Prep</div><div class="gantt-bar-track"><div class="gantt-bar" style="left:0%;width:12.5%;background:var(--green)"></div></div></div>
-          <div class="gantt-row"><div class="gantt-task">⚡ Electrical</div><div class="gantt-bar-track"><div class="gantt-bar" style="left:12.5%;width:12.5%;background:var(--blue)"></div></div></div>
-          <div class="gantt-row"><div class="gantt-task">🔧 Plumbing</div><div class="gantt-bar-track"><div class="gantt-bar" style="left:12.5%;width:12.5%;background:var(--purple)"></div></div></div>
-          <div class="gantt-row"><div class="gantt-task">🗄️ Cabinet Install</div><div class="gantt-bar-track"><div class="gantt-bar" style="left:25%;width:25%;background:var(--yellow-dark)"></div></div></div>
-          <div class="gantt-row"><div class="gantt-task">🪵 Tile &amp; Flooring</div><div class="gantt-bar-track"><div class="gantt-bar" style="left:50%;width:25%;background:var(--orange)"></div></div></div>
-          <div class="gantt-row"><div class="gantt-task">🎨 Painting &amp; Trim</div><div class="gantt-bar-track"><div class="gantt-bar" style="left:62.5%;width:25%;background:#06b6d4"></div></div></div>
-          <div class="gantt-row"><div class="gantt-task">🧹 Punch List</div><div class="gantt-bar-track"><div class="gantt-bar" style="left:87.5%;width:12.5%;background:var(--green)"></div></div></div>
-        </div>
-      </div>
-    </div>
-
-    <div id="ptab-payment" class="ptab-content">
-      <div class="card">
-        <div class="payment-header">
-          <h2>💳 Payment Schedule</h2>
-          <div class="escrow-badge-lg">🔒 Escrow Protected — funds released at each milestone</div>
-        </div>
-        <div class="payment-milestones">
-          <div class="pm-item paid"><div class="pm-check green">✓</div><div class="pm-details"><div class="pm-title">Deposit — Contract Signed</div><div class="pm-desc">30% reserves crew &amp; start date</div><div class="pm-date">Paid May 12</div></div><div class="pm-amount">$5,561<small>30%</small></div></div>
-          <div class="pm-item paid"><div class="pm-check green">✓</div><div class="pm-details"><div class="pm-title">Milestone 2 — Rough-In Done</div><div class="pm-desc">Electrical &amp; plumbing inspected</div><div class="pm-date">Paid May 22</div></div><div class="pm-amount">$3,707<small>20%</small></div></div>
-          <div class="pm-item current"><div class="pm-check yellow">⏳</div><div class="pm-details"><div class="pm-title">Milestone 3 — Cabinets &amp; Finish</div><div class="pm-desc">Cabinets in, tile and flooring done</div><div class="pm-date">Due ~Jun 5</div></div><div class="pm-amount">$4,634<small>25%</small></div></div>
-          <div class="pm-item"><div class="pm-check gray">○</div><div class="pm-details"><div class="pm-title">Final — Punch List Clear</div><div class="pm-desc">Client walk-through approved</div><div class="pm-date">Est. Jun 18</div></div><div class="pm-amount">$4,633<small>25%</small></div></div>
-        </div>
-        <div class="payment-summary">
-          <div class="ps-row"><span>Total Contract</span><span>$18,535</span></div>
-          <div class="ps-row"><span class="accent-green">Received</span><span class="accent-green">$9,268</span></div>
-          <div class="ps-row"><span>Remaining</span><span>$9,267</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div id="ptab-docs" class="ptab-content">
-      <div class="card">
-        <h2>📁 Project Documents</h2>
-        <div class="docs-grid">
-          <div class="doc-item"><div class="doc-icon">📄</div><div class="doc-info"><div class="doc-name">Labor Contract</div><div class="doc-meta">Signed May 12</div></div><div class="status-badge green">Signed</div></div>
-          <div class="doc-item"><div class="doc-icon">📋</div><div class="doc-info"><div class="doc-name">Scope of Work</div><div class="doc-meta">Uploaded May 10</div></div><div class="status-badge green">Uploaded</div></div>
-          <div class="doc-item"><div class="doc-icon">📸</div><div class="doc-info"><div class="doc-name">Pre-Work Photos</div><div class="doc-meta">12 photos · May 13</div></div><div class="status-badge green">Complete</div></div>
-          <div class="doc-item"><div class="doc-icon">✏️</div><div class="doc-info"><div class="doc-name">Change Order #1</div><div class="doc-meta">Lighting · May 18</div></div><div class="status-badge yellow">Pending</div></div>
-        </div>
-        <div class="doc-upload-area">
-          <div>📎 Drop files here or <button class="link-btn">browse</button></div>
-          <small>PDF, JPG, PNG — up to 25MB</small>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== CHANGE ORDERS ===== -->
-  <div id="view-changeorders" class="view">
-    <div class="view-header">
-      <h1>Change <span class="accent">Orders</span></h1>
-      <button class="btn-primary" onclick="openChangeOrderModal()">+ New Change Order</button>
-    </div>
-    <div class="card" style="padding:0;overflow:hidden">
-      <table class="projects-table">
-        <thead><tr><th>CO #</th><th>Project</th><th>Description</th><th>Hours</th><th>Labor Impact</th><th>Status</th><th>Date</th></tr></thead>
-        <tbody id="coTableBody">
-          <tr><td>#CO-001</td><td>Lakewood Kitchen</td><td>Under-cabinet LED lighting</td><td>+4 hrs</td><td class="positive">+$440</td><td><span class="status-badge yellow">Pending</span></td><td>May 18</td></tr>
-          <tr><td>#CO-002</td><td>Lakewood Kitchen</td><td>Pull-out bins carpentry</td><td>+2 hrs</td><td class="positive">+$170</td><td><span class="status-badge green">Approved</span></td><td>May 22</td></tr>
-          <tr><td>#CO-003</td><td>Riverside Bath</td><td>Heated floor installation</td><td>+6 hrs</td><td class="positive">+$660</td><td><span class="status-badge blue">In Review</span></td><td>May 24</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ===== CLIENT PORTAL ===== -->
-  <div id="view-client-portal" class="view">
-    <div class="view-header">
-      <h1>Client <span class="accent">Labor Proposal</span></h1>
-      <p class="subtitle">Share with your client — they can review, print, and sign digitally.</p>
-    </div>
-    <div class="card link-card" style="margin-bottom:14px">
-      <span class="portal-link-label">🔗 Shareable Link</span>
-      <div class="portal-link-input">
-        <input type="text" value="renovateiq.app/labor/lakewood-2024-xyz" readonly class="form-input">
-        <button class="btn-primary" onclick="copyPortalLink()">Copy</button>
-      </div>
-      <button class="btn-secondary" onclick="printEstimate()" style="margin-left:8px">🖨️ Print Estimate</button>
-    </div>
-    <div class="client-portal-preview card" style="margin-top:0;padding:0;overflow:hidden">
-      <!-- Contractor Letterhead -->
-      <div class="letterhead" id="portalLetterhead">
-        <div class="lh-logo-wrap">
-          <div class="lh-logo-placeholder" id="portalLogoDisplay">🐒</div>
-        </div>
-        <div class="lh-info">
-          <div class="lh-company" id="portalCompanyDisplay">T. Martin Renovations</div>
-          <div class="lh-tagline" id="portalTaglineDisplay">Detroit's trusted renovation specialists</div>
-          <div class="lh-contact" id="portalContactDisplay">📞 (313) 555-0100 · ✉️ info@martin-reno.com · 📍 Detroit, MI</div>
-          <div class="lh-license" id="portalLicenseDisplay">License: MI-RB-123456</div>
-        </div>
-      </div>
-      <div class="portal-header">
-        <div class="portal-logo">Hello, <strong>Sarah!</strong> 👋</div>
-        <div>Your labor estimate is ready — prepared <span id="portalDate"></span></div>
-      </div>
-      <div class="portal-hero">
-        <h2>Lakewood Kitchen — Labor Estimate</h2>
-        <p>4821 Lakewood Dr · Prepared by T. Martin</p>
-        <div class="portal-highlights">
-          <div class="ph-item"><div class="ph-val">128 hrs</div><div class="ph-lbl">Labor Hours</div></div>
-          <div class="ph-item"><div class="ph-val">$18,535</div><div class="ph-lbl">Total</div></div>
-          <div class="ph-item"><div class="ph-val">8 weeks</div><div class="ph-lbl">Duration</div></div>
-          <div class="ph-item"><div class="ph-val">$115/hr</div><div class="ph-lbl">Blended Rate</div></div>
-        </div>
-      </div>
-      <div class="portal-breakdown-section">
-        <h3>Labor Breakdown</h3>
-        <div class="portal-labor-list">
-          <div class="pll-item"><span>Demo &amp; Prep</span><span>20 hrs</span><span>$2,340</span></div>
-          <div class="pll-item"><span>Electrical</span><span>22 hrs</span><span>$2,420</span></div>
-          <div class="pll-item"><span>Plumbing</span><span>16 hrs</span><span>$1,840</span></div>
-          <div class="pll-item"><span>Cabinet Install</span><span>24 hrs</span><span>$4,080</span></div>
-          <div class="pll-item"><span>Tile &amp; Flooring</span><span>22 hrs</span><span>$2,940</span></div>
-          <div class="pll-item"><span>Painting &amp; Trim</span><span>18 hrs</span><span>$1,430</span></div>
-          <div class="pll-item"><span>Cleanup</span><span>6 hrs</span><span>$390</span></div>
-          <div class="pll-divider"></div>
-          <div class="pll-item subtotal"><span>Raw Labor</span><span>128 hrs</span><span>$15,440</span></div>
-          <div class="pll-item"><span>O&amp;P (20%)</span><span></span><span>$3,088</span></div>
-          <div class="pll-item"><span>Contingency (5%)</span><span></span><span>$1,026</span></div>
-          <div class="pll-item total"><span>Total</span><span></span><span>$19,554</span></div>
-        </div>
-      </div>
-      <!-- AI Concept Preview -->
-      <div class="portal-concept-section">
-        <h3>🤖 AI Space Concept Preview</h3>
-        <div class="concept-upload-area" id="conceptUploadArea">
-          <div id="conceptPhotoPreview" class="concept-photo-placeholder">
-            <span>📷</span>
-            <p>Upload a photo of your current space to get an AI-generated "after" concept vision</p>
-            <button class="btn-secondary btn-sm" onclick="document.getElementById('conceptPhotoInput').click()">Upload Photo</button>
-            <input type="file" id="conceptPhotoInput" accept="image/*" style="display:none" onchange="handleConceptPhoto(this)">
-          </div>
-        </div>
-        <div id="conceptVisionBox" class="concept-vision" style="display:none">
-          <div class="cv-header">
-            <span class="cv-badge">🐒 Remy's Vision</span>
-            <small class="cv-note">AI-generated concept description — not a photorealistic render</small>
-          </div>
-          <div id="conceptVisionText" class="cv-text"></div>
-        </div>
-      </div>
-
-      <!-- Estimate Disclaimer -->
-      <div class="portal-disclaimer">
-        <div class="disclaimer-icon">ℹ️</div>
-        <div>
-          <strong>About This Estimate</strong>
-          <p>This is a preliminary labor cost <em>range</em> based on your answers and the contractor's rates. The actual final price is set after an in-person site visit where your contractor verifies the exact square footage and scope. If this range fits your budget, click below to schedule your on-site visit — there's no obligation.</p>
-        </div>
-      </div>
-
-      <div class="portal-acceptance">
-        <button class="btn-primary btn-xl full-width" style="margin-bottom:12px" onclick="scheduleVisit()">📅 Schedule On-Site Visit</button>
-        <div class="digital-signature-area">
-          <h4>✍️ Digital Acceptance <span style="font-size:0.75rem;font-weight:400;color:var(--text-muted)">(after on-site price is confirmed)</span></h4>
-          <div class="sig-fields">
-            <input type="text" placeholder="Type your full legal name" class="form-input" id="sigName">
-            <div class="sig-date">Date: <strong id="sigDateDisplay"></strong></div>
-          </div>
-          <label class="sig-checkbox"><input type="checkbox" id="sigAgree"> I agree to the labor scope, verified pricing, and payment schedule.</label>
-          <button class="btn-accept" onclick="acceptProposal()">✅ Accept &amp; Sign Proposal</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== AI ADVISOR ===== -->
-  <div id="view-ai-advisor" class="view">
-    <div class="view-header">
-      <div class="mascot-inline"><span class="mascot-sm">🐒</span><div class="mascot-tip">Ask me anything about labor rates, crew sizes, hours, or scheduling. I know the Detroit metro market inside and out! 🍌</div></div>
-      <h1>AI Labor <span class="accent">Advisor</span></h1>
-    </div>
-    <div class="ai-layout">
-      <div class="ai-chat-section card">
-        <div class="ai-chat-messages" id="aiMessages">
-          <div class="ai-message ai">
-            <div class="ai-avatar">🐒</div>
-            <div class="ai-bubble">
-              <p><strong>Hey there! I'm Remy, your renovation monkey! 🍌</strong></p>
-              <p>I can help you with:</p>
-              <ul>
-                <li>Local labor rate benchmarks by trade</li>
-                <li>Hours estimation for specific tasks</li>
-                <li>Crew size recommendations</li>
-                <li>Labor cost optimization tips</li>
-                <li>Scheduling and trade sequencing</li>
-              </ul>
-              <p>What do you want to know?</p>
-            </div>
-          </div>
-        </div>
-        <div class="ai-input-area">
-          <div class="ai-api-key-section" id="aiApiKeySection">
-            <div class="api-key-banner">
-              🔑 <div><strong>Connect Anthropic API Key</strong><p>Stored locally in your browser only.</p></div>
-            </div>
-            <div class="api-key-input-wrap">
-              <input type="password" id="apiKeyInput" placeholder="sk-ant-..." class="form-input">
-              <button class="btn-primary" onclick="saveApiKey()">Connect</button>
-            </div>
-          </div>
-          <div class="ai-quick-prompts">
-            <button class="qp-btn" onclick="sendQuickPrompt(this)">💰 Fair electrician rate in Detroit?</button>
-            <button class="qp-btn" onclick="sendQuickPrompt(this)">⏱️ Hours to install kitchen cabinets?</button>
-            <button class="qp-btn" onclick="sendQuickPrompt(this)">👷 Crew size for kitchen reno?</button>
-            <button class="qp-btn" onclick="sendQuickPrompt(this)">📉 Cut labor costs on a bathroom?</button>
-          </div>
-          <div class="ai-chat-input">
-            <textarea id="aiPromptInput" placeholder="Ask Remy anything about labor..." rows="2" onkeydown="handleAiKeydown(event)"></textarea>
-            <button class="ai-send-btn" onclick="sendAiMessage()">➤</button>
-          </div>
-        </div>
-      </div>
-      <div class="ai-insights-panel">
-        <div class="card">
-          <h3>📊 Detroit Metro Rates</h3>
-          <div class="insight-items">
-            <div class="insight-item"><div class="insight-label">General Laborer</div><div class="insight-value">$55–75/hr</div></div>
-            <div class="insight-item"><div class="insight-label">Carpenter</div><div class="insight-value">$75–100/hr</div></div>
-            <div class="insight-item"><div class="insight-label">Electrician</div><div class="insight-value">$95–130/hr</div></div>
-            <div class="insight-item"><div class="insight-label">Plumber</div><div class="insight-value">$100–135/hr</div></div>
-            <div class="insight-item"><div class="insight-label">HVAC Tech</div><div class="insight-value">$90–120/hr</div></div>
-            <div class="insight-item"><div class="insight-label">Tile Setter</div><div class="insight-value">$80–105/hr or $6–10/sqft</div></div>
-            <div class="insight-item"><div class="insight-label">Painter</div><div class="insight-value">$65–90/hr or $2–4/sqft</div></div>
-          </div>
-        </div>
-        <div class="card mt-16">
-          <h3>🍌 Remy's Tips</h3>
-          <div class="tips-list">
-            <div class="tip-item">💡 Sequence trades right — rough-in before drywall saves costly re-opens</div>
-            <div class="tip-item">💡 Bundle electrical + plumbing to cut mobilization costs</div>
-            <div class="tip-item">💡 Add 10–15% buffer on tile — layout complexity is underestimated</div>
-            <div class="tip-item">💡 2-man cabinet crews are 40% faster than solo install</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== SETUP / CONTRACTOR ONBOARDING ===== -->
-  <div id="view-setup" class="view">
-    <div class="view-header">
-      <div class="mascot-inline"><span class="mascot-sm">🐒</span><div class="mascot-tip">Set up your contractor profile once — it appears on every client estimate, proposal, and contract you generate!</div></div>
-      <h1>Contractor <span class="accent">Profile Setup</span></h1>
-    </div>
-
-    <!-- Setup Step Progress -->
-    <div class="step-progress" style="max-width:500px;margin-bottom:24px">
-      <div class="step-track"><div class="step-fill" id="setupStepFill" style="width:33%"></div></div>
-      <div class="steps">
-        <div class="step active" data-setup-step="1"><div class="step-num">1</div><div class="step-label">Identity</div></div>
-        <div class="step" data-setup-step="2"><div class="step-num">2</div><div class="step-label">Branding</div></div>
-        <div class="step" data-setup-step="3"><div class="step-num">3</div><div class="step-label">Pricing</div></div>
-      </div>
-    </div>
-
-    <!-- Setup Step 1: Company Identity -->
-    <div class="step-content" id="setup-step1">
-      <div class="setup-card card">
-        <h2 class="step-title">Company Identity 🏢</h2>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Company Name *</label>
-            <input type="text" class="form-input" id="setupCompanyName" placeholder="Rivera Renovations LLC" oninput="previewHandle(this.value)">
-          </div>
-          <div class="form-group">
-            <label>Your Handle</label>
-            <div class="handle-wrap">
-              <span class="handle-at">@</span>
-              <input type="text" class="form-input handle-input" id="setupHandle" placeholder="riverarenovations" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')">
-            </div>
-          </div>
-          <div class="form-group full-width">
-            <label>Tagline</label>
-            <input type="text" class="form-input" id="setupTagline" placeholder="Detroit's trusted kitchen & bath specialists since 2010" maxlength="80">
-          </div>
-          <div class="form-group">
-            <label>License Number</label>
-            <input type="text" class="form-input" id="setupLicense" placeholder="MI-RB-123456">
-          </div>
-          <div class="form-group">
-            <label>Insurance / Bond #</label>
-            <input type="text" class="form-input" id="setupInsurance" placeholder="Policy # (optional)">
-          </div>
-        </div>
-        <div style="display:flex;justify-content:flex-end;margin-top:16px">
-          <button class="btn-primary btn-xl" onclick="setupGoToStep(2)">Continue →</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Setup Step 2: Branding & Contact -->
-    <div class="step-content hidden" id="setup-step2">
-      <div class="setup-card card">
-        <h2 class="step-title">Branding &amp; Contact 🎨</h2>
-        <div class="logo-upload-area" id="logoUploadArea" onclick="document.getElementById('logoFileInput').click()">
-          <div id="logoPreviewWrap">
-            <div class="logo-upload-icon">📷</div>
-            <p>Click to upload company logo</p>
-            <small>PNG, JPG up to 2MB — appears on every estimate &amp; contract</small>
-          </div>
-          <input type="file" id="logoFileInput" accept="image/*" style="display:none" onchange="handleLogoUpload(this)">
-        </div>
-        <div class="form-grid" style="margin-top:20px">
-          <div class="form-group">
-            <label>Business Phone *</label>
-            <input type="tel" class="form-input" id="setupPhone" placeholder="(313) 555-0100">
-          </div>
-          <div class="form-group">
-            <label>Business Email *</label>
-            <input type="email" class="form-input" id="setupEmail" placeholder="hello@riverarenovations.com">
-          </div>
-          <div class="form-group full-width">
-            <label>Business Address *</label>
-            <input type="text" class="form-input" id="setupAddress" placeholder="1234 Main St, Detroit, MI 48201">
-          </div>
-          <div class="form-group">
-            <label>Website</label>
-            <input type="url" class="form-input" id="setupWebsite" placeholder="www.riverarenovations.com">
-          </div>
-        </div>
-        <div class="step-nav">
-          <button class="btn-secondary" onclick="setupGoToStep(1)">← Back</button>
-          <button class="btn-primary btn-xl" onclick="setupGoToStep(3)">Continue →</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Setup Step 3: Job-Type Pricing -->
-    <div class="step-content hidden" id="setup-step3">
-      <div class="setup-card card">
-        <h2 class="step-title">Labor Rate Ranges by Job Type 💲</h2>
-        <div class="mascot-inline" style="margin-bottom:16px">
-          <span class="mascot-sm">🐒</span>
-          <div class="mascot-tip">Set a <strong>min and max $/sqft</strong> labor rate for each job type. When a homeowner submits their sqft and project type, we calculate their estimate range using YOUR rates — not market defaults.</div>
-        </div>
-        <div class="job-rates-grid">
-          <div class="job-rate-head"><span>Job Type</span><span>Min ($/sqft)</span><span>Max ($/sqft)</span><span>Typical Range</span></div>
-          <div class="job-rate-row" data-type="kitchen">
-            <div class="jrt-icon">🍳 Kitchen</div>
-            <div><input type="number" class="form-input rate-in" id="jr-kitchen-min" value="80" min="0" step="1"></div>
-            <div><input type="number" class="form-input rate-in" id="jr-kitchen-max" value="140" min="0" step="1"></div>
-            <div class="jrt-bench">Market: $75–$150</div>
-          </div>
-          <div class="job-rate-row" data-type="bathroom">
-            <div class="jrt-icon">🛁 Bathroom</div>
-            <div><input type="number" class="form-input rate-in" id="jr-bathroom-min" value="90" min="0" step="1"></div>
-            <div><input type="number" class="form-input rate-in" id="jr-bathroom-max" value="150" min="0" step="1"></div>
-            <div class="jrt-bench">Market: $85–$160</div>
-          </div>
-          <div class="job-rate-row" data-type="fullhome">
-            <div class="jrt-icon">🏠 Full Home</div>
-            <div><input type="number" class="form-input rate-in" id="jr-fullhome-min" value="65" min="0" step="1"></div>
-            <div><input type="number" class="form-input rate-in" id="jr-fullhome-max" value="110" min="0" step="1"></div>
-            <div class="jrt-bench">Market: $60–$120</div>
-          </div>
-          <div class="job-rate-row" data-type="basement">
-            <div class="jrt-icon">🏗️ Basement</div>
-            <div><input type="number" class="form-input rate-in" id="jr-basement-min" value="55" min="0" step="1"></div>
-            <div><input type="number" class="form-input rate-in" id="jr-basement-max" value="95" min="0" step="1"></div>
-            <div class="jrt-bench">Market: $50–$100</div>
-          </div>
-          <div class="job-rate-row" data-type="outdoor">
-            <div class="jrt-icon">🌿 Outdoor</div>
-            <div><input type="number" class="form-input rate-in" id="jr-outdoor-min" value="45" min="0" step="1"></div>
-            <div><input type="number" class="form-input rate-in" id="jr-outdoor-max" value="80" min="0" step="1"></div>
-            <div class="jrt-bench">Market: $40–$90</div>
-          </div>
-          <div class="job-rate-row" data-type="addition">
-            <div class="jrt-icon">🏡 Addition</div>
-            <div><input type="number" class="form-input rate-in" id="jr-addition-min" value="85" min="0" step="1"></div>
-            <div><input type="number" class="form-input rate-in" id="jr-addition-max" value="135" min="0" step="1"></div>
-            <div class="jrt-bench">Market: $80–$145</div>
-          </div>
-        </div>
-        <div class="step-nav" style="margin-top:20px">
-          <button class="btn-secondary" onclick="setupGoToStep(2)">← Back</button>
-          <button class="btn-primary btn-xl" onclick="saveContractorSetup()">💾 Save &amp; Finish Setup</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== ON-SITE VERIFICATION ===== -->
-  <div id="view-onsite" class="view">
-    <div class="view-header">
-      <div class="mascot-inline"><span class="mascot-sm">🐒</span><div class="mascot-tip">On-site? Verify the client's sqft, adjust scope if needed, enter your final locked price, then generate the contract — all in one tap.</div></div>
-      <h1>On-Site <span class="accent">Verification</span></h1>
-    </div>
-
-    <!-- Client Selector -->
-    <div class="card mb-16">
-      <label class="form-label">Select Client / Project</label>
-      <select class="form-input" id="onsiteClientSelect" onchange="loadOnsiteClient(this.value)" style="max-width:400px">
-        <option value="">— Choose a pending estimate —</option>
-        <option value="lakewood">Lakewood Kitchen — Sarah Johnson</option>
-        <option value="riverside">Riverside Bath — Mike Chen</option>
-        <option value="sample">Sample (demo data)</option>
-      </select>
-    </div>
-
-    <div id="onsitePanel" style="display:none">
-      <div class="onsite-layout">
-        <!-- Left: Verification -->
-        <div>
-          <!-- Sqft Verification -->
-          <div class="card mb-16">
-            <h3 class="step-title" style="margin-bottom:14px">📐 Sqft Verification</h3>
-            <div class="sqft-verify-row">
-              <div class="sqft-box client-sqft">
-                <div class="sqft-label">Client Said</div>
-                <div class="sqft-value" id="onsiteClientSqft">—</div>
-                <div class="sqft-unit">sq ft</div>
-              </div>
-              <div class="sqft-arrow">→</div>
-              <div class="sqft-box actual-sqft">
-                <div class="sqft-label">Verified (You)</div>
-                <input type="number" class="sqft-input" id="onsiteActualSqft" placeholder="Enter measured sqft" oninput="recalcOnSite()">
-                <div class="sqft-unit">sq ft</div>
-              </div>
-            </div>
-            <div id="sqftAdjustFlag" class="sqft-flag" style="display:none"></div>
-          </div>
-
-          <!-- Scope Adjustments -->
-          <div class="card mb-16">
-            <h3 class="step-title" style="margin-bottom:12px">✏️ Scope Adjustments</h3>
-            <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px">Tap to toggle — changes are flagged on the estimate</p>
-            <div id="onsiteScopeChips" class="scope-chips"></div>
-            <div id="onsiteAdjustments" class="onsite-adj-list" style="margin-top:12px"></div>
-          </div>
-
-          <!-- Notes -->
-          <div class="card mb-16">
-            <h3 class="step-title" style="margin-bottom:10px">📝 Site Notes</h3>
-            <textarea class="form-input" id="onsiteNotes" rows="3" placeholder="Access issues, special conditions, scope clarifications..."></textarea>
-          </div>
-        </div>
-
-        <!-- Right: Live Range + Final Price -->
-        <div>
-          <div class="onsite-price-panel card">
-            <div class="opp-header">📊 Live Labor Range</div>
-            <div class="opp-range">
-              <span id="onsiteRangeMin">$—</span>
-              <span class="opp-dash">–</span>
-              <span id="onsiteRangeMax">$—</span>
-            </div>
-            <div class="opp-basis" id="onsiteRangeBasis">Based on client's estimate</div>
-
-            <div class="opp-divider"></div>
-
-            <div class="opp-section-label">🔒 Enter Final Locked Price</div>
-            <div class="final-price-wrap">
-              <span class="dollar-sign">$</span>
-              <input type="number" class="final-price-input" id="onsiteFinalPrice" placeholder="0" oninput="checkFinalPrice()">
-            </div>
-            <div id="finalPriceFlag" class="final-price-flag" style="display:none"></div>
-
-            <button class="btn-primary full-width" style="margin-top:14px" id="lockPriceBtn" onclick="lockFinalPrice()" disabled>
-              🔒 Lock Price &amp; Notify Client
-            </button>
-
-            <div id="lockedConfirm" class="locked-confirm" style="display:none">
-              <div class="lc-badge">✅ Price Locked</div>
-              <div class="lc-amount" id="lockedAmount"></div>
-              <div class="lc-note">Client will see "🔒 Price Locked" on their estimate</div>
-              <button class="btn-yellow full-width" style="margin-top:12px" onclick="draftContract()">
-                📜 Draft Contract
+            <div class="card-header"><h2>Quick Actions</h2></div>
+            <div class="quick-action-list">
+              <button class="qa-item" onclick="switchView('estimates')">
+                <span class="qa-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+                <div><strong>New Estimate</strong><p>Start a labor estimate</p></div>
+                <span class="qa-arrow">→</span>
+              </button>
+              <button class="qa-item" onclick="switchView('rates')">
+                <span class="qa-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+                <div><strong>Update Rates</strong><p>Adjust your labor pricing</p></div>
+                <span class="qa-arrow">→</span>
+              </button>
+              <button class="qa-item" onclick="openChangeOrderModal()">
+                <span class="qa-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg></span>
+                <div><strong>Change Order</strong><p>Add to active project</p></div>
+                <span class="qa-arrow">→</span>
+              </button>
+              <button class="qa-item" onclick="switchView('invoices')">
+                <span class="qa-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+                <div><strong>Send Invoice</strong><p>Generate from estimate</p></div>
+                <span class="qa-arrow">→</span>
               </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-</main>
-
-<!-- CHANGE ORDER MODAL -->
-<div class="modal-overlay" id="coModal" onclick="closeModal(event)">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-mascot">🐒</div>
-      <h2>New Change Order</h2>
-      <button class="modal-close" onclick="closeChangeOrderModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group"><label>Project</label><select class="form-input"><option>Lakewood Kitchen — Sarah Johnson</option><option>Riverside Master Bath — Mike Chen</option></select></div>
-      <div class="form-group"><label>Change Description</label><input type="text" class="form-input" id="coTitle" placeholder="e.g. Add under-cabinet lighting"></div>
-      <div class="form-group"><label>Trade</label><select class="form-input" id="coTrade"><option>Carpentry</option><option>Electrical</option><option>Plumbing</option><option>HVAC</option><option>Tile Work</option><option>Painting</option><option>General Labor</option></select></div>
-      <div class="form-grid">
-        <div class="form-group"><label>Hours</label><input type="number" class="form-input" id="coHours" placeholder="e.g. 4" oninput="updateCoPreview()"></div>
-        <div class="form-group"><label>Rate ($/hr)</label><input type="number" class="form-input" id="coRate" placeholder="e.g. 95" oninput="updateCoPreview()"></div>
+    <!-- ===== ESTIMATES ===== -->
+    <div id="view-estimates" class="view">
+      <div class="view-header">
+        <div><h1>New Estimate</h1><p class="view-sub">Build a labor-only estimate step by step</p></div>
       </div>
-      <div class="form-group"><label>Type</label><select class="form-input" id="coType" onchange="updateCoPreview()"><option value="addition">Addition (more work)</option><option value="credit">Credit (removed work)</option></select></div>
-      <div class="co-impact-preview">
-        <div style="display:flex;gap:24px">
-          <div><div class="cip-label">Hours</div><div class="cip-value" id="cipHours">0 hrs</div></div>
-          <div><div class="cip-label">Labor Impact</div><div class="cip-value" id="cipValue">+$0</div></div>
+
+      <!-- Step progress bar -->
+      <div class="step-bar">
+        <div class="step-bar-track"><div class="step-bar-fill" id="stepFill" style="width:33%"></div></div>
+        <div class="step-pills">
+          <div class="step-pill active" data-step="1"><span class="sp-num">1</span><span>Project Info</span></div>
+          <div class="step-pill" data-step="2"><span class="sp-num">2</span><span>Labor Lines</span></div>
+          <div class="step-pill" data-step="3"><span class="sp-num">3</span><span>Review</span></div>
+        </div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="step-content" id="step1">
+        <div class="two-col-layout">
+          <div>
+            <h2 class="section-title">Project type</h2>
+            <div class="project-type-grid" id="ptGrid">
+              <button class="pt-btn" data-type="kitchen" onclick="selectProjectType(this)">🍳<span>Kitchen</span></button>
+              <button class="pt-btn" data-type="bathroom" onclick="selectProjectType(this)">🛁<span>Bathroom</span></button>
+              <button class="pt-btn" data-type="fullhome" onclick="selectProjectType(this)">🏠<span>Full Home</span></button>
+              <button class="pt-btn" data-type="basement" onclick="selectProjectType(this)">🏗️<span>Basement</span></button>
+              <button class="pt-btn" data-type="outdoor" onclick="selectProjectType(this)">🌿<span>Outdoor</span></button>
+              <button class="pt-btn" data-type="addition" onclick="selectProjectType(this)">🏡<span>Addition</span></button>
+            </div>
+            <h2 class="section-title" style="margin-top:24px">Project details</h2>
+            <div class="form-row-2">
+              <div class="form-group"><label class="form-label">Client Name *</label><input type="text" class="form-input" id="clientName" placeholder="Sarah Johnson"></div>
+              <div class="form-group"><label class="form-label">Client Email</label><input type="email" class="form-input" id="clientEmail" placeholder="sarah@email.com"></div>
+              <div class="form-group"><label class="form-label">Project Address</label><input type="text" class="form-input" id="projectAddress" placeholder="4821 Lakewood Dr, Detroit, MI"></div>
+              <div class="form-group"><label class="form-label">Start Date</label><input type="date" class="form-input" id="startDate"></div>
+              <div class="form-group"><label class="form-label">Client Budget ($)</label><input type="number" class="form-input" id="clientBudget" placeholder="20000" oninput="state.clientBudget=parseFloat(this.value)||0;updateLivePanel()"></div>
+              <div class="form-group"><label class="form-label">Default Rate ($/hr)</label><input type="number" class="form-input" id="defaultRate" value="95" oninput="state.defaultRate=parseFloat(this.value)||95"></div>
+            </div>
+            <div class="form-group"><label class="form-label">Scope Notes</label><textarea class="form-input" id="scopeNotes" rows="3" placeholder="Describe scope, access requirements, special conditions..."></textarea></div>
+          </div>
+          <div class="step1-aside">
+            <div class="card aside-tip">
+              <h3>Before you start</h3>
+              <ul class="tip-list">
+                <li>Select a project type to load your saved rates</li>
+                <li>Budget field enables a "vs. budget" indicator on the live panel</li>
+                <li>Scope notes appear on the client's estimate doc</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="step-actions">
+          <div></div>
+          <button class="btn-primary" id="nextStep1" onclick="goToStep(2)" disabled>Continue to Labor Lines →</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Labor Lines -->
+      <div class="step-content hidden" id="step2">
+        <div class="labor-layout">
+          <div class="labor-main">
+            <div class="labor-toolbar">
+              <h2 class="section-title" style="margin:0">Labor Lines</h2>
+              <div class="labor-toolbar-right">
+                <select class="form-input select-sm" id="quickAddTrade">
+                  <option value="">Quick add trade...</option>
+                  <option value="demo">Demo &amp; Hauling</option>
+                  <option value="framing">Framing &amp; Carpentry</option>
+                  <option value="electrical">Electrical</option>
+                  <option value="plumbing">Plumbing</option>
+                  <option value="hvac">HVAC</option>
+                  <option value="tile">Tile Work</option>
+                  <option value="flooring">Flooring Install</option>
+                  <option value="cabinets">Cabinet Install</option>
+                  <option value="drywall">Drywall</option>
+                  <option value="painting">Painting</option>
+                  <option value="trim">Trim &amp; Millwork</option>
+                  <option value="cleanup">Final Cleanup</option>
+                </select>
+                <button class="btn-outline btn-sm" onclick="addCustomLine()">+ Custom</button>
+              </div>
+            </div>
+
+            <div class="labor-table">
+              <div class="lt-head">
+                <span>Trade / Task</span><span>Unit</span><span>Qty / Crew</span><span>Rate</span><span>Total</span><span></span>
+              </div>
+              <div id="laborLines">
+                <div class="lt-empty" id="laborEmpty">No labor lines yet — quick add a trade above or click + Custom</div>
+              </div>
+            </div>
+
+            <div class="card saved-rates-panel" style="margin-top:14px">
+              <div class="srp-header"><span>Saved Rates</span><span class="srp-hint">Click to add</span></div>
+              <div id="miniPresetGrid" class="srp-chips"></div>
+            </div>
+          </div>
+
+          <div class="live-panel" id="liveCostPanel">
+            <div class="lp-label">Live Total</div>
+            <div class="lp-total" id="lcpTotal">$0</div>
+            <div class="lp-stats">
+              <div class="lp-stat"><div id="lcpHours">0</div><span>Hours</span></div>
+              <div class="lp-stat"><div id="lcpLines">0</div><span>Lines</span></div>
+              <div class="lp-stat"><div id="lcpBlended">—</div><span>Blended</span></div>
+            </div>
+            <div class="lp-divider"></div>
+            <div id="lcpBreakdown" class="lp-breakdown">
+              <div class="lp-empty">Add lines to see breakdown</div>
+            </div>
+            <div class="lp-divider"></div>
+            <div class="lp-budget-row">
+              <span>vs. Budget</span>
+              <span id="bcValue" class="lp-budget-val">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-actions">
+          <button class="btn-outline" onclick="goToStep(1)">← Back</button>
+          <button class="btn-primary" onclick="goToStep(3)">Review Estimate →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Review -->
+      <div class="step-content hidden" id="step3">
+        <div class="review-layout">
+          <div>
+            <div class="card" style="margin-bottom:14px">
+              <h2 class="section-title">Project Overview</h2>
+              <div class="review-meta-grid">
+                <div class="rm-item"><span>Type</span><strong id="rv-type">—</strong></div>
+                <div class="rm-item"><span>Client</span><strong id="rv-client">—</strong></div>
+                <div class="rm-item"><span>Address</span><strong id="rv-address">—</strong></div>
+                <div class="rm-item"><span>Start</span><strong id="rv-start">—</strong></div>
+                <div class="rm-item"><span>Total Hours</span><strong id="rv-hours">—</strong></div>
+                <div class="rm-item"><span>Blended Rate</span><strong id="rv-rate">—</strong></div>
+              </div>
+            </div>
+            <div class="card" style="margin-bottom:14px">
+              <h2 class="section-title">Labor Lines</h2>
+              <div id="rv-lines"></div>
+            </div>
+            <div class="card">
+              <h2 class="section-title">Markup &amp; Margin</h2>
+              <div class="slider-row"><label>Overhead &amp; Profit</label><input type="range" min="10" max="40" value="20" id="markupSlider" oninput="updateMarkup(this.value)"><span class="slider-val" id="markupVal">20%</span></div>
+              <div class="slider-row"><label>Contingency</label><input type="range" min="0" max="15" value="5" id="contingencySlider" oninput="updateContingency(this.value)"><span class="slider-val" id="contingencyVal">5%</span></div>
+            </div>
+          </div>
+          <div>
+            <div class="card total-panel">
+              <h2 class="section-title">Grand Total</h2>
+              <div class="total-rows">
+                <div class="total-row"><span>Raw Labor</span><span id="ft-raw">$0</span></div>
+                <div class="total-row"><span>O&amp;P (<span id="ft-markup-pct">20</span>%)</span><span id="ft-markup">$0</span></div>
+                <div class="total-row"><span>Contingency (<span id="ft-cont-pct">5</span>%)</span><span id="ft-contingency">$0</span></div>
+                <div class="total-row total-row-final"><span>Grand Total</span><span id="ft-total">$0</span></div>
+              </div>
+              <div id="ftBudgetStatus"></div>
+              <button class="btn-primary full-width" style="margin-top:16px" onclick="generateProposal()">Generate Proposal →</button>
+              <button class="btn-outline full-width" style="margin-top:8px" onclick="goToStep(2)">← Revise Lines</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn-secondary" onclick="closeChangeOrderModal()">Cancel</button>
-      <button class="btn-primary" onclick="submitChangeOrder()">Create Change Order 🐒</button>
+
+    <!-- ===== MY RATES ===== -->
+    <div id="view-rates" class="view">
+      <div class="view-header">
+        <div><h1>My Rates</h1><p class="view-sub">Your default labor pricing — auto-loads when you quick-add a trade</p></div>
+        <div class="view-header-actions">
+          <button class="btn-outline" onclick="resetRates()">Reset to Defaults</button>
+          <button class="btn-primary" onclick="saveRates()">Save Rates</button>
+        </div>
+      </div>
+      <div class="rates-layout">
+        <div class="card" style="padding:0;overflow:hidden">
+          <div class="rates-table-head">
+            <span>Trade</span><span>Unit</span><span>Rate</span><span>Min Charge</span><span>Notes</span>
+          </div>
+          <div id="ratesTableBody"></div>
+        </div>
+        <div>
+          <div class="card market-card">
+            <h3>Market Benchmarks</h3>
+            <p class="market-sub">Detroit Metro · 2025</p>
+            <div class="market-list">
+              <div class="ml-row"><span>General Labor</span><span>$55–75/hr</span></div>
+              <div class="ml-row"><span>Carpenter</span><span>$75–100/hr</span></div>
+              <div class="ml-row"><span>Electrician</span><span>$95–130/hr</span></div>
+              <div class="ml-row"><span>Plumber</span><span>$100–135/hr</span></div>
+              <div class="ml-row"><span>HVAC Tech</span><span>$90–120/hr</span></div>
+              <div class="ml-row"><span>Tile Setter</span><span>$6–12/sqft</span></div>
+              <div class="ml-row"><span>Painter</span><span>$2–4/sqft</span></div>
+              <div class="ml-row"><span>Flooring</span><span>$3–8/sqft</span></div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:14px">
+            <h3 style="margin-bottom:12px">Add Custom Trade</h3>
+            <div class="form-group"><label class="form-label">Trade Name</label><input type="text" class="form-input" id="newTradeName" placeholder="e.g. Waterproofing"></div>
+            <div class="form-row-2">
+              <div class="form-group"><label class="form-label">Unit</label>
+                <select class="form-input" id="newTradeUnit">
+                  <option value="hr">$/hr</option>
+                  <option value="sqft">$/sqft</option>
+                  <option value="flat">Flat Rate</option>
+                </select>
+              </div>
+              <div class="form-group"><label class="form-label">Rate</label><input type="number" class="form-input" id="newTradeRate" placeholder="0.00"></div>
+            </div>
+            <button class="btn-primary full-width" onclick="addCustomTrade()">Add Trade</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PROPOSALS ===== -->
+    <div id="view-proposals" class="view">
+      <div class="view-header">
+        <div><h1>Proposals</h1><p class="view-sub">Manage active project proposals</p></div>
+        <select class="form-input" style="width:320px" onchange="showToast('Proposal loaded')">
+          <option>Lakewood Kitchen — Sarah Johnson</option>
+          <option>Riverside Master Bath — Mike Chen</option>
+          <option>Oakdale Full Home — Williams Family</option>
+        </select>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchProposalTab(this,'ptab-estimate')">Estimate</button>
+        <button class="tab-btn" onclick="switchProposalTab(this,'ptab-schedule')">Schedule</button>
+        <button class="tab-btn" onclick="switchProposalTab(this,'ptab-payment')">Payment</button>
+        <button class="tab-btn" onclick="switchProposalTab(this,'ptab-docs')">Documents</button>
+      </div>
+
+      <div id="ptab-estimate" class="tab-panel active">
+        <div class="proposal-layout">
+          <div class="card">
+            <div class="proposal-head">
+              <div><h2>Lakewood Kitchen Renovation</h2><p class="view-sub">Sarah Johnson · 4821 Lakewood Dr, Detroit MI</p></div>
+              <span class="status-pill status-signed">✓ Accepted</span>
+            </div>
+            <div class="li-head"><span>Trade / Task</span><span>Crew</span><span>Hrs</span><span>Rate</span><span>Total</span></div>
+            <div class="li-cat">Demo &amp; Prep</div>
+            <div class="li-row"><span>Demolition &amp; Haul-Away</span><span>2</span><span>16</span><span>$65/hr</span><span>$2,080</span></div>
+            <div class="li-cat">Rough-In</div>
+            <div class="li-row"><span>Electrical Rough-In</span><span>1</span><span>16</span><span>$110/hr</span><span>$1,760</span></div>
+            <div class="li-row"><span>Plumbing Rough-In</span><span>1</span><span>12</span><span>$105/hr</span><span>$1,260</span></div>
+            <div class="li-cat">Cabinets &amp; Finish</div>
+            <div class="li-row"><span>Cabinet Installation</span><span>2</span><span>24</span><span>$85/hr</span><span>$4,080</span></div>
+            <div class="li-row"><span>Tile Work</span><span>1</span><span>10</span><span>$90/hr</span><span>$900</span></div>
+            <div class="li-row"><span>Flooring Install</span><span>2</span><span>12</span><span>$85/hr</span><span>$2,040</span></div>
+            <div class="li-row"><span>Painting</span><span>1</span><span>10</span><span>$75/hr</span><span>$750</span></div>
+            <div class="li-row"><span>Cleanup</span><span>2</span><span>6</span><span>$65/hr</span><span>$780</span></div>
+            <div class="li-divider"></div>
+            <div class="li-subtotal"><span>Raw Labor</span><span></span><span>128 hrs</span><span></span><span>$13,650</span></div>
+            <div class="li-row"><span>Overhead &amp; Profit (20%)</span><span></span><span></span><span></span><span>$2,730</span></div>
+            <div class="li-row"><span>Contingency (5%)</span><span></span><span></span><span></span><span>$819</span></div>
+            <div class="li-total"><span>Grand Total Labor</span><span></span><span></span><span></span><span>$17,199</span></div>
+          </div>
+          <div>
+            <div class="card" style="margin-bottom:14px">
+              <h3>Actions</h3>
+              <button class="btn-primary full-width" onclick="switchView('client-portal')">Send to Client →</button>
+              <button class="btn-outline full-width" style="margin-top:8px" onclick="printEstimate()">Print / Export PDF</button>
+              <button class="btn-outline full-width" style="margin-top:8px" onclick="openChangeOrderModal()">Add Change Order</button>
+            </div>
+            <div class="card">
+              <h3>Change Orders</h3>
+              <div class="co-list" id="coList">
+                <div class="co-item"><span>Under-cabinet lighting</span><span class="co-pos">+$440</span></div>
+                <div class="co-item"><span>Pull-out bins</span><span class="co-pos">+$170</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="ptab-schedule" class="tab-panel">
+        <div class="card">
+          <h2 style="margin-bottom:16px">Project Schedule</h2>
+          <div class="gantt-wrap">
+            <div class="gantt-head"><div class="gt-label">Phase</div><div class="gt-weeks"><span>Wk1</span><span>Wk2</span><span>Wk3</span><span>Wk4</span><span>Wk5</span><span>Wk6</span><span>Wk7</span><span>Wk8</span></div></div>
+            <div class="gantt-row"><div class="gt-label">Demo &amp; Prep</div><div class="gt-track"><div class="gt-bar" style="left:0%;width:12.5%;background:var(--indigo)"></div></div></div>
+            <div class="gantt-row"><div class="gt-label">Electrical</div><div class="gt-track"><div class="gt-bar" style="left:12.5%;width:12.5%;background:var(--blue)"></div></div></div>
+            <div class="gantt-row"><div class="gt-label">Plumbing</div><div class="gt-track"><div class="gt-bar" style="left:12.5%;width:12.5%;background:var(--emerald)"></div></div></div>
+            <div class="gantt-row"><div class="gt-label">Cabinet Install</div><div class="gt-track"><div class="gt-bar" style="left:25%;width:25%;background:var(--amber)"></div></div></div>
+            <div class="gantt-row"><div class="gt-label">Tile &amp; Flooring</div><div class="gt-track"><div class="gt-bar" style="left:50%;width:25%;background:var(--orange)"></div></div></div>
+            <div class="gantt-row"><div class="gt-label">Painting &amp; Trim</div><div class="gt-track"><div class="gt-bar" style="left:62.5%;width:25%;background:var(--purple)"></div></div></div>
+            <div class="gantt-row"><div class="gt-label">Punch List</div><div class="gt-track"><div class="gt-bar" style="left:87.5%;width:12.5%;background:var(--indigo)"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="ptab-payment" class="tab-panel">
+        <div class="card">
+          <div class="flex-between" style="margin-bottom:16px"><h2>Payment Schedule</h2><span class="badge-escrow">🔒 Escrow Protected</span></div>
+          <div class="milestones">
+            <div class="ms-item ms-paid"><div class="ms-dot dot-green"></div><div class="ms-info"><div class="ms-name">Deposit — Contract Signed</div><div class="ms-desc">30% — reserves crew &amp; start date · Paid May 12</div></div><div class="ms-amount">$5,160</div></div>
+            <div class="ms-item ms-paid"><div class="ms-dot dot-green"></div><div class="ms-info"><div class="ms-name">Milestone 2 — Rough-In</div><div class="ms-desc">20% — after electrical &amp; plumbing inspection · Paid May 22</div></div><div class="ms-amount">$3,440</div></div>
+            <div class="ms-item ms-current"><div class="ms-dot dot-amber"></div><div class="ms-info"><div class="ms-name">Milestone 3 — Cabinets &amp; Finish</div><div class="ms-desc">25% — cabinets in, tile &amp; flooring done · Due ~Jun 5</div></div><div class="ms-amount">$4,300</div></div>
+            <div class="ms-item"><div class="ms-dot dot-slate"></div><div class="ms-info"><div class="ms-name">Final — Punch List Clear</div><div class="ms-desc">25% — client walkthrough approved · Est. Jun 18</div></div><div class="ms-amount">$4,299</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="ptab-docs" class="tab-panel">
+        <div class="card">
+          <h2 style="margin-bottom:16px">Project Documents</h2>
+          <div class="doc-list">
+            <div class="doc-item"><span class="doc-ico">📄</span><div class="doc-info"><div>Labor Contract</div><small>Signed May 12</small></div><span class="status-pill status-signed">Signed</span></div>
+            <div class="doc-item"><span class="doc-ico">📋</span><div class="doc-info"><div>Scope of Work</div><small>Uploaded May 10</small></div><span class="status-pill status-active">Uploaded</span></div>
+            <div class="doc-item"><span class="doc-ico">📸</span><div class="doc-info"><div>Pre-Work Photos</div><small>12 photos</small></div><span class="status-pill status-active">Complete</span></div>
+            <div class="doc-item"><span class="doc-ico">✏️</span><div class="doc-info"><div>Change Order #1</div><small>Under-cabinet lighting</small></div><span class="status-pill status-pending">Pending</span></div>
+          </div>
+          <div class="doc-upload"><span>📎 Drop files here or <button class="link-btn" onclick="showToast('File upload coming soon')">browse</button></span><small>PDF, JPG, PNG — up to 25MB</small></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CHANGE ORDERS ===== -->
+    <div id="view-changeorders" class="view">
+      <div class="view-header">
+        <div><h1>Change Orders</h1><p class="view-sub">Track scope additions and credits</p></div>
+        <button class="btn-primary" onclick="openChangeOrderModal()">+ New Change Order</button>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <table class="data-table">
+          <thead><tr><th>CO #</th><th>Project</th><th>Description</th><th>Hours</th><th>Impact</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody id="coTableBody">
+            <tr><td>#CO-001</td><td>Lakewood Kitchen</td><td>Under-cabinet LED lighting</td><td>+4 hrs</td><td class="td-pos">+$440</td><td><span class="status-pill status-pending">Pending</span></td><td>May 18</td></tr>
+            <tr><td>#CO-002</td><td>Lakewood Kitchen</td><td>Pull-out bins carpentry</td><td>+2 hrs</td><td class="td-pos">+$170</td><td><span class="status-pill status-active">Approved</span></td><td>May 22</td></tr>
+            <tr><td>#CO-003</td><td>Riverside Bath</td><td>Heated floor installation</td><td>+6 hrs</td><td class="td-pos">+$660</td><td><span class="status-pill status-review">In Review</span></td><td>May 24</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== ON-SITE ===== -->
+    <div id="view-onsite" class="view">
+      <div class="view-header">
+        <div><h1>On-Site Verification</h1><p class="view-sub">Verify sqft, confirm scope, and lock the final price</p></div>
+      </div>
+      <div class="card" style="margin-bottom:16px;max-width:400px">
+        <label class="form-label">Select Client</label>
+        <select class="form-input" id="onsiteClientSelect" onchange="loadOnsiteClient(this.value)">
+          <option value="">— Choose a pending estimate —</option>
+          <option value="lakewood">Lakewood Kitchen — Sarah Johnson</option>
+          <option value="riverside">Riverside Bath — Mike Chen</option>
+          <option value="sample">Sample (demo)</option>
+        </select>
+      </div>
+      <div id="onsitePanel" style="display:none">
+        <div class="onsite-layout">
+          <div>
+            <div class="card" style="margin-bottom:14px">
+              <h3 style="margin-bottom:14px">Sqft Verification</h3>
+              <div class="sqft-row">
+                <div class="sqft-box"><div class="sqft-label">Client Submitted</div><div class="sqft-val" id="onsiteClientSqft">—</div><div class="sqft-unit">sq ft</div></div>
+                <div class="sqft-arrow">→</div>
+                <div class="sqft-box sqft-actual"><div class="sqft-label">Your Measurement</div><input type="number" class="sqft-input" id="onsiteActualSqft" placeholder="0" oninput="recalcOnSite()"><div class="sqft-unit">sq ft</div></div>
+              </div>
+              <div id="sqftAdjustFlag" class="adjust-flag" style="display:none"></div>
+            </div>
+            <div class="card" style="margin-bottom:14px">
+              <h3 style="margin-bottom:10px">Scope Confirmation</h3>
+              <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px">Tap to toggle included trades</p>
+              <div id="onsiteScopeChips" class="scope-chips"></div>
+              <div id="onsiteAdjustments" style="margin-top:10px"></div>
+            </div>
+            <div class="card">
+              <h3 style="margin-bottom:10px">Site Notes</h3>
+              <textarea class="form-input" id="onsiteNotes" rows="3" placeholder="Access conditions, scope clarifications..."></textarea>
+            </div>
+          </div>
+          <div>
+            <div class="card onsite-price-card">
+              <h3>Estimated Range</h3>
+              <div class="onsite-range"><span id="onsiteRangeMin">—</span><span class="range-dash">–</span><span id="onsiteRangeMax">—</span></div>
+              <div class="range-basis" id="onsiteRangeBasis"></div>
+              <div class="divider"></div>
+              <h3>Lock Final Price</h3>
+              <div class="final-price-row">
+                <span class="dollar">$</span>
+                <input type="number" class="final-price-in" id="onsiteFinalPrice" placeholder="0" oninput="checkFinalPrice()">
+              </div>
+              <div id="finalPriceFlag" style="display:none;font-size:0.78rem;color:var(--amber);margin-top:6px"></div>
+              <button class="btn-primary full-width" style="margin-top:12px" id="lockPriceBtn" onclick="lockFinalPrice()" disabled>Lock Price</button>
+              <div id="lockedConfirm" style="display:none;margin-top:12px">
+                <div class="locked-badge">✓ Price Locked</div>
+                <div class="locked-amount" id="lockedAmount"></div>
+                <button class="btn-outline full-width" style="margin-top:10px" onclick="draftContract()">Draft Contract →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CLIENT PORTAL ===== -->
+    <div id="view-client-portal" class="view">
+      <div class="view-header">
+        <div><h1>Client Portal</h1><p class="view-sub">Shareable proposal your client reviews and signs</p></div>
+        <div class="view-header-actions">
+          <button class="btn-outline" onclick="copyPortalLink()">Copy Link</button>
+          <button class="btn-primary" onclick="printEstimate()">Print / Export PDF</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;max-width:720px;margin:0 auto">
+        <div class="letterhead" id="portalLetterhead">
+          <div id="portalLogoDisplay" class="lh-logo">
+            <svg width="40" height="40" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#4F46E5"/><path d="M8 22L12 10L16 18L20 13L24 22H8Z" fill="white"/></svg>
+          </div>
+          <div>
+            <div class="lh-company" id="portalCompanyDisplay">T. Martin Renovations</div>
+            <div class="lh-detail" id="portalContactDisplay">(313) 555-0100 · info@martin-reno.com · Detroit, MI</div>
+            <div class="lh-detail" id="portalLicenseDisplay">License: MI-RB-123456</div>
+          </div>
+        </div>
+        <div class="portal-body">
+          <div class="portal-greeting">Hello, <strong>Sarah</strong> — your labor estimate is ready.</div>
+          <div class="portal-highlights">
+            <div class="ph-item"><div class="ph-val">128 hrs</div><div class="ph-label">Labor Hours</div></div>
+            <div class="ph-item"><div class="ph-val">$17,199</div><div class="ph-label">Total</div></div>
+            <div class="ph-item"><div class="ph-val">8 weeks</div><div class="ph-label">Duration</div></div>
+            <div class="ph-item"><div class="ph-val">$107/hr</div><div class="ph-label">Blended Rate</div></div>
+          </div>
+          <!-- AI Concept -->
+          <div class="portal-section">
+            <h3>AI Space Concept</h3>
+            <div class="concept-zone" id="conceptPhotoPreview">
+              <p>Upload a photo of your current space to get an AI-generated "after renovation" concept description.</p>
+              <button class="btn-outline btn-sm" onclick="document.getElementById('conceptPhotoInput').click()">Upload Photo</button>
+              <input type="file" id="conceptPhotoInput" accept="image/*" style="display:none" onchange="handleConceptPhoto(this)">
+            </div>
+            <div id="conceptVisionBox" style="display:none" class="concept-vision">
+              <div class="cv-label">AI Vision</div>
+              <div id="conceptVisionText"></div>
+            </div>
+          </div>
+          <!-- Disclaimer -->
+          <div class="portal-disclaimer">
+            <strong>About this estimate</strong>
+            <p>This is a preliminary labor cost range based on your project answers. The locked price is confirmed after an in-person site visit. If this fits your budget, schedule a visit below — no obligation.</p>
+          </div>
+          <!-- Sign -->
+          <div class="portal-section">
+            <button class="btn-primary full-width" style="margin-bottom:12px" onclick="scheduleVisit()">Schedule On-Site Visit →</button>
+            <h3>Digital Acceptance</h3>
+            <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:12px">After your contractor confirms the final price on-site</p>
+            <div class="form-row-2">
+              <div class="form-group"><label class="form-label">Full Legal Name</label><input type="text" class="form-input" id="sigName" placeholder="Type your name"></div>
+              <div class="form-group"><label class="form-label">Date</label><input type="text" class="form-input" id="sigDateDisplay" readonly></div>
+            </div>
+            <label class="checkbox-label"><input type="checkbox" id="sigAgree"> I agree to the labor scope, pricing, and payment schedule</label>
+            <button class="btn-primary full-width" style="margin-top:12px" onclick="acceptProposal()">Accept &amp; Sign Proposal</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== INVOICES ===== -->
+    <div id="view-invoices" class="view">
+      <div class="view-header">
+        <div><h1>Invoices</h1><p class="view-sub">Generate branded invoices from your estimates</p></div>
+        <button class="btn-primary" onclick="showToast('Select a project below to generate an invoice')">+ New Invoice</button>
+      </div>
+      <div class="invoice-layout">
+        <div class="card">
+          <h2 style="margin-bottom:14px">Invoice Template</h2>
+          <div class="template-grid" id="invoiceTemplateGrid">
+            <div class="template-card" id="inv-tpl-classic" onclick="selectTemplate('classic')">
+              <div class="tpl-preview classic-preview">
+                <div class="tp-header tp-classic-h"><div class="tp-logo-box" id="invLogoClassic"></div><div class="tp-company-info"><div class="tp-co" id="invCoClassic">Your Company</div><div class="tp-sub">Detroit, MI</div></div></div>
+                <div class="tp-title-bar tp-classic-t">INVOICE</div>
+                <div class="tp-body"><div class="tp-line"><span class="tp-trade">Labor Services</span><span class="tp-amt">$17,199</span></div><div class="tp-total-line"><span>Total Due</span><span>$17,199</span></div></div>
+              </div>
+              <div class="tpl-meta"><div class="tpl-name">Classic</div><div class="tpl-desc">Clean &amp; professional</div></div>
+              <div class="tpl-check" id="inv-check-classic"></div>
+            </div>
+            <div class="template-card" id="inv-tpl-modern" onclick="selectTemplate('modern')">
+              <div class="tpl-preview modern-preview">
+                <div class="tp-header tp-modern-h"><div class="tp-logo-box-inv"></div><div><div class="tp-co tp-co-inv">Your Company</div></div><div class="tp-est-label">INVOICE</div></div>
+                <div class="tp-body tp-body-modern"><div class="tp-line tp-line-modern"><span class="tp-trade">Labor Services</span><span class="tp-amt">$17,199</span></div><div class="tp-total-line tp-total-modern"><span>Total Due</span><span>$17,199</span></div></div>
+              </div>
+              <div class="tpl-meta"><div class="tpl-name">Modern</div><div class="tpl-desc">Bold dark header</div></div>
+              <div class="tpl-check" id="inv-check-modern"></div>
+            </div>
+            <div class="template-card" id="inv-tpl-minimal" onclick="selectTemplate('minimal')">
+              <div class="tpl-preview minimal-preview">
+                <div class="tp-header tp-minimal-h"><div class="tp-co tp-co-minimal">Your Company</div><div class="tp-sub tp-sub-minimal">Detroit, MI</div></div>
+                <div class="tp-rule"></div><div class="tp-title-minimal">Invoice</div>
+                <div class="tp-body tp-body-minimal"><div class="tp-line tp-line-min"><span class="tp-trade">Labor Services</span><span class="tp-amt">$17,199</span></div><div class="tp-rule" style="margin:6px 0"></div><div class="tp-total-line tp-total-min"><span>Total Due</span><span>$17,199</span></div></div>
+              </div>
+              <div class="tpl-meta"><div class="tpl-name">Minimal</div><div class="tpl-desc">Clean &amp; airy</div></div>
+              <div class="tpl-check" id="inv-check-minimal"></div>
+            </div>
+          </div>
+          <div style="margin-top:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <select class="form-input" style="max-width:280px">
+              <option>Lakewood Kitchen — Sarah Johnson</option>
+              <option>Riverside Bath — Mike Chen</option>
+            </select>
+            <button class="btn-primary" onclick="generateInvoice()">Generate Invoice</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== AI ADVISOR ===== -->
+    <div id="view-ai-advisor" class="view">
+      <div class="view-header">
+        <div><h1>AI Labor Advisor</h1><p class="view-sub">Get rate benchmarks, crew recommendations, and cost breakdowns</p></div>
+      </div>
+      <div class="ai-layout">
+        <div class="card ai-chat-card">
+          <div class="ai-messages" id="aiMessages">
+            <div class="ai-msg ai-msg-ai">
+              <div class="ai-avatar">AI</div>
+              <div class="ai-bubble">
+                <p><strong>Hello! I'm your AI labor advisor.</strong></p>
+                <p>I can help with:</p>
+                <ul>
+                  <li>Labor rate benchmarks by trade and region</li>
+                  <li>Crew size recommendations</li>
+                  <li>Hours estimation for specific tasks</li>
+                  <li>Cost optimization tips</li>
+                </ul>
+                <p>What do you need?</p>
+              </div>
+            </div>
+          </div>
+          <div class="ai-input-section">
+            <div id="aiApiKeySection" class="api-key-section">
+              <input type="password" class="form-input" id="apiKeyInput" placeholder="Anthropic API key (sk-ant-...)">
+              <button class="btn-outline" onclick="saveApiKey()">Connect</button>
+            </div>
+            <div class="quick-prompts">
+              <button class="qp-chip" onclick="sendQuickPrompt(this)">Electrician rate in Detroit?</button>
+              <button class="qp-chip" onclick="sendQuickPrompt(this)">Hours for kitchen cabinet install?</button>
+              <button class="qp-chip" onclick="sendQuickPrompt(this)">Crew size for bathroom reno?</button>
+              <button class="qp-chip" onclick="sendQuickPrompt(this)">How to cut labor costs?</button>
+            </div>
+            <div class="ai-input-row">
+              <textarea class="form-input ai-textarea" id="aiPromptInput" rows="2" placeholder="Ask about rates, scheduling, crew sizes..." onkeydown="handleAiKeydown(event)"></textarea>
+              <button class="btn-primary ai-send" onclick="sendAiMessage()">Send</button>
+            </div>
+          </div>
+        </div>
+        <div class="ai-sidebar">
+          <div class="card">
+            <h3 style="margin-bottom:12px">Detroit Metro Rates</h3>
+            <div class="market-list">
+              <div class="ml-row"><span>General Labor</span><span>$55–75/hr</span></div>
+              <div class="ml-row"><span>Carpenter</span><span>$75–100/hr</span></div>
+              <div class="ml-row"><span>Electrician</span><span>$95–130/hr</span></div>
+              <div class="ml-row"><span>Plumber</span><span>$100–135/hr</span></div>
+              <div class="ml-row"><span>HVAC Tech</span><span>$90–120/hr</span></div>
+              <div class="ml-row"><span>Tile Setter</span><span>$80–105/hr</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SETTINGS / SETUP ===== -->
+    <div id="view-setup" class="view">
+      <div class="view-header">
+        <div><h1>Settings</h1><p class="view-sub">Manage your profile, branding, and pricing</p></div>
+        <button class="btn-primary" onclick="saveContractorSetup()">Save Changes</button>
+      </div>
+      <div class="settings-layout">
+        <div>
+          <div class="card" style="margin-bottom:16px">
+            <h2 style="margin-bottom:16px">Company Profile</h2>
+            <div class="logo-upload-box" id="settingsLogoBox" onclick="document.getElementById('settingsLogoInput').click()" style="margin-bottom:16px">
+              <div id="settingsLogoPreview">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+                <span>Upload logo</span>
+              </div>
+              <input type="file" id="settingsLogoInput" accept="image/*" style="display:none" onchange="handleLogoUpload(this)">
+            </div>
+            <div class="form-row-2">
+              <div class="form-group"><label class="form-label">Company Name</label><input type="text" class="form-input" id="setupCompanyName" placeholder="Your Company LLC"></div>
+              <div class="form-group"><label class="form-label">Your Name</label><input type="text" class="form-input" id="setupOwnerName" placeholder="James Rivera"></div>
+              <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" id="setupPhone" placeholder="(313) 555-0100"></div>
+              <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="setupEmail" placeholder="you@company.com"></div>
+              <div class="form-group"><label class="form-label">Address</label><input type="text" class="form-input" id="setupAddress" placeholder="Detroit, MI 48201"></div>
+              <div class="form-group"><label class="form-label">Website</label><input type="url" class="form-input" id="setupWebsite" placeholder="www.yourcompany.com"></div>
+              <div class="form-group"><label class="form-label">License #</label><input type="text" class="form-input" id="setupLicense" placeholder="MI-RB-123456"></div>
+              <div class="form-group"><label class="form-label">Tagline</label><input type="text" class="form-input" id="setupTagline" placeholder="Detroit's trusted renovation specialists"></div>
+            </div>
+          </div>
+          <div class="card">
+            <h2 style="margin-bottom:6px">Invoice Template</h2>
+            <p class="view-sub" style="margin-bottom:16px">Your selected template applies to all new invoices</p>
+            <div class="template-grid">
+              <div class="template-card" id="set-tpl-classic" onclick="selectTemplate('classic')"><div class="tpl-preview classic-preview"><div class="tp-header tp-classic-h"><div class="tp-logo-box"></div><div class="tp-company-info"><div class="tp-co">Your Company</div><div class="tp-sub">Detroit, MI</div></div></div><div class="tp-title-bar tp-classic-t">INVOICE</div><div class="tp-body"><div class="tp-total-line"><span>Total Due</span><span>$17,199</span></div></div></div><div class="tpl-meta"><div class="tpl-name">Classic</div></div><div class="tpl-check" id="set-check-classic"></div></div>
+              <div class="template-card" id="set-tpl-modern" onclick="selectTemplate('modern')"><div class="tpl-preview modern-preview"><div class="tp-header tp-modern-h"><div class="tp-logo-box-inv"></div><div class="tp-est-label">INVOICE</div></div><div class="tp-body tp-body-modern"><div class="tp-total-line tp-total-modern"><span>Total Due</span><span>$17,199</span></div></div></div><div class="tpl-meta"><div class="tpl-name">Modern</div></div><div class="tpl-check" id="set-check-modern"></div></div>
+              <div class="template-card" id="set-tpl-minimal" onclick="selectTemplate('minimal')"><div class="tpl-preview minimal-preview"><div class="tp-header tp-minimal-h"><div class="tp-co tp-co-minimal">Your Company</div></div><div class="tp-rule"></div><div class="tp-body tp-body-minimal"><div class="tp-total-line tp-total-min"><span>Total Due</span><span>$17,199</span></div></div></div><div class="tpl-meta"><div class="tpl-name">Minimal</div></div><div class="tpl-check" id="set-check-minimal"></div></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <h2 style="margin-bottom:6px">Job-Type Rates</h2>
+            <p class="view-sub" style="margin-bottom:14px">Min/max $/sqft used for homeowner estimate ranges</p>
+            <div class="jr-list">
+              <div class="jr-head"><span>Job Type</span><span>Min $/sqft</span><span>Max $/sqft</span></div>
+              <div class="jr-row"><span>🍳 Kitchen</span><input type="number" class="form-input rate-in-sm" id="jr-kitchen-min" value="80"><input type="number" class="form-input rate-in-sm" id="jr-kitchen-max" value="140"></div>
+              <div class="jr-row"><span>🛁 Bathroom</span><input type="number" class="form-input rate-in-sm" id="jr-bathroom-min" value="90"><input type="number" class="form-input rate-in-sm" id="jr-bathroom-max" value="150"></div>
+              <div class="jr-row"><span>🏠 Full Home</span><input type="number" class="form-input rate-in-sm" id="jr-fullhome-min" value="65"><input type="number" class="form-input rate-in-sm" id="jr-fullhome-max" value="110"></div>
+              <div class="jr-row"><span>🏗️ Basement</span><input type="number" class="form-input rate-in-sm" id="jr-basement-min" value="55"><input type="number" class="form-input rate-in-sm" id="jr-basement-max" value="95"></div>
+              <div class="jr-row"><span>🌿 Outdoor</span><input type="number" class="form-input rate-in-sm" id="jr-outdoor-min" value="45"><input type="number" class="form-input rate-in-sm" id="jr-outdoor-max" value="80"></div>
+              <div class="jr-row"><span>🏡 Addition</span><input type="number" class="form-input rate-in-sm" id="jr-addition-min" value="85"><input type="number" class="form-input rate-in-sm" id="jr-addition-max" value="135"></div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:14px">
+            <h2 style="margin-bottom:12px">Account</h2>
+            <button class="btn-outline full-width" onclick="signOut()">Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ===================================================
+     CLIENT / HOMEOWNER SHELL
+===================================================== -->
+<div id="clientShell" style="display:none">
+  <div class="client-nav">
+    <div class="cn-brand" id="clientNavBrand">
+      <svg width="22" height="22" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="7" fill="#4F46E5"/><path d="M8 22L12 10L16 18L20 13L24 22H8Z" fill="white"/></svg>
+      RenovateIQ
+    </div>
+    <button class="btn-outline btn-sm" onclick="signOut()">Exit Portal</button>
+  </div>
+  <div class="client-content">
+    <div class="client-estimate-card card">
+      <div class="letterhead" id="clientLetterhead">
+        <div id="clientLogoDisplay" class="lh-logo">
+          <svg width="36" height="36" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#4F46E5"/><path d="M8 22L12 10L16 18L20 13L24 22H8Z" fill="white"/></svg>
+        </div>
+        <div>
+          <div class="lh-company" id="clientCompanyDisplay">Your Contractor</div>
+          <div class="lh-detail" id="clientContactDisplay"></div>
+        </div>
+      </div>
+      <div class="portal-body">
+        <div class="portal-greeting">Hello, <strong>Sarah</strong> — your labor estimate is ready.</div>
+        <div class="portal-highlights">
+          <div class="ph-item"><div class="ph-val">$14,200–$24,920</div><div class="ph-label">Estimated Range</div></div>
+          <div class="ph-item"><div class="ph-val">Kitchen</div><div class="ph-label">Project Type</div></div>
+          <div class="ph-item"><div class="ph-val">280 sq ft</div><div class="ph-label">Submitted Size</div></div>
+        </div>
+        <div class="portal-disclaimer">
+          <strong>About this estimate</strong>
+          <p>This is a preliminary labor cost range based on your project description. Your contractor will confirm the exact price during an on-site visit. There's no obligation to proceed.</p>
+        </div>
+        <button class="btn-primary full-width" style="margin-top:16px" onclick="showToast('Scheduling request sent! Your contractor will contact you within 24 hours.')">Schedule On-Site Visit →</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- PRINT MODAL (estimate + contract) -->
+<!-- CHANGE ORDER MODAL -->
+<div class="modal-overlay" id="coModal" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>New Change Order</h2>
+      <button class="modal-close" onclick="closeChangeOrderModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Project</label><select class="form-input"><option>Lakewood Kitchen — Sarah Johnson</option><option>Riverside Bath — Mike Chen</option></select></div>
+      <div class="form-group"><label class="form-label">Description</label><input type="text" class="form-input" id="coTitle" placeholder="e.g. Add under-cabinet lighting"></div>
+      <div class="form-row-2">
+        <div class="form-group"><label class="form-label">Hours</label><input type="number" class="form-input" id="coHours" oninput="updateCoPreview()"></div>
+        <div class="form-group"><label class="form-label">Rate ($/hr)</label><input type="number" class="form-input" id="coRate" oninput="updateCoPreview()"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Type</label><select class="form-input" id="coType" onchange="updateCoPreview()"><option value="addition">Addition</option><option value="credit">Credit</option></select></div>
+      <div class="co-preview"><div><div class="cop-label">Hours</div><div class="cop-val" id="cipHours">0 hrs</div></div><div><div class="cop-label">Impact</div><div class="cop-val" id="cipValue">+$0</div></div></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-outline" onclick="closeChangeOrderModal()">Cancel</button>
+      <button class="btn-primary" onclick="submitChangeOrder()">Create Change Order</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT MODAL -->
 <div class="print-modal-overlay" id="printModal">
   <div class="print-modal-inner">
-    <div class="print-modal-actions no-print">
+    <div class="print-actions no-print">
       <button class="btn-primary" onclick="window.print()">🖨️ Print / Save PDF</button>
-      <button class="btn-secondary" onclick="closePrintModal()">✕ Close</button>
+      <button class="btn-outline" onclick="closePrintModal()">✕ Close</button>
     </div>
     <div id="printContent" class="print-doc"></div>
   </div>
