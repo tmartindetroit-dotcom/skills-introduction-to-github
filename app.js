@@ -77,8 +77,36 @@ var contractor = JSON.parse(JSON.stringify(DEFAULT_CONTRACTOR));
 var rates = {};
 var jobRates = JSON.parse(JSON.stringify(DEFAULT_JOB_RATES));
 
+/* ===== IMPORT LEAD FROM URL ===== */
+function importLeadFromUrl() {
+  var search = window.location.search;
+  if (!search || search.indexOf('import=') === -1) return;
+  try {
+    var raw = search.replace('?', '').split('&').reduce(function(acc, pair) {
+      var parts = pair.split('='); acc[parts[0]] = decodeURIComponent(parts.slice(1).join('=')); return acc;
+    }, {});
+    var param = raw['import'];
+    if (!param) return;
+    var json = decodeURIComponent(escape(atob(param)));
+    var data = JSON.parse(json);
+    if (!data || !data.code) return;
+    var requests = JSON.parse(localStorage.getItem('renovateiq_requests') || '[]');
+    var exists = requests.find(function(r) { return r.code === data.code; });
+    if (!exists) {
+      data._imported = true;
+      requests.push(data);
+      localStorage.setItem('renovateiq_requests', JSON.stringify(requests));
+    }
+    window.history.replaceState({}, '', window.location.pathname);
+    state._importedCode = data.code;
+    state._importedName = data.name;
+  } catch(e) { /* bad param, ignore */ }
+}
+
 /* ===== INIT ===== */
 (function init() {
+  importLeadFromUrl();
+
   var savedRates = localStorage.getItem('renovateiq_rates');
   rates = savedRates ? JSON.parse(savedRates) : JSON.parse(JSON.stringify(DEFAULT_RATES));
 
@@ -154,7 +182,25 @@ function contractorLogin() {
   updateSidebarProfile();
   renderRatesTable();
   renderMiniPresets();
-  switchView('dashboard');
+  updateRequestsBadge();
+
+  if (state._importedCode) {
+    var code = state._importedCode;
+    var name = state._importedName;
+    state._importedCode = null;
+    state._importedName = null;
+    switchView('requests');
+    setTimeout(function() {
+      var banner = document.getElementById('importBanner');
+      var title = document.getElementById('importBannerTitle');
+      var sub = document.getElementById('importBannerSub');
+      if (banner) banner.style.display = 'flex';
+      if (title) title.textContent = 'New lead imported: ' + code;
+      if (sub) sub.textContent = (name || 'Customer') + ' filled out your intake form. Ready to review.';
+    }, 300);
+  } else {
+    switchView('dashboard');
+  }
 }
 
 function clientLogin() {
@@ -1511,11 +1557,90 @@ function submitCustomerRequest() {
     if (pill) { pill.classList.remove('active'); pill.classList.add('done'); }
   }
 
+  var importUrl = generateImportUrl(request);
+  var urlInput = document.getElementById('ciImportUrlInput');
+  if (urlInput) urlInput.value = importUrl;
+  var code2 = document.getElementById('ciConfirmCode2');
+  if (code2) code2.textContent = code;
+  state._lastImportUrl = importUrl;
+
   updateRequestsBadge();
+}
+
+/* ===== LINK SHARING ===== */
+function generateImportUrl(request) {
+  var slim = {
+    code: request.code, name: request.name, phone: request.phone,
+    email: request.email, address: request.address, projectType: request.projectType,
+    sqft: request.sqft, budget: request.budget, scope: request.scope,
+    description: request.description, aiConcept: request.aiConcept,
+    scheduledDate: request.scheduledDate, scheduledTime: request.scheduledTime,
+    preferredWorkDate: request.preferredWorkDate, estMin: request.estMin,
+    estMax: request.estMax, submittedAt: request.submittedAt, status: 'pending',
+    photos: [],
+  };
+  try {
+    var encoded = btoa(unescape(encodeURIComponent(JSON.stringify(slim))));
+    return window.location.href.split('?')[0].split('#')[0] + '?import=' + encoded;
+  } catch(e) { return window.location.href.split('?')[0]; }
+}
+
+function copyImportLink() {
+  var url = state._lastImportUrl || document.getElementById('ciImportUrlInput').value;
+  if (!url) { showToast('No link available'); return; }
+  navigator.clipboard.writeText(url)
+    .then(function() { showToast('Contractor link copied!'); })
+    .catch(function() { showToast('Select the link field and copy manually'); });
+}
+
+function shareImportLink() {
+  var url = state._lastImportUrl || (document.getElementById('ciImportUrlInput') || {}).value;
+  var code = (document.getElementById('ciConfirmCode') || {}).textContent || '';
+  if (navigator.share && url) {
+    navigator.share({
+      title: 'Renovation Request ' + code,
+      text: 'Open this link to import my renovation request into your dashboard',
+      url: url,
+    }).catch(function() {});
+  } else {
+    copyImportLink();
+  }
+}
+
+function copyIntakeLink() {
+  var url = window.location.href.split('?')[0].split('#')[0] + '?intake=1';
+  var input = document.getElementById('intakeLinkInput');
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url)
+      .then(function() { showToast('Customer intake link copied!'); })
+      .catch(function() { if (input) { input.select(); document.execCommand('copy'); showToast('Copied!'); } });
+  } else if (input) {
+    input.select();
+    document.execCommand('copy');
+    showToast('Customer intake link copied!');
+  }
+}
+
+function shareIntakeLink() {
+  var url = window.location.href.split('?')[0].split('#')[0] + '?intake=1';
+  var c = contractor;
+  if (navigator.share) {
+    navigator.share({
+      title: (c.companyName || 'Your Contractor') + ' — Renovation Estimate',
+      text: 'Fill out this quick form to get an instant renovation estimate',
+      url: url,
+    }).catch(function() {});
+  } else {
+    copyIntakeLink();
+  }
 }
 
 /* ===== REQUESTS VIEW ===== */
 function renderRequestsList() {
+  var url = window.location.href.split('?')[0].split('#')[0] + '?intake=1';
+  var linkInput = document.getElementById('intakeLinkInput');
+  if (linkInput) linkInput.value = url;
+
   var requests = JSON.parse(localStorage.getItem('renovateiq_requests') || '[]');
   var emptyEl = document.getElementById('requestsEmpty');
   var listEl = document.getElementById('requestsList');
@@ -1524,42 +1649,84 @@ function renderRequestsList() {
   if (requests.length === 0) {
     if (emptyEl) emptyEl.style.display = 'block';
     listEl.style.display = 'none';
+    updateRequestsBadge();
     return;
   }
   if (emptyEl) emptyEl.style.display = 'none';
-  listEl.style.display = 'grid';
+  listEl.style.display = 'block';
 
   var typeLabels = { kitchen:'Kitchen', bathroom:'Bathroom', fullhome:'Full Home', basement:'Basement', outdoor:'Outdoor', addition:'Addition' };
-  var timeLabels = { morning: 'Morning (8–11am)', afternoon: 'Afternoon (12–3pm)', late: 'Late Afternoon (3–6pm)' };
+  var timeLabels = { morning:'Morning (8–11am)', afternoon:'Afternoon (12–3pm)', late:'Late Afternoon (3–6pm)' };
+  var statusColors = { pending:'status-pending', locked:'status-locked', inprogress:'status-inprogress' };
 
   listEl.innerHTML = requests.slice().reverse().map(function(r) {
-    var d = new Date(r.submittedAt);
-    var submitted = d.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
-    var visit = r.scheduledDate ? new Date(r.scheduledDate + 'T12:00:00').toLocaleDateString('en-US', {month:'short',day:'numeric'}) + ' · ' + (timeLabels[r.scheduledTime] || '') : '—';
-    return '<div class="req-card card">' +
-      '<div class="req-card-head">' +
-        '<div>' +
-          '<div class="req-name">' + escHtml(r.name) + '</div>' +
-          '<div class="req-code">' + escHtml(r.code) + '</div>' +
+    var visitDate = r.scheduledDate ? new Date(r.scheduledDate + 'T12:00:00') : null;
+    var visitStr = visitDate
+      ? visitDate.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'}) + ' · ' + (timeLabels[r.scheduledTime] || '')
+      : 'Not scheduled';
+    var workStr = r.preferredWorkDate
+      ? new Date(r.preferredWorkDate + 'T12:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric'})
+      : '—';
+    var submitted = new Date(r.submittedAt).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+    var initials = (r.name || 'CU').split(' ').map(function(w){return w[0];}).slice(0,2).join('').toUpperCase();
+    var scopeStr = (r.scope || []).slice(0,4).map(function(k){ return (DEFAULT_RATES[k]||{name:k}).name; }).join(', ');
+    if ((r.scope||[]).length > 4) scopeStr += ' +' + ((r.scope.length) - 4) + ' more';
+
+    return '<div class="lead-card card">' +
+      '<div class="lead-card-top">' +
+        '<div class="lead-avatar">' + initials + '</div>' +
+        '<div class="lead-info">' +
+          '<div class="lead-name">' + escHtml(r.name) + '</div>' +
+          '<div class="lead-contact">' +
+            (r.phone ? '<span>' + escHtml(r.phone) + '</span>' : '') +
+            (r.email ? '<span>' + escHtml(r.email) + '</span>' : '') +
+          '</div>' +
+          '<div class="lead-address">' + escHtml(r.address || '—') + '</div>' +
         '</div>' +
-        '<span class="status-pill status-pending">Pending</span>' +
+        '<div class="lead-right">' +
+          '<span class="status-pill ' + (statusColors[r.status] || 'status-pending') + '">' + (r.status === 'locked' ? 'Locked' : r.status === 'inprogress' ? 'In Progress' : 'Pending') + '</span>' +
+          '<div class="lead-code">' + escHtml(r.code) + '</div>' +
+          '<div class="lead-submitted">Submitted ' + submitted + '</div>' +
+        '</div>' +
       '</div>' +
-      '<div class="req-meta">' +
-        '<span>📍 ' + escHtml(r.address || '—') + '</span>' +
-        '<span>🔧 ' + escHtml(typeLabels[r.projectType] || r.projectType || '—') + '</span>' +
-        '<span>📐 ' + (r.sqft || '—') + ' sqft</span>' +
-        '<span>📅 Visit: ' + visit + '</span>' +
+      '<div class="lead-divider"></div>' +
+      '<div class="lead-details-grid">' +
+        '<div class="ld-item"><div class="ld-label">Project Type</div><div class="ld-val">' + (typeLabels[r.projectType] || '—') + '</div></div>' +
+        '<div class="ld-item"><div class="ld-label">Square Footage</div><div class="ld-val">' + (r.sqft ? r.sqft + ' sqft' : '—') + '</div></div>' +
+        '<div class="ld-item"><div class="ld-label">Budget</div><div class="ld-val">' + escHtml(r.budget || 'Not given') + '</div></div>' +
+        '<div class="ld-item"><div class="ld-label">Estimate Range</div><div class="ld-val lead-range">' + fmt(r.estMin) + ' – ' + fmt(r.estMax) + '</div></div>' +
+        '<div class="ld-item"><div class="ld-label">Visit Scheduled</div><div class="ld-val">' + visitStr + '</div></div>' +
+        '<div class="ld-item"><div class="ld-label">Work Start Pref.</div><div class="ld-val">' + workStr + '</div></div>' +
       '</div>' +
-      '<div class="req-range">' + fmt(r.estMin) + ' – ' + fmt(r.estMax) + ' estimate range</div>' +
-      (r.description ? '<div class="req-desc">"' + escHtml(r.description.slice(0, 120)) + (r.description.length > 120 ? '…' : '') + '"</div>' : '') +
-      '<div class="req-actions">' +
+      (scopeStr ? '<div class="lead-scope"><span class="ld-label">Scope: </span>' + escHtml(scopeStr) + '</div>' : '') +
+      (r.description ? '<div class="lead-desc">"' + escHtml(r.description.slice(0,160)) + (r.description.length > 160 ? '…' : '') + '"</div>' : '') +
+      '<div class="lead-actions">' +
         '<button class="btn-primary btn-sm" onclick="loadRequestToOnsite(\'' + r.code + '\')">Verify On-Site →</button>' +
-        '<button class="btn-outline btn-sm" onclick="copyIntakeLink()">Copy Link</button>' +
+        '<button class="btn-outline btn-sm" onclick="showLeadShareLink(\'' + r.code + '\',event)">Share Lead Link</button>' +
+        '<button class="btn-ghost btn-sm" onclick="deleteRequest(\'' + r.code + '\')" style="color:var(--red);margin-left:auto">Remove</button>' +
       '</div>' +
     '</div>';
   }).join('');
 
   updateRequestsBadge();
+}
+
+function showLeadShareLink(code, event) {
+  var requests = JSON.parse(localStorage.getItem('renovateiq_requests') || '[]');
+  var r = requests.find(function(x){ return x.code === code; });
+  if (!r) { showToast('Request not found'); return; }
+  var url = generateImportUrl(r);
+  navigator.clipboard.writeText(url)
+    .then(function() { showToast('Contractor import link copied!'); })
+    .catch(function() { showToast('Could not copy — check browser permissions'); });
+}
+
+function deleteRequest(code) {
+  var requests = JSON.parse(localStorage.getItem('renovateiq_requests') || '[]');
+  requests = requests.filter(function(r){ return r.code !== code; });
+  localStorage.setItem('renovateiq_requests', JSON.stringify(requests));
+  renderRequestsList();
+  showToast('Lead removed');
 }
 
 function updateRequestsBadge() {
@@ -1570,13 +1737,6 @@ function updateRequestsBadge() {
     if (pending > 0) { badge.style.display = 'inline-flex'; badge.textContent = pending; }
     else badge.style.display = 'none';
   }
-}
-
-function copyIntakeLink() {
-  var url = window.location.href.split('?')[0].split('#')[0] + '?intake=1';
-  navigator.clipboard.writeText(url)
-    .then(function() { showToast('Customer intake link copied!'); })
-    .catch(function() { showToast('Copy the URL from your address bar'); });
 }
 
 function loadRequestToOnsite(code) {
