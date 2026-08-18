@@ -86,13 +86,24 @@
       <div class="login-form-wrap" id="homeownerLoginForm" style="display:none">
         <div class="lf-header">
           <button class="lf-back" onclick="backToPortals()">← Back</button>
-          <h2>View Your Estimate</h2>
+          <h2>Get an Estimate</h2>
         </div>
-        <div class="form-group">
-          <label class="form-label">Estimate Code or Email</label>
-          <input type="text" class="form-input" id="clientCode" placeholder="Enter code from your contractor (e.g. LAK-2025-001)" value="LAK-2025-001">
+        <div class="hw-path-card hw-path-hot" onclick="showMarketplace()">
+          <div class="hw-path-icon">🔥</div>
+          <div>
+            <div class="hw-path-title">Find Local Contractors</div>
+            <div class="hw-path-sub">Get competing quotes from verified contractors in your area — free, no obligation</div>
+          </div>
+          <span class="hw-path-arrow">→</span>
         </div>
-        <button class="btn-primary full-width" onclick="clientLogin()">View Estimate</button>
+        <div class="hw-path-card" onclick="showIntakeFlow()">
+          <div class="hw-path-icon">🔗</div>
+          <div>
+            <div class="hw-path-title">My Contractor Sent Me a Link</div>
+            <div class="hw-path-sub">Fill out your contractor's intake form to get an instant estimate</div>
+          </div>
+          <span class="hw-path-arrow">→</span>
+        </div>
       </div>
     </div>
   </div>
@@ -1115,6 +1126,20 @@
         </div>
       </div>
 
+      <!-- Hot Leads from Marketplace -->
+      <div id="hotLeadsSection" style="display:none">
+        <div class="hot-leads-bar">
+          <div class="hot-leads-bar-left">
+            <span class="hot-badge-pill">🔥 HOT LEADS</span>
+            <span class="hot-leads-bar-title">Customer Generated — RenovateIQ Marketplace</span>
+          </div>
+          <span class="hot-leads-count" id="hotLeadsCount"></span>
+        </div>
+        <div class="hot-urgency-bar">⚡ Other verified contractors in your area are receiving these same leads right now. First to respond earns top placement.</div>
+        <div id="hotLeadsList"></div>
+        <div class="hot-section-divider"></div>
+      </div>
+
       <!-- Import success banner -->
       <div id="importBanner" class="import-banner" style="display:none">
         <div class="import-banner-icon">✓</div>
@@ -1458,6 +1483,180 @@
     </div>
 
   </main>
+</div>
+
+<!-- ===================================================
+     MARKETPLACE FLOW (customer-generated, no contractor link)
+===================================================== -->
+<div id="marketplaceFlow" style="display:none">
+  <div class="ci-shell">
+    <div class="ci-header mkt-header">
+      <div class="ci-brand">
+        <svg width="22" height="22" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="7" fill="#4F46E5"/><path d="M8 22L12 10L16 18L20 13L24 22H8Z" fill="white"/></svg>
+        RenovateIQ <span class="mkt-header-badge">Marketplace</span>
+      </div>
+      <div class="ci-progress-wrap">
+        <div class="ci-steps">
+          <div class="ci-step-pill active" id="mpsp-1">1</div>
+          <div class="ci-step-line"></div>
+          <div class="ci-step-pill" id="mpsp-2">2</div>
+          <div class="ci-step-line"></div>
+          <div class="ci-step-pill" id="mpsp-3">3</div>
+          <div class="ci-step-line"></div>
+          <div class="ci-step-pill" id="mpsp-4">4</div>
+        </div>
+        <div class="ci-step-labels">
+          <span>Location</span><span>Details</span><span>Contact</span><span>Estimate</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ci-body">
+
+      <!-- MP Step 1: Location + Project Type -->
+      <div class="ci-step" id="mpst-1">
+        <div class="ci-step-card">
+          <div class="mkt-intro-pill">🔥 Free — No obligation — Competing quotes</div>
+          <h2 class="ci-step-title">Where is your renovation?</h2>
+          <p class="ci-step-sub">We'll match you with verified, rated contractors in your area.</p>
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">City *</label><input type="text" class="form-input" id="mpCity" placeholder="e.g. Detroit"></div>
+            <div class="form-group"><label class="form-label">ZIP Code *</label><input type="text" class="form-input" id="mpZip" placeholder="48201" maxlength="5"></div>
+          </div>
+          <h3 style="margin-top:18px;margin-bottom:12px">What type of renovation? *</h3>
+          <div class="ci-type-grid">
+            <button class="ci-type-btn" data-type="kitchen" onclick="mpSelectType(this)">🍳 Kitchen</button>
+            <button class="ci-type-btn" data-type="bathroom" onclick="mpSelectType(this)">🛁 Bathroom</button>
+            <button class="ci-type-btn" data-type="fullhome" onclick="mpSelectType(this)">🏠 Full Home</button>
+            <button class="ci-type-btn" data-type="basement" onclick="mpSelectType(this)">🏗️ Basement</button>
+            <button class="ci-type-btn" data-type="outdoor" onclick="mpSelectType(this)">🌿 Outdoor</button>
+            <button class="ci-type-btn" data-type="addition" onclick="mpSelectType(this)">🏡 Addition</button>
+          </div>
+          <div class="ci-nav">
+            <button class="btn-outline" onclick="backToPortals()">← Back</button>
+            <button class="btn-primary" onclick="mpStep(2)">Next: Project Details →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MP Step 2: Project Details -->
+      <div class="ci-step" id="mpst-2" style="display:none">
+        <div class="ci-step-card">
+          <h2 class="ci-step-title">Tell us about your project</h2>
+          <p class="ci-step-sub">Contractors use this to prepare accurate quotes. More detail = better bids.</p>
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">Approx. Square Footage *</label><input type="number" class="form-input" id="mpSqft" placeholder="e.g. 250"></div>
+            <div class="form-group">
+              <label class="form-label">Budget Range *</label>
+              <select class="form-input" id="mpBudget">
+                <option value="">Select a range</option>
+                <option value="under10k">Under $10,000</option>
+                <option value="10k-25k">$10,000 – $25,000</option>
+                <option value="25k-50k">$25,000 – $50,000</option>
+                <option value="50k-100k">$50,000 – $100,000</option>
+                <option value="over100k">$100,000+</option>
+              </select>
+            </div>
+          </div>
+          <h3 style="margin-top:14px;margin-bottom:10px">Trades needed (check all that apply)</h3>
+          <div class="ci-scope-grid">
+            <label class="ci-scope-cb"><input type="checkbox" value="demo"> Demo &amp; Hauling</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="electrical"> Electrical</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="plumbing"> Plumbing</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="hvac"> HVAC</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="framing"> Framing</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="drywall"> Drywall</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="tile"> Tile Work</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="flooring"> Flooring</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="cabinets"> Cabinets</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="painting"> Painting</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="trim"> Trim &amp; Millwork</label>
+            <label class="ci-scope-cb"><input type="checkbox" value="cleanup"> Final Cleanup</label>
+          </div>
+          <div class="form-group" style="margin-top:14px">
+            <label class="form-label">Describe your project *</label>
+            <textarea class="form-input" id="mpDescription" rows="4" placeholder="Current condition of the space, what you want changed, any special requirements or concerns..."></textarea>
+          </div>
+          <div class="ci-nav">
+            <button class="btn-outline" onclick="mpStep(1)">← Back</button>
+            <button class="btn-primary" onclick="mpStep(3)">Next: Your Contact Info →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MP Step 3: Contact Info -->
+      <div class="ci-step" id="mpst-3" style="display:none">
+        <div class="ci-step-card">
+          <h2 class="ci-step-title">Your contact info</h2>
+          <p class="ci-step-sub">Contractors reach out directly to schedule your free on-site estimate. Your info is only shared with matched contractors.</p>
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">First Name *</label><input type="text" class="form-input" id="mpFirstName" placeholder="Sarah"></div>
+            <div class="form-group"><label class="form-label">Last Name *</label><input type="text" class="form-input" id="mpLastName" placeholder="Johnson"></div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">Phone *</label><input type="tel" class="form-input" id="mpPhone" placeholder="(313) 555-1234"></div>
+            <div class="form-group"><label class="form-label">Email *</label><input type="email" class="form-input" id="mpEmail" placeholder="sarah@email.com"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Project Address *</label><input type="text" class="form-input" id="mpAddress" placeholder="123 Main St, Detroit, MI 48201"></div>
+          <div class="ci-nav">
+            <button class="btn-outline" onclick="mpStep(2)">← Back</button>
+            <button class="btn-primary" onclick="mpStep(4)">See Estimate &amp; Contractors →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MP Step 4: Estimate + Contractor Ranking -->
+      <div class="ci-step" id="mpst-4" style="display:none">
+        <div class="ci-step-card">
+          <h2 class="ci-step-title">Your Estimate &amp; Matching Contractors</h2>
+          <p class="ci-step-sub">Priced from real contractor rates in your area. All contractors receive your lead simultaneously.</p>
+
+          <div class="ci-estimate-range" style="margin-bottom:18px">
+            <div class="ci-range-label">Local Average Labor Estimate</div>
+            <div class="ci-range-nums"><span id="mpEstMin">—</span><span class="range-dash"> – </span><span id="mpEstMax">—</span></div>
+            <div class="ci-range-basis" id="mpEstBasis"></div>
+          </div>
+
+          <div class="mkt-section-head">
+            <span>🏆 Contractors in Your Area</span>
+            <span class="mkt-urgency-chip">⚡ All receive this lead at the same time</span>
+          </div>
+          <div id="mpContractorList" class="mkt-contractor-list"></div>
+
+          <div class="mkt-rank-note">
+            Contractors are ranked by <strong>response time</strong> and <strong>customer reviews</strong>. First to respond earns priority placement.
+          </div>
+
+          <div class="ci-nav" style="margin-top:20px">
+            <button class="btn-outline" onclick="mpStep(3)">← Back</button>
+            <button class="btn-primary mkt-submit-btn" onclick="submitMarketplaceRequest()">🔥 Send to All Contractors →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MP Confirmation -->
+      <div class="ci-step" id="mpst-confirm" style="display:none">
+        <div class="ci-step-card ci-confirm-card">
+          <div class="ci-confirm-icon mkt-confirm-icon">🔥</div>
+          <h2 class="ci-step-title">Your Request Is Live!</h2>
+          <p class="ci-step-sub" id="mpConfirmSub">Your renovation request has been sent to contractors in your area.</p>
+          <div class="mkt-confirm-urgency">⚡ Contractors are competing for your business — expect responses within 1–4 hours</div>
+          <div class="ci-confirm-details" style="margin-top:16px">
+            <div class="ci-confirm-row"><span>Request Code</span><strong id="mpConfirmCode">—</strong></div>
+            <div class="ci-confirm-row"><span>Contractors Notified</span><strong id="mpConfirmCount">—</strong></div>
+            <div class="ci-confirm-row"><span>Local Estimate Range</span><strong id="mpConfirmRange">—</strong></div>
+          </div>
+          <div class="mkt-next-steps">
+            <div class="mkt-next-title">What happens next?</div>
+            <div class="mkt-next-item">📞 Contractors will call or text you to schedule a free visit</div>
+            <div class="mkt-next-item">📅 Get free on-site estimates — no commitment required</div>
+            <div class="mkt-next-item">⭐ Pick the contractor with the best rating and offer</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <!-- ===================================================
