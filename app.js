@@ -1,3 +1,15 @@
+/* ===== SCHEDULE DEFAULTS ===== */
+var DEFAULT_SCHEDULE = {
+  visitDays: [1,2,3,4,5],
+  visitSlots: ['morning','afternoon','late'],
+  visitLeadDays: 1,
+  visitBlockedDates: [],
+  workDays: [1,2,3,4,5],
+  workLeadDays: 14,
+  workBlockedDates: [],
+};
+var scheduleData = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
+
 /* ===== DEFAULT DATA ===== */
 var DEFAULT_RATES = {
   demo:       { name: 'Demo & Hauling',      unit: 'hr',   rate: 65,   minCharge: 400, notes: 'Includes dumpster coordination' },
@@ -81,6 +93,9 @@ var jobRates = JSON.parse(JSON.stringify(DEFAULT_JOB_RATES));
 
   var savedTpl = localStorage.getItem('renovateiq_template');
   if (savedTpl) state.selectedTemplate = savedTpl;
+
+  var savedSched = localStorage.getItem('renovateiq_schedule');
+  if (savedSched) scheduleData = JSON.parse(savedSched);
 
   document.getElementById('sigDateDisplay').value = new Date().toLocaleDateString();
 
@@ -305,7 +320,7 @@ function switchView(viewName) {
     'dashboard': 'Dashboard', 'estimates': 'New Estimate', 'rates': 'My Rates',
     'proposals': 'Proposals', 'changeorders': 'Change Orders', 'onsite': 'On-Site',
     'client-portal': 'Client Portal', 'invoices': 'Invoices', 'ai-advisor': 'AI Advisor',
-    'setup': 'Settings', 'requests': 'Requests'
+    'setup': 'Settings', 'requests': 'Requests', 'schedule': 'Schedule'
   };
   var bc = document.getElementById('breadcrumb');
   if (bc) bc.textContent = labels[viewName] || viewName;
@@ -317,6 +332,7 @@ function switchView(viewName) {
   if (viewName === 'proposals') updateProposalHero();
   if (viewName === 'requests') renderRequestsList();
   if (viewName === 'onsite') populateOnsiteSelect();
+  if (viewName === 'schedule') renderScheduleView();
 }
 
 /* ===== ESTIMATE STEPS ===== */
@@ -1078,6 +1094,113 @@ function appendAiMsg(role, text) {
   msgs.scrollTop = msgs.scrollHeight;
 }
 
+/* ===== SCHEDULE MANAGEMENT ===== */
+function renderScheduleView() {
+  populateScheduleForm();
+  renderBlockCal('visit', 'visitBlockCal', 'visitBlockedList', scheduleData.visitBlockedDates, scheduleData.visitLeadDays || 1, 35);
+  renderBlockCal('work', 'workBlockCal', 'workBlockedList', scheduleData.workBlockedDates, scheduleData.workLeadDays || 14, 63);
+}
+
+function populateScheduleForm() {
+  var s = scheduleData;
+
+  var visitDow = document.getElementById('visitDowRow');
+  if (visitDow) visitDow.querySelectorAll('input').forEach(function(cb) {
+    cb.checked = s.visitDays.indexOf(parseInt(cb.value)) !== -1;
+  });
+
+  var visitSlot = document.getElementById('visitSlotRow');
+  if (visitSlot) visitSlot.querySelectorAll('input').forEach(function(cb) {
+    cb.checked = s.visitSlots.indexOf(cb.value) !== -1;
+  });
+
+  var vLead = document.getElementById('visitLeadDays');
+  if (vLead) vLead.value = s.visitLeadDays;
+
+  var workDow = document.getElementById('workDowRow');
+  if (workDow) workDow.querySelectorAll('input').forEach(function(cb) {
+    cb.checked = s.workDays.indexOf(parseInt(cb.value)) !== -1;
+  });
+
+  var wLead = document.getElementById('workLeadDays');
+  if (wLead) wLead.value = s.workLeadDays;
+}
+
+function renderBlockCal(type, calId, listId, blocked, leadDays, totalDays) {
+  var cal = document.getElementById(calId);
+  if (!cal) return;
+  blocked = blocked || [];
+  leadDays = leadDays || 1;
+  totalDays = totalDays || 42;
+
+  var today = new Date();
+  var start = new Date(today);
+  start.setDate(today.getDate() + 1);
+  var startDow = start.getDay();
+
+  var html = '<div class="sched-cal-grid">';
+  var dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  html += dayNames.map(function(d){ return '<div class="sched-cal-dow">' + d + '</div>'; }).join('');
+  for (var pad = 0; pad < startDow; pad++) html += '<div></div>';
+
+  for (var i = 0; i < totalDays; i++) {
+    var d = new Date(start);
+    d.setDate(start.getDate() + i);
+    var iso = d.toISOString().split('T')[0];
+    var isBlocked = blocked.indexOf(iso) !== -1;
+    var isPast = i < leadDays - 1;
+    html += '<button class="sched-cal-day' + (isBlocked ? ' sched-day-blocked' : '') + (isPast ? ' sched-day-past' : '') + '"' +
+      ' data-date="' + iso + '" onclick="toggleBlockDate(\'' + type + '\',\'' + iso + '\')">' + d.getDate() + '</button>';
+  }
+  html += '</div>';
+  cal.innerHTML = html;
+
+  renderBlockedList(listId, blocked, type);
+}
+
+function renderBlockedList(listId, blocked, type) {
+  var el = document.getElementById(listId);
+  if (!el) return;
+  if (!blocked || blocked.length === 0) { el.innerHTML = '<div style="font-size:.78rem;color:var(--text-muted)">No dates blocked</div>'; return; }
+  el.innerHTML = '<div style="font-size:.75rem;color:var(--text-muted);margin-bottom:6px;font-weight:600">Blocked dates:</div>' +
+    blocked.map(function(iso) {
+      var d = new Date(iso + 'T12:00:00');
+      return '<span class="sched-blocked-tag">' + d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) +
+        ' <button onclick="toggleBlockDate(\'' + type + '\',\'' + iso + '\')" style="background:none;border:none;cursor:pointer;font-size:.8rem;line-height:1">✕</button></span>';
+    }).join('');
+}
+
+function toggleBlockDate(type, iso) {
+  var arr = type === 'visit' ? scheduleData.visitBlockedDates : scheduleData.workBlockedDates;
+  var idx = arr.indexOf(iso);
+  if (idx !== -1) arr.splice(idx, 1);
+  else arr.push(iso);
+
+  var leadDays = type === 'visit' ? (scheduleData.visitLeadDays || 1) : (scheduleData.workLeadDays || 14);
+  var totalDays = type === 'visit' ? 35 : 63;
+  renderBlockCal(type, type + 'BlockCal', type + 'BlockedList', arr, leadDays, totalDays);
+}
+
+function saveSchedule() {
+  var visitDow = document.getElementById('visitDowRow');
+  scheduleData.visitDays = visitDow ? Array.from(visitDow.querySelectorAll('input:checked')).map(function(cb){ return parseInt(cb.value); }) : [1,2,3,4,5];
+
+  var visitSlot = document.getElementById('visitSlotRow');
+  scheduleData.visitSlots = visitSlot ? Array.from(visitSlot.querySelectorAll('input:checked')).map(function(cb){ return cb.value; }) : ['morning','afternoon','late'];
+
+  var vLead = document.getElementById('visitLeadDays');
+  scheduleData.visitLeadDays = vLead ? parseInt(vLead.value) : 1;
+
+  var workDow = document.getElementById('workDowRow');
+  scheduleData.workDays = workDow ? Array.from(workDow.querySelectorAll('input:checked')).map(function(cb){ return parseInt(cb.value); }) : [1,2,3,4,5];
+
+  var wLead = document.getElementById('workLeadDays');
+  scheduleData.workLeadDays = wLead ? parseInt(wLead.value) : 14;
+
+  localStorage.setItem('renovateiq_schedule', JSON.stringify(scheduleData));
+  showToast('Schedule saved!');
+}
+
 /* ===== CUSTOMER INTAKE ===== */
 var ciState = {
   projectType: null,
@@ -1085,6 +1208,7 @@ var ciState = {
   aiConcept: null,
   selectedDate: null,
   selectedTime: null,
+  selectedWorkDate: null,
 };
 
 function customerStep(n) {
@@ -1199,32 +1323,106 @@ function calculateInstantEstimate() {
 function renderDatePicker() {
   var cal = document.getElementById('ciCalendar');
   if (!cal) return;
+  var sched = scheduleData;
+  var allowedDays = sched.visitDays || [1,2,3,4,5];
+  var blockedDates = sched.visitBlockedDates || [];
+  var leadDays = sched.visitLeadDays !== undefined ? sched.visitLeadDays : 1;
+
   var today = new Date();
+  var firstAvail = new Date(today);
+  firstAvail.setDate(today.getDate() + Math.max(leadDays, 1));
+
   var html = '<div class="ci-cal-grid">';
-  var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  html += days.map(function(d){ return '<div class="ci-cal-dow">' + d + '</div>'; }).join('');
-  var startDay = new Date(today);
-  startDay.setDate(today.getDate() + 1);
-  var startDow = startDay.getDay();
+  var dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  html += dayNames.map(function(d){ return '<div class="ci-cal-dow">' + d + '</div>'; }).join('');
+
+  var startDow = firstAvail.getDay();
   for (var pad = 0; pad < startDow; pad++) html += '<div></div>';
-  for (var i = 0; i < 14; i++) {
-    var d = new Date(startDay);
-    d.setDate(startDay.getDate() + i);
-    var isWeekend = d.getDay() === 0 || d.getDay() === 6;
+
+  for (var i = 0; i < 21; i++) {
+    var d = new Date(firstAvail);
+    d.setDate(firstAvail.getDate() + i);
+    var dow = d.getDay();
     var iso = d.toISOString().split('T')[0];
-    var label = (i === 0 ? 'Tomorrow' : d.toLocaleDateString('en-US', {month:'short',day:'numeric'}));
-    html += '<button class="ci-cal-day' + (isWeekend ? ' ci-cal-weekend' : '') + '" data-date="' + iso + '" onclick="selectDate(this,\'' + iso + '\')">' + d.getDate() + '</button>';
+    var isUnavailable = allowedDays.indexOf(dow) === -1 || blockedDates.indexOf(iso) !== -1;
+    html += '<button class="ci-cal-day' + (isUnavailable ? ' ci-cal-weekend' : '') + '" data-date="' + iso + '"' +
+      (isUnavailable ? ' disabled' : ' onclick="selectDate(this,\'' + iso + '\')"') + '>' + d.getDate() + '</button>';
+  }
+  html += '</div>';
+  cal.innerHTML = html;
+
+  // Also filter time slots
+  var slotEl = document.getElementById('ciTimeSlots');
+  if (slotEl) {
+    var slots = sched.visitSlots || ['morning','afternoon','late'];
+    var slotLabels = { morning: 'Morning (8–11am)', afternoon: 'Afternoon (12–3pm)', late: 'Late Afternoon (3–6pm)' };
+    var allSlots = ['morning','afternoon','late'];
+    slotEl.querySelector('.ci-slots-row').innerHTML = allSlots
+      .filter(function(s){ return slots.indexOf(s) !== -1; })
+      .map(function(s){
+        return '<button class="ci-slot" onclick="selectTimeSlot(this,\'' + s + '\')">' + slotLabels[s] + '</button>';
+      }).join('');
+  }
+}
+
+function ciSwitchSchedTab(tab) {
+  document.getElementById('ciSchedVisit').style.display = tab === 'visit' ? 'block' : 'none';
+  document.getElementById('ciSchedWork').style.display = tab === 'work' ? 'block' : 'none';
+  document.getElementById('ciTabVisit').classList.toggle('active', tab === 'visit');
+  document.getElementById('ciTabWork').classList.toggle('active', tab === 'work');
+  if (tab === 'work') renderWorkDatePicker();
+}
+
+function renderWorkDatePicker() {
+  var cal = document.getElementById('ciWorkCalendar');
+  if (!cal) return;
+  var sched = scheduleData;
+  var allowedDays = sched.workDays || [1,2,3,4,5];
+  var blockedDates = sched.workBlockedDates || [];
+  var leadDays = sched.workLeadDays !== undefined ? sched.workLeadDays : 14;
+
+  var today = new Date();
+  var firstAvail = new Date(today);
+  firstAvail.setDate(today.getDate() + leadDays);
+
+  var html = '<div class="ci-cal-grid">';
+  var dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  html += dayNames.map(function(d){ return '<div class="ci-cal-dow">' + d + '</div>'; }).join('');
+  var startDow = firstAvail.getDay();
+  for (var pad = 0; pad < startDow; pad++) html += '<div></div>';
+  for (var i = 0; i < 42; i++) {
+    var d = new Date(firstAvail);
+    d.setDate(firstAvail.getDate() + i);
+    var dow = d.getDay();
+    var iso = d.toISOString().split('T')[0];
+    var isUnavail = allowedDays.indexOf(dow) === -1 || blockedDates.indexOf(iso) !== -1;
+    html += '<button class="ci-cal-day' + (isUnavail ? ' ci-cal-weekend' : '') + (ciState.selectedWorkDate === iso ? ' selected' : '') + '"' +
+      (isUnavail ? ' disabled' : ' onclick="selectWorkDate(this,\'' + iso + '\')"') + '>' + d.getDate() + '</button>';
   }
   html += '</div>';
   cal.innerHTML = html;
 }
 
+function selectWorkDate(el, date) {
+  var allDays = document.querySelectorAll('#ciWorkCalendar .ci-cal-day');
+  allDays.forEach(function(b) { b.classList.remove('selected'); });
+  el.classList.add('selected');
+  ciState.selectedWorkDate = date;
+  var d = new Date(date + 'T12:00:00');
+  var label = document.getElementById('ciWorkSelectedLabel');
+  if (label) {
+    label.style.display = 'block';
+    label.textContent = 'Preferred start: ' + d.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'});
+  }
+}
+
 function selectDate(el, date) {
-  document.querySelectorAll('.ci-cal-day').forEach(function(b) { b.classList.remove('selected'); });
+  document.querySelectorAll('#ciCalendar .ci-cal-day').forEach(function(b) { b.classList.remove('selected'); });
   el.classList.add('selected');
   ciState.selectedDate = date;
   ciState.selectedTime = null;
-  document.querySelectorAll('.ci-slot').forEach(function(s) { s.classList.remove('selected'); });
+  var slotsRow = document.querySelector('#ciTimeSlots .ci-slots-row');
+  if (slotsRow) slotsRow.querySelectorAll('.ci-slot').forEach(function(s) { s.classList.remove('selected'); });
   var slots = document.getElementById('ciTimeSlots');
   if (slots) slots.style.display = 'block';
   updateSubmitBtn();
@@ -1275,6 +1473,7 @@ function submitCustomerRequest() {
     aiConcept: ciState.aiConcept,
     scheduledDate: ciState.selectedDate,
     scheduledTime: ciState.selectedTime,
+    preferredWorkDate: ciState.selectedWorkDate,
     estMin: ciState._minEst || 0,
     estMax: ciState._maxEst || 0,
     submittedAt: new Date().toISOString(),
@@ -1290,6 +1489,16 @@ function submitCustomerRequest() {
   setText('ciConfirmCode', code);
   setText('ciConfirmDate', dateStr);
   setText('ciConfirmEmail', document.getElementById('ciEmail').value || 'your email');
+  var workDateEl = document.getElementById('ciConfirmWorkDate');
+  if (workDateEl) {
+    if (ciState.selectedWorkDate) {
+      var wd = new Date(ciState.selectedWorkDate + 'T12:00:00');
+      workDateEl.parentElement.style.display = 'flex';
+      workDateEl.textContent = wd.toLocaleDateString('en-US', {weekday:'short', month:'long', day:'numeric'});
+    } else {
+      workDateEl.parentElement.style.display = 'none';
+    }
+  }
 
   for (var i = 1; i <= 4; i++) {
     var el = document.getElementById('cist-' + i);

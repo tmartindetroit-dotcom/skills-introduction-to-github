@@ -346,6 +346,10 @@
         Invoices
       </a>
       <div class="nav-section-label">Tools</div>
+      <a href="#" class="nav-item" data-view="schedule">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Schedule
+      </a>
       <a href="#" class="nav-item" data-view="ai-advisor">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2-1 4H6l3.5 3-1.5 5L12 11l4 3-1.5-5L18 6h-5z"/><path d="M12 22v-4"/></svg>
         AI Advisor
@@ -1268,6 +1272,104 @@
       </div>
     </div>
 
+    <!-- ===== SCHEDULE ===== -->
+    <div id="view-schedule" class="view">
+      <div class="view-header">
+        <div><h1>Schedule</h1><p class="view-sub">Control which dates and times customers can book</p></div>
+        <button class="btn-primary" onclick="saveSchedule()">Save Schedule</button>
+      </div>
+
+      <div class="sched-layout">
+
+        <!-- VISIT AVAILABILITY -->
+        <div class="card">
+          <h2 style="margin-bottom:4px">Verification Visit Availability</h2>
+          <p class="view-sub" style="margin-bottom:20px">Dates &amp; times customers can pick when scheduling their on-site walkthrough</p>
+
+          <div class="sched-section">
+            <div class="sched-section-label">Available Days</div>
+            <div class="sched-dow-row" id="visitDowRow">
+              <label class="sched-dow"><input type="checkbox" value="1" checked> Mon</label>
+              <label class="sched-dow"><input type="checkbox" value="2" checked> Tue</label>
+              <label class="sched-dow"><input type="checkbox" value="3" checked> Wed</label>
+              <label class="sched-dow"><input type="checkbox" value="4" checked> Thu</label>
+              <label class="sched-dow"><input type="checkbox" value="5" checked> Fri</label>
+              <label class="sched-dow"><input type="checkbox" value="6"> Sat</label>
+              <label class="sched-dow"><input type="checkbox" value="0"> Sun</label>
+            </div>
+          </div>
+
+          <div class="sched-section">
+            <div class="sched-section-label">Available Time Slots</div>
+            <div class="sched-slot-row" id="visitSlotRow">
+              <label class="sched-slot-cb"><input type="checkbox" value="morning" checked> Morning (8–11am)</label>
+              <label class="sched-slot-cb"><input type="checkbox" value="afternoon" checked> Afternoon (12–3pm)</label>
+              <label class="sched-slot-cb"><input type="checkbox" value="late" checked> Late Afternoon (3–6pm)</label>
+            </div>
+          </div>
+
+          <div class="sched-section">
+            <div class="sched-section-label">Minimum Lead Time</div>
+            <select class="form-input sched-lead-sel" id="visitLeadDays">
+              <option value="0">Same day</option>
+              <option value="1" selected>1 day ahead</option>
+              <option value="2">2 days ahead</option>
+              <option value="3">3 days ahead</option>
+              <option value="7">1 week ahead</option>
+            </select>
+          </div>
+
+          <div class="sched-section">
+            <div class="sched-section-label" style="margin-bottom:8px">Block Specific Dates
+              <span style="font-size:.72rem;font-weight:400;color:var(--text-muted);margin-left:6px">Click a date to block/unblock it</span>
+            </div>
+            <div id="visitBlockCal"></div>
+            <div id="visitBlockedList" class="sched-blocked-list"></div>
+          </div>
+        </div>
+
+        <!-- WORK START AVAILABILITY -->
+        <div class="card">
+          <h2 style="margin-bottom:4px">Work Start Availability</h2>
+          <p class="view-sub" style="margin-bottom:20px">Dates customers can pick for the renovation to begin (shown after the on-site visit)</p>
+
+          <div class="sched-section">
+            <div class="sched-section-label">Available Days</div>
+            <div class="sched-dow-row" id="workDowRow">
+              <label class="sched-dow"><input type="checkbox" value="1" checked> Mon</label>
+              <label class="sched-dow"><input type="checkbox" value="2" checked> Tue</label>
+              <label class="sched-dow"><input type="checkbox" value="3" checked> Wed</label>
+              <label class="sched-dow"><input type="checkbox" value="4" checked> Thu</label>
+              <label class="sched-dow"><input type="checkbox" value="5" checked> Fri</label>
+              <label class="sched-dow"><input type="checkbox" value="6"> Sat</label>
+              <label class="sched-dow"><input type="checkbox" value="0"> Sun</label>
+            </div>
+          </div>
+
+          <div class="sched-section">
+            <div class="sched-section-label">Minimum Lead Time</div>
+            <select class="form-input sched-lead-sel" id="workLeadDays">
+              <option value="7">1 week</option>
+              <option value="14" selected>2 weeks</option>
+              <option value="21">3 weeks</option>
+              <option value="30">1 month</option>
+              <option value="45">6 weeks</option>
+              <option value="60">2 months</option>
+            </select>
+          </div>
+
+          <div class="sched-section">
+            <div class="sched-section-label" style="margin-bottom:8px">Block Specific Dates
+              <span style="font-size:.72rem;font-weight:400;color:var(--text-muted);margin-left:6px">Click a date to block/unblock it</span>
+            </div>
+            <div id="workBlockCal"></div>
+            <div id="workBlockedList" class="sched-blocked-list"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- ===== SETTINGS / SETUP ===== -->
     <div id="view-setup" class="view">
       <div class="view-header">
@@ -1478,16 +1580,28 @@
             <strong>About this estimate</strong> — This is a preliminary range based on your project type and square footage. Labor prices vary by scope, materials, and site conditions. Your contractor will confirm the final price in person. No obligation to proceed.
           </div>
 
-          <h3 style="margin-top:20px;margin-bottom:12px">Schedule an On-Site Visit</h3>
-          <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:14px">Pick a day and time for your contractor to visit, measure, and provide a locked quote.</p>
-          <div class="ci-calendar" id="ciCalendar"></div>
-          <div class="ci-time-slots" id="ciTimeSlots" style="display:none">
-            <div style="font-size:.85rem;font-weight:600;margin-bottom:10px">Available Times</div>
-            <div class="ci-slots-row">
-              <button class="ci-slot" onclick="selectTimeSlot(this,'morning')">Morning (8–11am)</button>
-              <button class="ci-slot" onclick="selectTimeSlot(this,'afternoon')">Afternoon (12–3pm)</button>
-              <button class="ci-slot" onclick="selectTimeSlot(this,'late')">Late Afternoon (3–6pm)</button>
+          <div class="ci-sched-tabs">
+            <button class="ci-sched-tab active" id="ciTabVisit" onclick="ciSwitchSchedTab('visit')">On-Site Visit</button>
+            <button class="ci-sched-tab" id="ciTabWork" onclick="ciSwitchSchedTab('work')">Work Start Date</button>
+          </div>
+
+          <!-- Visit Scheduling -->
+          <div id="ciSchedVisit">
+            <h3 style="margin-bottom:6px">Schedule an On-Site Visit</h3>
+            <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:14px">Pick a day and time for your contractor to visit, measure, and provide a locked quote.</p>
+            <div class="ci-calendar" id="ciCalendar"></div>
+            <div class="ci-time-slots" id="ciTimeSlots" style="display:none">
+              <div style="font-size:.85rem;font-weight:600;margin-bottom:10px">Available Times</div>
+              <div class="ci-slots-row"></div>
             </div>
+          </div>
+
+          <!-- Work Start Scheduling -->
+          <div id="ciSchedWork" style="display:none">
+            <h3 style="margin-bottom:6px">Preferred Work Start Date</h3>
+            <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:14px">When would you like the renovation to begin? (Optional — your contractor will confirm availability)</p>
+            <div class="ci-calendar" id="ciWorkCalendar"></div>
+            <p id="ciWorkSelectedLabel" style="font-size:.82rem;color:var(--green-dark);font-weight:600;margin-top:8px;display:none"></p>
           </div>
 
           <div class="ci-nav">
@@ -1505,7 +1619,8 @@
           <p class="ci-step-sub">Your contractor has been notified and will confirm your appointment within 24 hours.</p>
           <div class="ci-confirm-details">
             <div class="ci-confirm-row"><span>Estimate Code</span><strong id="ciConfirmCode">—</strong></div>
-            <div class="ci-confirm-row"><span>Scheduled</span><strong id="ciConfirmDate">—</strong></div>
+            <div class="ci-confirm-row"><span>Visit Scheduled</span><strong id="ciConfirmDate">—</strong></div>
+            <div class="ci-confirm-row" id="ciConfirmWorkRow"><span>Preferred Work Start</span><strong id="ciConfirmWorkDate">—</strong></div>
             <div class="ci-confirm-row"><span>Estimate Range</span><strong id="ciConfirmRange">—</strong></div>
           </div>
           <p style="font-size:.82rem;color:var(--text-muted);margin-top:16px">Save your estimate code — you'll need it to check status. We'll email you a confirmation at <span id="ciConfirmEmail"></span>.</p>
