@@ -14,9 +14,37 @@ var DEFAULT_RATES = {
   cleanup:    { name: 'Final Cleanup',        unit: 'hr',   rate: 45,   minCharge: 150, notes: '' },
 };
 
+var DEFAULT_CONTRACTOR = {
+  companyName: 'T. Martin Renovations', handle: 'tmartinreno',
+  tagline: "Detroit's trusted renovation specialists",
+  logo: null, phone: '(313) 555-0100', email: 'info@martin-reno.com',
+  address: 'Detroit, MI 48201', website: '', license: 'MI-RB-123456', insurance: ''
+};
+var DEFAULT_JOB_RATES = {
+  kitchen:  { min: 80,  max: 140 },
+  bathroom: { min: 90,  max: 150 },
+  fullhome: { min: 65,  max: 110 },
+  basement: { min: 55,  max: 95  },
+  outdoor:  { min: 45,  max: 80  },
+  addition: { min: 85,  max: 135 }
+};
+var ONSITE_SCOPE_OPTIONS = [
+  { key:'demo',       label:'🗑️ Demo & Hauling',     selected:true  },
+  { key:'electrical', label:'⚡ Electrical',          selected:true  },
+  { key:'plumbing',   label:'🔧 Plumbing',            selected:false },
+  { key:'hvac',       label:'❄️ HVAC',                selected:false },
+  { key:'drywall',    label:'🧱 Drywall',             selected:true  },
+  { key:'tile',       label:'🪟 Tile Work',           selected:false },
+  { key:'flooring',   label:'🪵 Flooring',            selected:true  },
+  { key:'cabinets',   label:'🗄️ Cabinets',            selected:true  },
+  { key:'painting',   label:'🎨 Painting',            selected:true  },
+  { key:'cleanup',    label:'🧹 Cleanup',             selected:true  }
+];
+
 var state = {
   currentView: 'dashboard',
   currentStep: 1,
+  setupStep: 1,
   projectType: null,
   laborLines: [],
   markup: 20,
@@ -26,6 +54,14 @@ var state = {
   coCounter: 3,
   apiKey: localStorage.getItem('renovateiq_apikey') || '',
   rates: JSON.parse(localStorage.getItem('renovateiq_rates') || 'null') || JSON.parse(JSON.stringify(DEFAULT_RATES)),
+  contractor: JSON.parse(localStorage.getItem('renovateiq_contractor') || 'null') || JSON.parse(JSON.stringify(DEFAULT_CONTRACTOR)),
+  jobRates: JSON.parse(localStorage.getItem('renovateiq_jobrates') || 'null') || JSON.parse(JSON.stringify(DEFAULT_JOB_RATES)),
+  onsite: {
+    clientKey: null, clientSqft: 0, actualSqft: 0,
+    projectType: 'kitchen', scopeItems: JSON.parse(JSON.stringify(ONSITE_SCOPE_OPTIONS)),
+    finalPrice: 0, locked: false, notes: ''
+  },
+  conceptPhoto: null,
 };
 
 /* ===== NAVIGATION ===== */
@@ -42,12 +78,15 @@ function switchView(view) {
   var titles = {
     dashboard: 'Dashboard', estimates: 'New Estimate', rates: 'My Rates',
     proposals: 'Proposals', changeorders: 'Change Orders',
-    'client-portal': 'Client Portal', 'ai-advisor': 'AI Advisor'
+    'client-portal': 'Client Portal', 'ai-advisor': 'AI Advisor',
+    onsite: 'On-Site Verification', setup: 'Contractor Setup'
   };
   var bc = document.getElementById('breadcrumb');
   if (bc) bc.textContent = titles[view] || view;
 
   if (view === 'rates') renderRatesTable();
+  if (view === 'setup') { populateSetupForm(); setupGoToStep(1); }
+  if (view === 'client-portal') updateLetterhead();
   document.getElementById('sidebar').classList.remove('open');
 }
 
@@ -565,6 +604,446 @@ function showToast(msg) {
   t._timer = setTimeout(function(){ t.classList.remove('show'); }, 2800);
 }
 
+/* ===== SETUP / CONTRACTOR PROFILE ===== */
+function setupGoToStep(step) {
+  state.setupStep = step;
+  document.querySelectorAll('.step-content[id^="setup-step"]').forEach(function(s) { s.classList.add('hidden'); });
+  var sc = document.getElementById('setup-step' + step);
+  if (sc) sc.classList.remove('hidden');
+  var pct = step === 1 ? 33 : step === 2 ? 66 : 100;
+  var fill = document.getElementById('setupStepFill');
+  if (fill) fill.style.width = pct + '%';
+  document.querySelectorAll('[data-setup-step]').forEach(function(s) {
+    var n = parseInt(s.dataset.setupStep);
+    s.classList.toggle('active', n === step);
+    s.classList.toggle('done', n < step);
+  });
+}
+
+function previewHandle(companyName) {
+  var handle = document.getElementById('setupHandle');
+  if (handle && !handle._userEdited) {
+    handle.value = companyName.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'').substring(0,20);
+  }
+}
+
+function handleLogoUpload(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    state.contractor.logo = e.target.result;
+    var wrap = document.getElementById('logoPreviewWrap');
+    if (wrap) wrap.innerHTML = '<img src="'+e.target.result+'" style="max-height:120px;max-width:200px;border-radius:8px;object-fit:contain">';
+    updateLetterhead();
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveContractorSetup() {
+  var c = state.contractor;
+  c.companyName = (document.getElementById('setupCompanyName') || {}).value || c.companyName;
+  c.handle      = (document.getElementById('setupHandle')      || {}).value || c.handle;
+  c.tagline     = (document.getElementById('setupTagline')     || {}).value || c.tagline;
+  c.license     = (document.getElementById('setupLicense')     || {}).value || c.license;
+  c.insurance   = (document.getElementById('setupInsurance')   || {}).value || '';
+  c.phone       = (document.getElementById('setupPhone')       || {}).value || c.phone;
+  c.email       = (document.getElementById('setupEmail')       || {}).value || c.email;
+  c.address     = (document.getElementById('setupAddress')     || {}).value || c.address;
+  c.website     = (document.getElementById('setupWebsite')     || {}).value || '';
+
+  var types = ['kitchen','bathroom','fullhome','basement','outdoor','addition'];
+  types.forEach(function(t) {
+    var mn = parseFloat((document.getElementById('jr-'+t+'-min')||{}).value)||state.jobRates[t].min;
+    var mx = parseFloat((document.getElementById('jr-'+t+'-max')||{}).value)||state.jobRates[t].max;
+    state.jobRates[t] = { min: mn, max: mx };
+  });
+
+  localStorage.setItem('renovateiq_contractor', JSON.stringify(c));
+  localStorage.setItem('renovateiq_jobrates', JSON.stringify(state.jobRates));
+  updateLetterhead();
+  updateSidebarProfile();
+  showToast('Profile saved! 🐒 Your branding is live.');
+  switchView('dashboard');
+}
+
+function updateLetterhead() {
+  var c = state.contractor;
+  var logoEl = document.getElementById('portalLogoDisplay');
+  if (logoEl) {
+    logoEl.innerHTML = c.logo
+      ? '<img src="'+c.logo+'" style="max-height:60px;max-width:120px;object-fit:contain">'
+      : '🐒';
+  }
+  function setText(id, v) { var el=document.getElementById(id); if(el) el.textContent=v; }
+  setText('portalCompanyDisplay', c.companyName);
+  setText('portalTaglineDisplay', c.tagline);
+  setText('portalContactDisplay', '📞 '+c.phone+' · ✉️ '+c.email+' · 📍 '+c.address+(c.website?' · 🌐 '+c.website:''));
+  setText('portalLicenseDisplay', c.license ? 'License: '+c.license : '');
+  var dateEl = document.getElementById('portalDate');
+  if (dateEl) dateEl.textContent = new Date().toLocaleDateString('en-US', {month:'long',day:'numeric',year:'numeric'});
+  var sigDate = document.getElementById('sigDateDisplay');
+  if (sigDate) sigDate.textContent = new Date().toLocaleDateString('en-US', {month:'long',day:'numeric',year:'numeric'});
+}
+
+function updateSidebarProfile() {
+  var c = state.contractor;
+  var nameEl = document.getElementById('sidebarCompanyName');
+  if (nameEl) nameEl.textContent = c.companyName;
+  var avatarWrap = document.getElementById('sidebarAvatarWrap');
+  if (avatarWrap) {
+    if (c.logo) {
+      avatarWrap.innerHTML = '<img src="'+c.logo+'" style="width:36px;height:36px;border-radius:50%;object-fit:cover">';
+    } else {
+      var initials = c.companyName.split(' ').map(function(w){return w[0];}).join('').toUpperCase().substring(0,2);
+      avatarWrap.innerHTML = '<span id="sidebarAvatarText">'+initials+'</span>';
+    }
+  }
+}
+
+function populateSetupForm() {
+  var c = state.contractor;
+  function setVal(id, v) { var el=document.getElementById(id); if(el) el.value=v||''; }
+  setVal('setupCompanyName', c.companyName);
+  setVal('setupHandle', c.handle);
+  setVal('setupTagline', c.tagline);
+  setVal('setupLicense', c.license);
+  setVal('setupInsurance', c.insurance);
+  setVal('setupPhone', c.phone);
+  setVal('setupEmail', c.email);
+  setVal('setupAddress', c.address);
+  setVal('setupWebsite', c.website);
+  if (c.logo) {
+    var wrap = document.getElementById('logoPreviewWrap');
+    if (wrap) wrap.innerHTML = '<img src="'+c.logo+'" style="max-height:120px;max-width:200px;border-radius:8px;object-fit:contain">';
+  }
+  var types = ['kitchen','bathroom','fullhome','basement','outdoor','addition'];
+  types.forEach(function(t) {
+    setVal('jr-'+t+'-min', state.jobRates[t].min);
+    setVal('jr-'+t+'-max', state.jobRates[t].max);
+  });
+}
+
+/* ===== ON-SITE VERIFICATION ===== */
+var DEMO_CLIENTS = {
+  lakewood: { name:'Sarah Johnson', type:'kitchen', sqft:280, items:['demo','electrical','cabinets','tile','flooring','painting','cleanup'] },
+  riverside:{ name:'Mike Chen',     type:'bathroom', sqft:85,  items:['demo','plumbing','tile','painting','cleanup'] },
+  sample:   { name:'Demo Client',   type:'fullhome', sqft:1800,items:['demo','electrical','plumbing','drywall','flooring','painting','cleanup'] }
+};
+
+function loadOnsiteClient(key) {
+  if (!key) { document.getElementById('onsitePanel').style.display='none'; return; }
+  var client = DEMO_CLIENTS[key];
+  if (!client) return;
+  state.onsite.clientKey = key;
+  state.onsite.clientSqft = client.sqft;
+  state.onsite.projectType = client.type;
+  state.onsite.locked = false;
+  state.onsite.scopeItems = JSON.parse(JSON.stringify(ONSITE_SCOPE_OPTIONS)).map(function(s) {
+    s.selected = client.items.indexOf(s.key) !== -1;
+    return s;
+  });
+  document.getElementById('onsitePanel').style.display = 'block';
+  document.getElementById('onsiteClientSqft').textContent = client.sqft;
+  document.getElementById('onsiteActualSqft').value = client.sqft;
+  document.getElementById('lockedConfirm').style.display = 'none';
+  document.getElementById('lockPriceBtn').style.display = 'block';
+  document.getElementById('lockPriceBtn').disabled = true;
+  renderScopeChips();
+  recalcOnSite();
+}
+
+function renderScopeChips() {
+  var container = document.getElementById('onsiteScopeChips');
+  if (!container) return;
+  container.innerHTML = state.onsite.scopeItems.map(function(s) {
+    return '<button class="scope-chip'+(s.selected?' scope-chip-on':'')+'" onclick="toggleScopeItem(\''+s.key+'\')">'
+      + s.label + '</button>';
+  }).join('');
+}
+
+function toggleScopeItem(key) {
+  state.onsite.scopeItems.forEach(function(s) {
+    if (s.key === key) { s.selected = !s.selected; s.adjusted = true; }
+  });
+  renderScopeChips();
+  renderScopeAdjustments();
+  recalcOnSite();
+}
+
+function renderScopeAdjustments() {
+  var container = document.getElementById('onsiteAdjustments');
+  if (!container) return;
+  var adjusted = state.onsite.scopeItems.filter(function(s) { return s.adjusted; });
+  if (!adjusted.length) { container.innerHTML = ''; return; }
+  container.innerHTML = '<div class="adj-header">📋 Scope Changes vs. Client Submission:</div>'
+    + adjusted.map(function(s) {
+      return '<div class="adj-item">'
+        + (s.selected ? '<span class="adj-add">+ Added</span>' : '<span class="adj-remove">- Removed</span>')
+        + ' ' + s.label + '</div>';
+    }).join('');
+}
+
+function recalcOnSite() {
+  var actual = parseFloat(document.getElementById('onsiteActualSqft').value) || state.onsite.clientSqft;
+  state.onsite.actualSqft = actual;
+  var clientSqft = state.onsite.clientSqft;
+  var flag = document.getElementById('sqftAdjustFlag');
+  if (flag) {
+    if (actual !== clientSqft && actual > 0) {
+      var diff = actual - clientSqft;
+      flag.style.display = 'block';
+      flag.innerHTML = '<span class="flag-icon">⚠️</span> Adjusted from client\'s '
+        + clientSqft + ' sqft ('+(diff>0?'+':'')+diff+' sqft — will be flagged on estimate)';
+    } else {
+      flag.style.display = 'none';
+    }
+  }
+  var jr = state.jobRates[state.onsite.projectType] || { min:65, max:110 };
+  var scopeMultiplier = 1.0;
+  var selectedCount = state.onsite.scopeItems.filter(function(s){return s.selected;}).length;
+  scopeMultiplier = 0.5 + (selectedCount / ONSITE_SCOPE_OPTIONS.length) * 0.8;
+  var rangeMin = Math.round(actual * jr.min * scopeMultiplier);
+  var rangeMax = Math.round(actual * jr.max * scopeMultiplier);
+  document.getElementById('onsiteRangeMin').textContent = fmt(rangeMin);
+  document.getElementById('onsiteRangeMax').textContent = fmt(rangeMax);
+  document.getElementById('onsiteRangeBasis').textContent =
+    actual + ' sqft × $' + jr.min + '–$' + jr.max + '/sqft ('+selectedCount+' trades)';
+  checkFinalPrice();
+}
+
+function checkFinalPrice() {
+  var val = parseFloat(document.getElementById('onsiteFinalPrice').value) || 0;
+  state.onsite.finalPrice = val;
+  var btn = document.getElementById('lockPriceBtn');
+  if (btn) btn.disabled = val < 100;
+  var flag = document.getElementById('finalPriceFlag');
+  if (flag && val > 0) {
+    var actual = state.onsite.actualSqft || state.onsite.clientSqft;
+    var jr = state.jobRates[state.onsite.projectType] || { min:65, max:110 };
+    var selectedCount = state.onsite.scopeItems.filter(function(s){return s.selected;}).length;
+    var mult = 0.5 + (selectedCount / ONSITE_SCOPE_OPTIONS.length) * 0.8;
+    var rangeMin = Math.round(actual * jr.min * mult);
+    var rangeMax = Math.round(actual * jr.max * mult);
+    if (val < rangeMin * 0.8) {
+      flag.style.display = 'block';
+      flag.textContent = '⚠️ Price is significantly below estimated range — double check';
+      flag.className = 'final-price-flag flag-warn';
+    } else if (val > rangeMax * 1.3) {
+      flag.style.display = 'block';
+      flag.textContent = '⚠️ Price is well above estimated range';
+      flag.className = 'final-price-flag flag-warn';
+    } else {
+      flag.style.display = 'none';
+    }
+  } else if (flag) { flag.style.display = 'none'; }
+}
+
+function lockFinalPrice() {
+  var price = state.onsite.finalPrice;
+  if (price < 100) { showToast('Enter a final price first'); return; }
+  state.onsite.locked = true;
+  document.getElementById('lockPriceBtn').style.display = 'none';
+  var confirm = document.getElementById('lockedConfirm');
+  if (confirm) {
+    confirm.style.display = 'block';
+    document.getElementById('lockedAmount').textContent = fmt(price);
+  }
+  showToast('Price locked at ' + fmt(price) + ' — client notified! 🔒');
+}
+
+function draftContract() {
+  var client = DEMO_CLIENTS[state.onsite.clientKey] || { name: 'Client', type:'kitchen', sqft:0 };
+  var scope = state.onsite.scopeItems.filter(function(s){return s.selected;}).map(function(s){return s.label;});
+  var price = state.onsite.finalPrice;
+  var deposit = Math.round(price * 0.30);
+  var mi2    = Math.round(price * 0.20);
+  var mi3    = Math.round(price * 0.25);
+  var final  = price - deposit - mi2 - mi3;
+  var c = state.contractor;
+  var today = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  var logoHtml = c.logo
+    ? '<img src="'+c.logo+'" style="height:60px;object-fit:contain;margin-bottom:8px">'
+    : '<div style="font-size:2rem;margin-bottom:6px">🐒</div>';
+
+  var html = '<div class="contract-doc">'
+    + '<div class="contract-header">'
+    + logoHtml
+    + '<div class="ch-company">'+escHtml(c.companyName)+'</div>'
+    + '<div class="ch-contact">'+escHtml(c.phone)+' · '+escHtml(c.email)+'</div>'
+    + '<div class="ch-contact">'+escHtml(c.address)+(c.license?' · License: '+escHtml(c.license):'')+' </div>'
+    + '</div>'
+    + '<div class="contract-title">RESIDENTIAL LABOR CONTRACT</div>'
+    + '<div class="contract-parties">'
+    + '<div><strong>Contractor:</strong> '+escHtml(c.companyName)+(c.handle?' (@'+escHtml(c.handle)+')':'')+'</div>'
+    + '<div><strong>Homeowner:</strong> '+escHtml(client.name)+'</div>'
+    + '<div><strong>Date:</strong> '+today+'</div>'
+    + '</div>'
+    + '<div class="contract-section"><h3>1. SCOPE OF WORK</h3>'
+    + '<p>Contractor agrees to furnish all labor for a <strong>'+escHtml(client.type.replace('fullhome','Full Home'))+' renovation</strong> '
+    + '('+escHtml(String(state.onsite.actualSqft||client.sqft))+' sqft verified on-site).</p>'
+    + '<p>Included labor trades:</p><ul>'
+    + scope.map(function(s){return '<li>'+escHtml(s)+'</li>';}).join('')
+    + '</ul></div>'
+    + '<div class="contract-section"><h3>2. LABOR-ONLY PRICE</h3>'
+    + '<p>Total Labor Price: <strong>'+fmt(price)+'</strong></p>'
+    + '<p><em>This is a labor-only contract. Materials, permits, and equipment rentals are excluded and billed separately unless otherwise agreed in writing.</em></p>'
+    + '</div>'
+    + '<div class="contract-section"><h3>3. PAYMENT SCHEDULE</h3>'
+    + '<table class="contract-table">'
+    + '<tr><th>Milestone</th><th>Amount</th><th>Due</th></tr>'
+    + '<tr><td>Deposit — Contract Signed</td><td>'+fmt(deposit)+'</td><td>Before work begins</td></tr>'
+    + '<tr><td>Milestone 2 — Rough-In Complete</td><td>'+fmt(mi2)+'</td><td>After electrical/plumbing inspection</td></tr>'
+    + '<tr><td>Milestone 3 — Finish Work Complete</td><td>'+fmt(mi3)+'</td><td>After cabinets, tile, flooring done</td></tr>'
+    + '<tr><td>Final — Punch List Clear</td><td>'+fmt(final)+'</td><td>Upon client walkthrough approval</td></tr>'
+    + '</table></div>'
+    + '<div class="contract-section"><h3>4. TIMELINE</h3>'
+    + '<p>Contractor will commence work within 14 days of deposit receipt and estimates substantial completion within the agreed project schedule. Timelines are estimates and may be extended due to weather, material delays, or homeowner-requested changes.</p>'
+    + '</div>'
+    + '<div class="contract-section"><h3>5. CHANGE ORDERS</h3>'
+    + '<p>Any work beyond the defined scope requires a written Change Order signed by both parties before work proceeds. Change orders may adjust the contract price and timeline accordingly.</p>'
+    + '</div>'
+    + '<div class="contract-section"><h3>6. WORKMANSHIP WARRANTY</h3>'
+    + '<p>Contractor warrants all labor against defects in workmanship for a period of <strong>one (1) year</strong> from the date of substantial completion. This warranty covers labor only and does not cover damage caused by homeowner actions, third-party contractors, or normal wear and tear.</p>'
+    + '</div>'
+    + '<div class="contract-section"><h3>7. CANCELLATION / RIGHT TO CANCEL</h3>'
+    + '<p>Homeowner may cancel this contract within <strong>3 business days</strong> of signing without penalty, per Michigan Residential Builder requirements. After 3 business days, cancellation may be subject to costs incurred. Contractor may terminate if homeowner fails to make payment within 10 business days of a due milestone.</p>'
+    + '<p><em>⚠️ Note: Michigan residential builder contracts have specific statutory requirements including license number disclosure and right-to-cancel language. This template is provided for informational purposes — have a licensed Michigan attorney review before use with real clients.</em></p>'
+    + '</div>'
+    + '<div class="contract-section"><h3>8. DISPUTE RESOLUTION</h3>'
+    + '<p>Parties agree to attempt good-faith mediation before pursuing legal action. Michigan law governs this agreement.</p>'
+    + '</div>'
+    + '<div class="contract-signatures">'
+    + '<div class="sig-block"><div class="sig-line">________________________________</div><div>Contractor: '+escHtml(c.companyName)+'</div><div>Date: ___________</div></div>'
+    + '<div class="sig-block"><div class="sig-line">________________________________</div><div>Homeowner: '+escHtml(client.name)+'</div><div>Date: ___________</div></div>'
+    + '</div>'
+    + '</div>';
+
+  openPrintModal(html);
+}
+
+/* ===== HOMEOWNER ESTIMATE PRINT ===== */
+function printEstimate() {
+  var c = state.contractor;
+  var today = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  var logoHtml = c.logo
+    ? '<img src="'+c.logo+'" style="height:60px;object-fit:contain">'
+    : '<div style="font-size:2.5rem">🐒</div>';
+
+  var html = '<div class="estimate-doc">'
+    + '<div class="contract-header">'
+    + logoHtml
+    + '<div class="ch-company">'+escHtml(c.companyName)+'</div>'
+    + '<div class="ch-contact">'+escHtml(c.phone)+' · '+escHtml(c.email)+'</div>'
+    + '<div class="ch-contact">'+escHtml(c.address)+(c.website?' · '+escHtml(c.website):'')+' </div>'
+    + (c.license?'<div class="ch-contact">License: '+escHtml(c.license)+'</div>':'')
+    + '</div>'
+    + '<div class="contract-title">PRELIMINARY LABOR ESTIMATE</div>'
+    + '<div class="contract-parties">'
+    + '<div><strong>Prepared for:</strong> Sarah Johnson · 4821 Lakewood Dr, Detroit, MI</div>'
+    + '<div><strong>Project Type:</strong> Kitchen Renovation</div>'
+    + '<div><strong>Date:</strong> '+today+'</div>'
+    + '</div>'
+    + '<div class="contract-section"><h3>SCOPE SUMMARY</h3>'
+    + '<ul>'
+    + '<li>Demo &amp; Hauling</li><li>Electrical</li><li>Plumbing</li>'
+    + '<li>Cabinet Installation</li><li>Tile Work</li><li>Flooring</li>'
+    + '<li>Painting &amp; Trim</li><li>Final Cleanup</li>'
+    + '</ul></div>'
+    + '<div class="contract-section est-range-block">'
+    + '<h3>LABOR ESTIMATE RANGE</h3>'
+    + '<div class="est-range-display"><span class="est-range-min">$14,560</span><span class="est-range-dash">—</span><span class="est-range-max">$25,480</span></div>'
+    + '<div class="est-range-basis">Based on ~280 sqft · Kitchen rates $80–$140/sqft labor</div>'
+    + '</div>'
+    + '<div class="contract-section">'
+    + '<div class="estimate-disclaimer">'
+    + '<strong>⚠️ Important — Please Read</strong>'
+    + '<p>This is a preliminary estimate range based on your project answers and this contractor\'s labor rates. '
+    + 'It is <em>not</em> a final price or binding contract. The actual locked price is determined after an in-person '
+    + 'site visit where your contractor verifies square footage and scope in person. '
+    + 'If this range fits your budget, the next step is scheduling your no-obligation site visit.</p>'
+    + '</div></div>'
+    + '<div class="contract-section">'
+    + '<p><strong>Next Step:</strong> Contact us to schedule your free on-site visit.</p>'
+    + '<p>📞 '+escHtml(c.phone)+'&nbsp;&nbsp;✉️ '+escHtml(c.email)+'</p>'
+    + '</div>'
+    + '</div>';
+
+  openPrintModal(html);
+}
+
+function openPrintModal(html) {
+  var overlay = document.getElementById('printModal');
+  var content = document.getElementById('printContent');
+  if (!overlay || !content) return;
+  content.innerHTML = html;
+  overlay.style.display = 'flex';
+}
+
+function closePrintModal() {
+  var overlay = document.getElementById('printModal');
+  if (overlay) overlay.style.display = 'none';
+}
+
+/* ===== CONCEPT PHOTO / AI ===== */
+function handleConceptPhoto(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    state.conceptPhoto = e.target.result;
+    var preview = document.getElementById('conceptPhotoPreview');
+    if (preview) {
+      preview.innerHTML = '<img src="'+e.target.result+'" style="max-width:100%;max-height:200px;border-radius:10px;object-fit:cover;display:block;margin:0 auto 12px">'
+        + '<button class="btn-primary btn-sm" onclick="generateConceptVision()">🤖 Generate AI Vision</button>'
+        + ' <button class="btn-secondary btn-sm" onclick="document.getElementById(\'conceptPhotoInput\').click()">Change Photo</button>';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function generateConceptVision() {
+  if (!state.apiKey) {
+    showToast('Connect your API key in AI Advisor first 🐒');
+    return;
+  }
+  var visionBox = document.getElementById('conceptVisionBox');
+  var visionText = document.getElementById('conceptVisionText');
+  if (visionBox) visionBox.style.display = 'block';
+  if (visionText) visionText.textContent = '🐒 Analyzing your space and generating the vision...';
+
+  var prompt = 'You are Remy, a renovation concept designer. The homeowner has uploaded a photo of their current '
+    + 'kitchen and is getting a renovation estimate. Write a vivid, specific 2-3 paragraph "after the renovation" '
+    + 'concept description imagining what their space will look and feel like after the work is complete. '
+    + 'Be specific about lighting, flow, finishes, and lifestyle impact. Write in second person ("Your kitchen will..."). '
+    + 'Be enthusiastic but grounded.';
+
+  var messages = [{ role: 'user', content: [
+    { type: 'image', source: { type: 'base64', media_type: file.type || 'image/jpeg', data: state.conceptPhoto.split(',')[1] } },
+    { type: 'text', text: prompt }
+  ]}];
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': state.apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 500, messages: messages })
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    var text = (data.content && data.content[0] && data.content[0].text) || 'Unable to generate concept.';
+    if (visionText) visionText.textContent = text;
+  }).catch(function() {
+    if (visionText) visionText.textContent = 'Unable to analyze photo. Check your API key and try again.';
+  });
+}
+
+function scheduleVisit() {
+  showToast('📅 Scheduling request sent to contractor! They\'ll contact you within 24 hours. 🐒');
+}
+
 /* ===== QUICK-ADD SELECT WIRING ===== */
 var quickAddSel = document.getElementById('quickAddTrade');
 if (quickAddSel) {
@@ -576,7 +1055,14 @@ if (quickAddSel) {
 
 /* ===== INIT ===== */
 switchView('dashboard');
+
 if (state.apiKey) {
   var keySection = document.getElementById('aiApiKeySection');
   if (keySection) keySection.style.display = 'none';
 }
+var handleInputInit = document.getElementById('setupHandle');
+if (handleInputInit) {
+  handleInputInit.addEventListener('input', function() { this._userEdited = true; });
+}
+updateLetterhead();
+updateSidebarProfile();

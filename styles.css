@@ -1389,5 +1389,135 @@ input[type="range"] {
   #ratesTableBody .rate-row > *:nth-child(4), #ratesTableBody .rate-row > *:nth-child(5) { display:none; }
   .portal-highlights { grid-template-columns:repeat(2,1fr); }
   .form-grid { grid-template-columns:1fr; }
+  .onsite-layout { grid-template-columns:1fr; }
+  .job-rates-grid .jrt-bench { display:none; }
+  .job-rates-grid { grid-template-columns:1fr 80px 80px; }
 }
+
+/* ===== SETUP VIEW ===== */
+.setup-card { max-width:760px; }
+.handle-wrap { display:flex; align-items:center; gap:0; }
+.handle-at { background:var(--border); border:2px solid var(--border); border-right:none; border-radius:var(--radius-sm) 0 0 var(--radius-sm); padding:10px 10px; font-weight:800; color:var(--text-muted); font-family:'Nunito',sans-serif; }
+.handle-input { border-radius:0 var(--radius-sm) var(--radius-sm) 0 !important; }
+.logo-upload-area { border:3px dashed var(--border-strong); border-radius:var(--radius); padding:28px; text-align:center; cursor:pointer; transition:all 0.15s; background:var(--bg); }
+.logo-upload-area:hover { border-color:var(--green); background:var(--green-bg); }
+.logo-upload-icon { font-size:2.5rem; margin-bottom:8px; }
+.logo-upload-area p { font-weight:700; margin-bottom:4px; }
+.logo-upload-area small { color:var(--text-muted); font-size:0.78rem; }
+.job-rates-grid { margin-top:8px; }
+.job-rate-head { display:grid; grid-template-columns:1fr 130px 130px 1fr; gap:10px; padding:8px 12px; background:var(--bg); border-radius:var(--radius-sm) var(--radius-sm) 0 0; border:2px solid var(--border); border-bottom:none; font-size:0.72rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em; }
+.job-rate-row { display:grid; grid-template-columns:1fr 130px 130px 1fr; gap:10px; padding:10px 12px; border:1px solid var(--border); border-top:none; align-items:center; background:var(--bg-card); }
+.job-rate-row:hover { background:var(--green-bg); }
+.job-rate-row:last-child { border-radius:0 0 var(--radius-sm) var(--radius-sm); }
+.jrt-icon { font-weight:700; font-size:0.9rem; }
+.jrt-bench { font-size:0.75rem; color:var(--text-muted); font-style:italic; }
+.rate-in { text-align:center !important; }
+
+/* ===== LETTERHEAD ===== */
+.letterhead { display:flex; align-items:center; gap:20px; padding:16px 24px; background:white; border-bottom:3px solid var(--green); }
+.lh-logo-wrap { flex-shrink:0; }
+.lh-logo-placeholder { font-size:2.5rem; line-height:1; }
+.lh-company { font-family:'Nunito',sans-serif; font-weight:900; font-size:1.2rem; color:var(--green-dark); margin-bottom:2px; }
+.lh-tagline { font-size:0.8rem; color:var(--text-muted); margin-bottom:4px; font-style:italic; }
+.lh-contact { font-size:0.75rem; color:var(--text); }
+.lh-license { font-size:0.7rem; color:var(--text-muted); margin-top:2px; }
+
+/* ===== ON-SITE TAB ===== */
+.onsite-layout { display:grid; grid-template-columns:1fr 300px; gap:20px; align-items:start; }
+.mb-16 { margin-bottom:16px; }
+.sqft-verify-row { display:flex; align-items:flex-end; gap:14px; margin-bottom:12px; }
+.sqft-box { background:var(--bg); border:2px solid var(--border); border-radius:var(--radius); padding:14px 20px; text-align:center; flex:1; }
+.sqft-box.actual-sqft { background:var(--green-bg); border-color:var(--green-light); }
+.sqft-label { font-size:0.72rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:6px; }
+.sqft-value { font-family:'Nunito',sans-serif; font-weight:900; font-size:1.8rem; color:var(--green-dark); }
+.sqft-input { font-family:'Nunito',sans-serif; font-weight:900; font-size:1.4rem; color:var(--green-dark); border:none; background:transparent; text-align:center; width:100%; outline:none; }
+.sqft-unit { font-size:0.72rem; color:var(--text-muted); font-weight:600; margin-top:4px; }
+.sqft-arrow { font-size:1.5rem; color:var(--text-muted); padding-bottom:20px; }
+.sqft-flag { background:var(--yellow-light); border:2px solid var(--yellow); border-radius:var(--radius-sm); padding:8px 12px; font-size:0.82rem; font-weight:700; color:#6B4E00; display:flex; gap:8px; align-items:center; }
+.flag-icon { font-size:1rem; }
+.scope-chips { display:flex; flex-wrap:wrap; gap:8px; }
+.scope-chip { padding:8px 14px; border-radius:99px; border:2px solid var(--border); background:var(--bg); font-family:'Nunito',sans-serif; font-weight:700; font-size:0.82rem; cursor:pointer; color:var(--text-muted); transition:all 0.12s; }
+.scope-chip:active { transform:scale(0.96); }
+.scope-chip-on { background:var(--green); border-color:var(--green-dark); color:white; }
+.onsite-adj-list { display:flex; flex-direction:column; gap:4px; }
+.adj-header { font-size:0.78rem; font-weight:700; color:var(--text-muted); margin-bottom:4px; }
+.adj-item { font-size:0.82rem; padding:4px 0; }
+.adj-add { color:var(--green-dark); font-weight:700; }
+.adj-remove { color:var(--red); font-weight:700; }
+.onsite-price-panel { background:var(--green-bg); border:2px solid var(--green-light); position:sticky; top:80px; }
+.opp-header { font-family:'Nunito',sans-serif; font-weight:800; font-size:0.85rem; color:var(--green-dark); margin-bottom:10px; }
+.opp-range { display:flex; align-items:center; gap:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:1.8rem; color:var(--green-dark); margin-bottom:4px; }
+.opp-dash { font-size:1.2rem; color:var(--text-muted); }
+.opp-basis { font-size:0.72rem; color:var(--text-muted); margin-bottom:12px; }
+.opp-divider { height:1px; background:var(--green-light); margin:12px 0; }
+.opp-section-label { font-family:'Nunito',sans-serif; font-weight:800; font-size:0.82rem; color:var(--green-dark); margin-bottom:8px; }
+.final-price-wrap { display:flex; align-items:center; gap:6px; background:white; border:2px solid var(--green); border-radius:var(--radius-sm); padding:8px 12px; }
+.dollar-sign { font-family:'Nunito',sans-serif; font-weight:900; font-size:1.4rem; color:var(--green-dark); }
+.final-price-input { border:none; font-family:'Nunito',sans-serif; font-weight:900; font-size:1.6rem; color:var(--green-dark); width:100%; outline:none; }
+.final-price-flag { padding:6px 10px; border-radius:8px; font-size:0.78rem; font-weight:700; margin-top:8px; }
+.flag-warn { background:var(--yellow-light); color:#6B4E00; }
+.locked-confirm { background:white; border:2px solid var(--green); border-radius:var(--radius); padding:16px; text-align:center; }
+.lc-badge { font-size:0.8rem; font-weight:700; color:var(--green-dark); margin-bottom:4px; }
+.lc-amount { font-family:'Nunito',sans-serif; font-weight:900; font-size:2rem; color:var(--green-dark); }
+.lc-note { font-size:0.75rem; color:var(--text-muted); margin-top:4px; }
+
+/* ===== CLIENT PORTAL — AI CONCEPT & DISCLAIMER ===== */
+.portal-concept-section { padding:20px 24px; border-bottom:2px solid var(--border); }
+.portal-concept-section h3 { font-family:'Nunito',sans-serif; margin-bottom:12px; }
+.concept-upload-area {}
+.concept-photo-placeholder { background:var(--bg); border:2px dashed var(--border-strong); border-radius:var(--radius); padding:28px; text-align:center; }
+.concept-photo-placeholder span { font-size:2.5rem; display:block; margin-bottom:8px; }
+.concept-photo-placeholder p { color:var(--text-muted); font-size:0.85rem; margin-bottom:12px; }
+.concept-vision { background:var(--purple-light); border:2px solid var(--purple-dark); border-radius:var(--radius); padding:16px; margin-top:12px; }
+.cv-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+.cv-badge { background:var(--purple-dark); color:white; padding:4px 12px; border-radius:99px; font-size:0.78rem; font-weight:700; font-family:'Nunito',sans-serif; }
+.cv-note { font-size:0.72rem; color:var(--purple-dark); font-style:italic; }
+.cv-text { font-size:0.88rem; line-height:1.6; white-space:pre-wrap; }
+.portal-disclaimer { display:flex; gap:12px; align-items:flex-start; background:var(--blue-light); border:2px solid var(--blue); border-radius:var(--radius); padding:14px 16px; margin:0; }
+.disclaimer-icon { font-size:1.3rem; flex-shrink:0; }
+.portal-disclaimer strong { display:block; font-family:'Nunito',sans-serif; font-size:0.9rem; margin-bottom:4px; color:var(--blue-dark); }
+.portal-disclaimer p { font-size:0.82rem; line-height:1.5; color:var(--text); margin:0; }
+
+/* ===== PRINT MODAL ===== */
+.print-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:2000; align-items:flex-start; justify-content:center; padding:20px; overflow-y:auto; }
+.print-modal-inner { background:white; border-radius:var(--radius); max-width:760px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.3); }
+.print-modal-actions { display:flex; gap:10px; padding:14px 20px; border-bottom:2px solid var(--border); align-items:center; background:var(--bg); border-radius:var(--radius) var(--radius) 0 0; }
+.print-doc { padding:0; }
+
+/* ===== CONTRACT DOCUMENT ===== */
+.contract-doc, .estimate-doc { font-family:'DM Sans',sans-serif; font-size:13px; color:#222; line-height:1.6; }
+.contract-header { text-align:center; padding:24px; border-bottom:2px solid var(--green); background:#F0FDE4; }
+.ch-company { font-family:'Nunito',sans-serif; font-weight:900; font-size:1.3rem; color:var(--green-dark); margin-top:6px; }
+.ch-contact { font-size:0.78rem; color:#555; margin-top:2px; }
+.contract-title { text-align:center; font-family:'Nunito',sans-serif; font-weight:900; font-size:1.1rem; padding:14px 24px; background:var(--green); color:white; letter-spacing:0.05em; }
+.contract-parties { padding:14px 24px; background:var(--bg); border-bottom:1px solid var(--border); font-size:0.85rem; display:flex; flex-direction:column; gap:4px; }
+.contract-section { padding:14px 24px; border-bottom:1px solid var(--border); }
+.contract-section h3 { font-family:'Nunito',sans-serif; font-weight:800; font-size:0.9rem; color:var(--green-dark); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.04em; }
+.contract-section p { margin-bottom:6px; font-size:0.85rem; }
+.contract-section ul { margin-left:20px; margin-top:4px; }
+.contract-section li { margin-bottom:3px; font-size:0.85rem; }
+.contract-table { width:100%; border-collapse:collapse; margin-top:8px; font-size:0.82rem; }
+.contract-table th { background:var(--green-bg); padding:7px 10px; text-align:left; font-weight:700; border:1px solid var(--border); }
+.contract-table td { padding:7px 10px; border:1px solid var(--border); }
+.contract-signatures { display:grid; grid-template-columns:1fr 1fr; gap:40px; padding:24px; }
+.sig-block { display:flex; flex-direction:column; gap:6px; font-size:0.82rem; }
+.sig-line { border-bottom:2px solid #333; padding-bottom:4px; margin-bottom:4px; }
+.est-range-block { background:var(--green-bg); }
+.est-range-display { display:flex; align-items:center; gap:12px; font-family:'Nunito',sans-serif; font-weight:900; font-size:2rem; color:var(--green-dark); margin:8px 0; }
+.est-range-dash { font-size:1.5rem; color:var(--text-muted); }
+.est-range-basis { font-size:0.78rem; color:var(--text-muted); }
+.estimate-disclaimer { background:var(--yellow-light); border:2px solid var(--yellow); border-radius:var(--radius-sm); padding:12px 14px; font-size:0.82rem; }
+.estimate-disclaimer strong { display:block; margin-bottom:6px; color:#6B4E00; }
+.estimate-disclaimer p { margin:0; line-height:1.5; }
+
+/* ===== PRINT MEDIA ===== */
+@media print {
+  body * { visibility:hidden; }
+  .print-modal-overlay { position:fixed; inset:0; display:block !important; background:white; z-index:9999; padding:0; }
+  .print-modal-overlay * { visibility:visible; }
+  .print-modal-inner { box-shadow:none; border-radius:0; max-width:100%; }
+  .no-print, .print-modal-actions { display:none !important; }
+  .contract-doc, .estimate-doc { font-size:11pt; }
+}
+
 
