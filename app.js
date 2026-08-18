@@ -297,6 +297,7 @@ function switchView(viewName) {
   if (viewName === 'rates') renderRatesTable();
   if (viewName === 'client-portal') updateLetterhead();
   if (viewName === 'estimates') { goToStep(1); }
+  if (viewName === 'proposals') updateProposalHero();
 }
 
 /* ===== ESTIMATE STEPS ===== */
@@ -550,6 +551,15 @@ function addCustomTrade() {
   showToast(name + ' added');
 }
 
+/* ===== PIPELINE TABS ===== */
+function switchPipelineTab(btn, tabId) {
+  document.querySelectorAll('.ptab').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.pipeline-tab-panel').forEach(function(p) { p.style.display = 'none'; });
+  btn.classList.add('active');
+  var panel = document.getElementById(tabId);
+  if (panel) panel.style.display = 'block';
+}
+
 /* ===== PROPOSALS ===== */
 function switchProposalTab(btn, tabId) {
   document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -604,6 +614,15 @@ function submitChangeOrder() {
   }
   closeChangeOrderModal();
   showToast('Change order created');
+}
+
+/* ===== PROPOSAL HERO ===== */
+function updateProposalHero() {
+  var c = contractor;
+  setText('heroCompany', c.companyName || 'Your Company');
+  setText('heroPresenter', c.companyName || 'Your Company');
+  setText('heroContact', [c.phone, c.email].filter(Boolean).join(' · '));
+  setText('heroPhone', '📞 ' + (c.phone || '(313) 555-0100'));
 }
 
 /* ===== CLIENT PORTAL / LETTERHEAD ===== */
