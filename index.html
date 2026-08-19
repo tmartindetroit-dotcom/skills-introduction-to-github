@@ -1850,21 +1850,30 @@
             <div class="ci-confirm-row"><span>Estimate Range</span><strong id="ciConfirmRange">—</strong></div>
           </div>
 
-          <!-- Share with contractor -->
-          <div class="ci-share-box">
-            <div class="ci-share-header">
-              <div class="ci-share-badge">Step 2</div>
+          <!-- Send to contractor — primary CTA -->
+          <div class="ci-send-cta">
+            <div class="ci-send-contractor-row">
+              <div class="ci-send-avatar" id="ciSendAvatar">TR</div>
               <div>
-                <div style="font-weight:700;font-size:.9rem">Send this link to your contractor</div>
-                <div style="font-size:.77rem;color:var(--text-muted);margin-top:2px">Opening this link imports your request directly into their dashboard — no manual entry needed</div>
+                <div class="ci-send-label">Last step — send your request to</div>
+                <div class="ci-send-name" id="ciConfirmContractorName">Your Contractor</div>
               </div>
             </div>
-            <input type="text" class="ci-share-url-input" id="ciImportUrlInput" readonly onclick="this.select()">
-            <div class="ci-share-actions">
-              <button class="btn-primary full-width" onclick="copyImportLink()">Copy Link</button>
-              <button class="btn-outline full-width" onclick="shareImportLink()">Share ↗</button>
-            </div>
+            <button class="btn-send-contractor" onclick="autoSendToContractor()">
+              <span>Send Request Now</span>
+              <span>↗</span>
+            </button>
+            <div class="ci-send-note" id="ciSendNote">Opens your share sheet — text, email, or any app</div>
           </div>
+
+          <!-- Fallback: manual URL copy -->
+          <details class="ci-link-details">
+            <summary>Or copy link manually</summary>
+            <input type="text" class="ci-share-url-input" id="ciImportUrlInput" readonly onclick="this.select()">
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button class="btn-outline full-width" onclick="copyImportLink()">Copy Link</button>
+            </div>
+          </details>
 
           <p style="font-size:.78rem;color:var(--text-muted);margin-top:14px">Your estimate code is <strong id="ciConfirmCode2"></strong>. Save it to follow up.</p>
           <button id="ciReturnDashBtn" class="btn-primary full-width" onclick="returnToContractorDashboard()" style="display:none;margin-top:16px">View in Your Dashboard →</button>
