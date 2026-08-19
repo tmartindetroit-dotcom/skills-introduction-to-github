@@ -166,6 +166,17 @@ function importLeadFromUrl() {
       if (window.innerWidth < 768) document.getElementById('sidebar').classList.remove('open');
     });
   });
+
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'renovateiq_requests' || e.key === 'renovateiq_hot_leads') {
+      updateRequestsBadge();
+      if (state.currentView === 'requests') {
+        renderRequestsList();
+      } else {
+        showToast('New customer request received!');
+      }
+    }
+  });
 })();
 
 /* ===== AUTH / PORTAL ===== */
@@ -195,6 +206,8 @@ function backToPortals() {
 function contractorLogin() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('appShell').style.display = 'flex';
+  state.contractorActive = true;
+  sessionStorage.setItem('ctr_active', '1');
   updateSidebarProfile();
   renderRatesTable();
   renderMiniPresets();
@@ -217,6 +230,17 @@ function contractorLogin() {
   } else {
     switchView('dashboard');
   }
+}
+
+function returnToContractorDashboard() {
+  var intake = document.getElementById('customerIntake');
+  if (intake) intake.style.display = 'none';
+  var app = document.getElementById('appShell');
+  if (app) app.style.display = 'flex';
+  updateSidebarProfile(); renderRatesTable(); renderMiniPresets();
+  switchView('requests');
+  renderRequestsList();
+  showToast('Lead added — view it below');
 }
 
 function clientLogin() {
@@ -1802,6 +1826,9 @@ function submitCustomerRequest() {
   if (code2) code2.textContent = code;
   state._lastImportUrl = importUrl;
 
+  var dashBtn = document.getElementById('ciReturnDashBtn');
+  if (dashBtn) dashBtn.style.display = (state.contractorActive || sessionStorage.getItem('ctr_active')) ? 'block' : 'none';
+
   updateRequestsBadge();
 }
 
@@ -1893,7 +1920,7 @@ function renderRequestsList() {
     return;
   }
   if (emptyEl) emptyEl.style.display = 'none';
-  listEl.style.display = 'block';
+  listEl.style.display = 'flex';
 
   var typeLabels = { kitchen:'Kitchen', bathroom:'Bathroom', fullhome:'Full Home', basement:'Basement', outdoor:'Outdoor', addition:'Addition' };
   var timeLabels = { morning:'Morning (8–11am)', afternoon:'Afternoon (12–3pm)', late:'Late Afternoon (3–6pm)' };
