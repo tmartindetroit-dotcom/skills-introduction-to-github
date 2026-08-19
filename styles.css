@@ -1067,25 +1067,89 @@ textarea.form-input { resize: vertical; }
 .status-locked { background: var(--green-light); color: var(--green-dark); }
 .status-inprogress { background: var(--blue-light); color: var(--blue-dark); }
 
-/* ===== CUSTOMER CONFIRM SHARE BOX ===== */
-.ci-share-box {
+/* ===== CUSTOMER CONFIRM — SEND TO CONTRACTOR CTA ===== */
+.ci-send-cta {
   margin-top: 20px;
   background: linear-gradient(135deg, #f0fdf4, #eff6ff);
   border: 1.5px solid var(--green);
   border-radius: var(--radius);
-  padding: 16px;
+  padding: 18px;
 }
-.ci-share-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
-.ci-share-badge {
+.ci-send-contractor-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.ci-send-avatar {
+  width: 44px;
+  height: 44px;
   background: var(--green);
   color: #fff;
-  font-size: .68rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 999px;
+  font-size: .85rem;
   flex-shrink: 0;
-  margin-top: 2px;
 }
+.ci-send-label {
+  font-size: .72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: 2px;
+}
+.ci-send-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-dark);
+}
+.btn-send-contractor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 18px;
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+  letter-spacing: .01em;
+}
+.btn-send-contractor:hover { background: #2d9a5e; }
+.btn-send-contractor:active { transform: scale(.98); }
+.ci-send-note {
+  font-size: .74rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 10px;
+  line-height: 1.4;
+}
+.ci-link-details {
+  margin-top: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #fff;
+}
+.ci-link-details summary {
+  font-size: .78rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+}
+.ci-link-details summary::-webkit-details-marker { display: none; }
+.ci-link-details summary::before { content: '+ '; }
+.ci-link-details[open] summary::before { content: '− '; }
+.ci-link-details[open] summary { margin-bottom: 10px; }
 .ci-share-url-input {
   width: 100%;
   padding: 8px 10px;
@@ -1094,12 +1158,11 @@ textarea.form-input { resize: vertical; }
   font-size: .72rem;
   font-family: 'Inter', monospace;
   background: #fff;
-  margin-bottom: 10px;
+  margin-bottom: 0;
   cursor: text;
+  box-sizing: border-box;
 }
 .ci-share-url-input:focus { outline: 2px solid var(--green); }
-.ci-share-actions { display: flex; gap: 8px; }
-.ci-share-actions .btn-primary, .ci-share-actions .btn-outline { flex: 1; }
 
 /* ===== HOMEOWNER PATH CARDS ===== */
 .hw-path-card {

@@ -1829,6 +1829,12 @@ function submitCustomerRequest() {
   var dashBtn = document.getElementById('ciReturnDashBtn');
   if (dashBtn) dashBtn.style.display = (state.contractorActive || sessionStorage.getItem('ctr_active')) ? 'block' : 'none';
 
+  var cName = contractor.companyName || 'Your Contractor';
+  var cInitials = cName.split(' ').map(function(w){return w[0]||'';}).slice(0,2).join('').toUpperCase() || 'CO';
+  setText('ciConfirmContractorName', cName);
+  var avatarEl = document.getElementById('ciSendAvatar');
+  if (avatarEl) avatarEl.textContent = cInitials;
+
   updateRequestsBadge();
 }
 
@@ -1848,6 +1854,33 @@ function generateImportUrl(request) {
     var encoded = btoa(unescape(encodeURIComponent(JSON.stringify(slim))));
     return window.location.href.split('?')[0].split('#')[0] + '?import=' + encoded;
   } catch(e) { return window.location.href.split('?')[0]; }
+}
+
+function autoSendToContractor() {
+  var url = state._lastImportUrl || (document.getElementById('ciImportUrlInput') || {}).value || '';
+  var cName = contractor.companyName || 'your contractor';
+  var noteEl = document.getElementById('ciSendNote');
+  if (!url) { showToast('No link available'); return; }
+  if (navigator.share) {
+    navigator.share({
+      title: 'My Renovation Estimate Request',
+      text: 'I submitted a renovation estimate — open this link to review it in your dashboard:',
+      url: url,
+    }).then(function() {
+      if (noteEl) { noteEl.textContent = 'Sent! Your contractor will see it when they open the link.'; noteEl.style.color = 'var(--green)'; }
+    }).catch(function() {});
+  } else {
+    navigator.clipboard.writeText(url)
+      .then(function() {
+        showToast('Link copied! Paste it to ' + cName + ' via text or email');
+        if (noteEl) { noteEl.textContent = 'Copied! Paste it to ' + cName + ' via text or email.'; noteEl.style.color = 'var(--green)'; }
+      })
+      .catch(function() {
+        var details = document.querySelector('.ci-link-details');
+        if (details) details.open = true;
+        showToast('Copy the link below and send it to your contractor');
+      });
+  }
 }
 
 function copyImportLink() {
